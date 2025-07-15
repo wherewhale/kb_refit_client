@@ -15,7 +15,7 @@ export default defineNuxtConfig({
       path: resolve(__dirname, "../../packages/ui/src"),
       pathPrefix: false,
       global: true,
-      prefix: "Ui", // 예: <UiNewComponent />
+      prefix: "KBUI", // 예: <KBUINewComponent />
     },
   ],
 
