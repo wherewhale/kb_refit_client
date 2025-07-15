@@ -22,6 +22,10 @@ const increment = () => {
     >
       <span class="w-full">카운트 증가</span>
     </UButton>
+    <div class="w-full h-20 bg-kb-yellow-neg">
+      <span class="text-kb-gold-1">노란색 배경</span>
+    </div>
     <UIcon name="fluent-color:alert-20" class="text-4xl text-blue-500" />
+    <UiTypography color="primary-brand" variant="h36-bold">테스트</UiTypography>
   </div>
 </template>

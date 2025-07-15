@@ -1,5 +1,29 @@
+// packages/ui/tsconfig.json
 {
-  "extends": "tsconfig/vue.json",
-  "include": ["."],
-  "exclude": ["dist", "build", "node_modules"]
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "target": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "jsx": "preserve",
+    "types": [
+      // "vue/ref-sugar-macros" 이 줄을 삭제합니다.
+    ],
+    "plugins": [{ "name": "@vue/language-tools/lib/ide/vue.plugin" }]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "index.ts",
+    "shims-vue.d.ts",
+    "theme/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }
