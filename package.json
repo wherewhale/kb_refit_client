@@ -1,5 +1,5 @@
 {
-  "name": "with-vue-nuxt",
+  "name": "kb-refit-client",
   "private": true,
   "scripts": {
     "build": "turbo run build",
