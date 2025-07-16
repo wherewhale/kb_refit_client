@@ -1,12 +1,15 @@
 <script setup lang="ts">
 // This is a simple Vue component for testing purposes
 
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const count = ref(0);
 const increment = () => {
   count.value++;
 };
+
+const items = ref(["Backlog", "Todo", "In Progress", "Done"]);
+const value = ref("Backlog");
 </script>
 
 <template>
@@ -15,13 +18,12 @@ const increment = () => {
   >
     <div>클라이언트 전용 페이지 테스트</div>
     <div class="text-2xl font-bold">카운트: {{ count }}</div>
-    <UButton
-      variant="solid"
-      class="px-8 py-3 text-lg cursor-pointer active:bg-blue-600 active:text-white w-full"
-      @click="increment"
-    >
-      <span class="w-full">카운트 증가</span>
+    <USelect v-model="value" :items="items" />
+    <UButton variant="solid" @click="increment">
+      <span class="w-full text-black">카운트 증가</span>
     </UButton>
+    <UInput class="w-full bg-kb-yellow-neg" />
+
     <div class="w-full h-20 bg-kb-yellow-neg">
       <span class="text-kb-gold-1">노란색 배경</span>
     </div>

@@ -19,4 +19,11 @@ export default {
     "./node_modules/@nuxt/ui/dist/runtime/**/*.{vue,js,ts}", // Nuxt UI 컴포넌트 경로 포함
   ],
   // theme나 plugins를 확장할 필요가 있다면 여기에 추가
+  extend: {
+    colors: {
+      "kb-yellow-pos": "var(--color-kb-yellow-pos)",
+      "kb-yellow-neg": "var(--color-kb-yellow-neg)",
+      // ... 다른 색상 변수들도 여기에 추가
+    },
+  },
 };

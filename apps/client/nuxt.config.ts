@@ -11,32 +11,29 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
     {
-      // 여전히 packages/ui의 src 폴더를 스캔하도록 유지합니다.
       path: resolve(__dirname, "../../packages/ui/src"),
       pathPrefix: false,
       global: true,
-      prefix: "KBUI", // 예: <KBUINewComponent />
+      prefix: "KBUI",
     },
   ],
-
-  // ★★★ 이 부분을 추가하거나 수정합니다. ★★★
   build: {
-    transpile: ["@repo/ui"], // @repo/ui 패키지를 트랜스파일합니다.
+    transpile: ["@repo/ui"],
   },
-
   typescript: {
     shim: false,
     typeCheck: true,
     strict: true,
   },
-
-  // vite alias는 그대로 유지합니다.
   vite: {
     resolve: {
       alias: {
         "@repo/ui": resolve(__dirname, "../../packages/ui"),
       },
     },
+  },
+  ui: {
+    colorMode: false,
   },
   modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/ui", "@nuxt/test-utils"],
 });
