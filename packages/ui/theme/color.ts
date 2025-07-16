@@ -1,8 +1,8 @@
 export const ColorPalette = {
   /** Brand */
   'primary-brand': '#4EB5B5',
-  'primary-light1': 'D1E0E3',
-  'primary-dark1': '40A1A1',
+  'primary-light1': '#D1E0E3',
+  'primary-dark1': '#40A1A1',
   'primary-dark2': '#348D8D',
 
   /** Sub */

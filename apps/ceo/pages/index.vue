@@ -13,7 +13,7 @@ const increment = () => {
   <div
     class="max-w-sm mx-auto mt-10 flex flex-col items-center justify-center gap-4"
   >
-    <div>클라이언트 전용 페이지 테스트</div>
+    <div>사장님 전용 페이지 테스트</div>
     <div class="text-2xl font-bold">카운트: {{ count }}</div>
     <UButton
       variant="solid"
@@ -28,9 +28,6 @@ const increment = () => {
     <UIcon name="fluent-color:alert-20" class="text-4xl text-blue-500" />
     <KBUITypography tag="h1" weight="bold" size="h36" color="purple-1"
       >테스트</KBUITypography
-    >
-    <KBUITypography tag="h1" weight="medium" size="h24" color="red-1"
-      >KB인증서</KBUITypography
     >
   </div>
 </template>
