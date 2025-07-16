@@ -15,21 +15,17 @@
         // 기타 필요한 slots 설정 (app.config.ts에서 가져와서 필요에 따라 수정)
       }"
     >
-      <template #point="{ item }">
+      <template #point="{ item }: { item: TabsItem }">
         <main>
-          포인트 탭
-          <div
-            class="w-full h-32 bg-kb-yellow-pos rounded-lg shadow-lg flex items-center justify-center"
-          >
-            <PointSummaryCard />
-          </div>
+          {{ item.label }}
+          <div class="h-[1024px]" />
         </main>
       </template>
-      <template #receipt="{ item }">
-        <main>구매 영수증 탭</main>
+      <template #receipt="{ item }: { item: TabsItem }">
+        <main>{{ item.label }}</main>
       </template>
-      <template #hospital_receipt="{ item }">
-        <main>병원 영수증 탭</main>
+      <template #hospital_receipt="{ item }: { item: TabsItem }">
+        <main>{{ item.label }}</main>
       </template>
     </UTabs>
 
@@ -53,22 +49,21 @@
       :open="isBottomSheetOpen"
       @update:open="isBottomSheetOpen = $event"
     >
-      <template #header>
-        <div class="relative w-full h-full">
-          <KBUITypography tag="h2" size="b16" weight="bold">
-            테스트
-          </KBUITypography>
+      <template #content>
+        <div class="relative w-full">
           <UButton
             icon="i-heroicons-chevron-down"
             block
             size="lg"
-            class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute bottom-0 left-1/2 transform -translate-x-1/2"
+            class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
             @click="isBottomSheetOpen = !isBottomSheetOpen"
           />
         </div>
-      </template>
-      <template #body>
-        <div class="p-4 min-h-[500px]">지갑 들어가야 하는 곳</div>
+        <div class="p-4 max-h-[500px] overflow-y-scroll">
+          <div class="h-[1024px]">
+            지갑 들어가면 뭐 이정도 길이 되지 않을까?
+          </div>
+        </div>
       </template>
     </USlideover>
   </div>
