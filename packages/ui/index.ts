@@ -1,5 +1,5 @@
-import Card from "./src/card.vue";
-import Gradient from "./src/gradient.vue";
-import Page from "./src/page.vue";
+import TextField from "./src/text-field.vue";
+import Typography from "./src/typography.vue";
+import Button from "./src/button.vue";
 
-export { Card, Gradient, Page };
+export { Button, Typography, TextField };

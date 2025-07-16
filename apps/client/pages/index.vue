@@ -10,6 +10,8 @@ const increment = () => {
 
 const items = ref(["Backlog", "Todo", "In Progress", "Done"]);
 const value = ref("Backlog");
+
+const textValue = ref("");
 </script>
 
 <template>
@@ -31,8 +33,18 @@ const value = ref("Backlog");
     <KBUITypography tag="h1" weight="bold" size="h36" color="purple-1"
       >테스트</KBUITypography
     >
-    <KBUITypography tag="h1" weight="medium" size="h24" color="red-1"
+    <KBUITypography tag="h1" weight="bold" size="h32" color="kb-yellow-neg"
       >KB인증서</KBUITypography
     >
+    <KBUIButton variant="primary" size="small" shape="circle" @click="increment"
+      >테스트</KBUIButton
+    >
+
+    <KBUITextField
+      v-model="textValue"
+      placeholder="여기에 입력하세요"
+      is-max-length-text
+      :error="textValue.length > 20 ? true : false"
+    />
   </div>
 </template>
