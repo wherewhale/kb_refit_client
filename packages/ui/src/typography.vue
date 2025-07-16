@@ -26,8 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import { useCssModule, useAttrs } from "vue";
-import { type ColorPalette } from "../theme";
+import { useCssModule, useAttrs } from 'vue';
+import { type ColorPalette } from '../theme';
 
 const style = useCssModule();
 const $attrs = useAttrs();
@@ -37,7 +37,7 @@ interface TypographyProps {
    * @type {'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span'}
    * @description 타입그래피 태그 (HTML 요소)
    */
-  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
+  tag?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p' | 'span';
   /**
    * @type {ColorPalette}
    * @description 타입그래피 색상. `theme/index.ts`의 `ColorPalette` 타입을 따릅니다.
@@ -47,22 +47,22 @@ interface TypographyProps {
    * @type {'regular' | 'medium' | 'bold'}
    * @description 타입그래피 두께.
    */
-  weight?: "regular" | "medium" | "bold";
+  weight?: 'regular' | 'medium' | 'bold';
   /**
    * @type {'h36' | 'h32' | 'h24' | 'b20' | 'b18' | 'b16' | 'b15' | 'b14' | 'b13' | 'b12'}
    * @description 타입그래피 크기. 기존 `variant`의 앞부분에 해당합니다.
    */
   size?:
-    | "h36"
-    | "h32"
-    | "h24"
-    | "b20"
-    | "b18"
-    | "b16"
-    | "b15"
-    | "b14"
-    | "b13"
-    | "b12";
+    | 'h36'
+    | 'h32'
+    | 'h24'
+    | 'b20'
+    | 'b18'
+    | 'b16'
+    | 'b15'
+    | 'b14'
+    | 'b13'
+    | 'b12';
   /**
    * @type {number}
    * @description 텍스트 말줄임 처리 (0: 없음, 1: 한 줄, >1: 여러 줄).
@@ -86,13 +86,13 @@ interface TypographyProps {
 }
 
 const props = withDefaults(defineProps<TypographyProps>(), {
-  tag: "p",
-  color: "black",
-  weight: "regular",
-  size: "b16",
+  tag: 'p',
+  color: 'black',
+  weight: 'regular',
+  size: 'b16',
   ellipsis: 0,
   inline: false,
-  className: "",
+  className: '',
   onClick: undefined,
 });
 </script>
@@ -184,6 +184,7 @@ $colors-map: (
   primary-dark2: $primary-dark2,
   green-1: $green-1,
   purple-1: #b7a4f5,
+  // $purple-1 변수가 선언되지 않았다면 리터럴 값으로 두는 것이 맞습니다.
   red-1: $red-1,
   yellow-1: $yellow-1,
   white: $white,
@@ -196,8 +197,8 @@ $colors-map: (
 
 @each $name, $color-value in $colors-map {
   // ★★★ 이 부분을 수정합니다. ★★★
-  // `.` 뒤에 바로 `#{$name}`을 사용합니다.
-  .#{$name} {
+  // `.` 뒤에 `#{$name}`을 직접 사용하는 대신, `"" + $name`을 사용하여 문자열로 명시합니다.
+  .#{'' + $name} {
     color: $color-value;
   }
 }
