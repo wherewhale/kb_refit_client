@@ -249,21 +249,21 @@ const computedSizeAndWeightClass = computed(() => {
 
 // TODO: 색상 업데이트 필요
 // 색상 클래스 (base.scss에서 @use / @import 되어야 할 변수들 필요)
-.primary-brand {
-  color: $primary-brand;
-}
+// .primary-brand {
+//   color: $primary-brand;
+// }
 
-.primary-light1 {
-  color: $primary-light1;
-}
+// .primary-light1 {
+//   color: $primary-light1;
+// }
 
-.primary-dark1 {
-  color: $primary-dark1;
-}
+// .primary-dark1 {
+//   color: $primary-dark1;
+// }
 
-.primary-dark2 {
-  color: $primary-dark2;
-}
+// .primary-dark2 {
+//   color: $primary-dark2;
+// }
 
 .green-1 {
   color: $green-1;

@@ -219,8 +219,8 @@ withDefaults(defineProps<ButtonProps>(), {
 /******************************************/
 /** Variant **/
 .primary {
-  background-color: $primary-brand;
-  color: $white;
+  background-color: $kb-yellow-pos;
+  color: $black;
   border-color: transparent;
 
   &.loading::before {
@@ -229,13 +229,14 @@ withDefaults(defineProps<ButtonProps>(), {
   }
 
   &:hover:not(.disabled) {
-    background-color: $primary-dark1;
+    background-color: $kb-yellow-neg;
   }
 
   &:active,
   &.isActive {
     border-color: transparent;
-    background-color: aqua;
+    background-color: $kb-gray;
+    color: $white;
   }
 
   &.disabled {
@@ -285,12 +286,12 @@ withDefaults(defineProps<ButtonProps>(), {
   }
 
   &:hover:not(.disabled) {
-    color: $primary-brand;
+    color: $kb-yellow-neg;
   }
 
   &:active,
   &.isActive {
-    color: $primary-dark1;
+    color: $kb-yellow-pos;
   }
 
   &.disabled {
