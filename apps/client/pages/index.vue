@@ -17,6 +17,9 @@
     >
       <template #point="{ item }: { item: TabsItem }">
         <main>
+          <NuxtLink to="/auth/login" class="block">
+            로그인 페이지 가기
+          </NuxtLink>
           {{ item.label }}
           <div class="h-[1024px]" />
         </main>

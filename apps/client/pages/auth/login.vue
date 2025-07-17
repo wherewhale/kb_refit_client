@@ -16,17 +16,17 @@ const onClickBackspace = () => {
 
 <template>
   <div class="max-w-sm mx-auto">
-    <header>
-      <div class="w-[99px] h-[17px] relative mx-auto mt-4">
-        <NuxtImg src="/assets/images/logos/kb_logo.png" alt="KB Logo" />
-      </div>
-    </header>
     <main class="px-6">
+      <div class="w-10 mt-20 mx-auto">
+        <NuxtImg src="assets/images/logos/symbol-logo.png" alt="kb_logo" />
+      </div>
+
       <KBUITypography
         tag="h2"
         size="h24"
         weight="bold"
-        class-name="mt-20 text-center"
+        class-name="mt-4 text-center"
+        color="white"
       >
         KB국민인증서
       </KBUITypography>

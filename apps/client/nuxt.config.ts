@@ -37,7 +37,7 @@ export default defineNuxtConfig({
       name: "KB Refit Client",
       short_name: "KB Refit",
       description: "전자 영수증은 KB Refit에서 현명하게 관리하세요.",
-      theme_color: "#ffbc00",
+      theme_color: "#545045",
       icons: [
         {
           src: "/assets/images/logos/icon192.png",
@@ -50,11 +50,7 @@ export default defineNuxtConfig({
           type: "image/png",
         },
       ],
-
-      start_url: "/",
-    },
-    workbox: {
-      navigateFallback: "/",
+      start_url: "/auth/login",
     },
     devOptions: {
       enabled: true,
