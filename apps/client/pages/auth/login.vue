@@ -15,7 +15,7 @@ const onClickBackspace = () => {
 </script>
 
 <template>
-  <div class="max-w-sm mx-auto">
+  <div class="max-w-md mx-auto">
     <main class="px-6">
       <div class="w-10 mt-20 mx-auto">
         <NuxtImg src="assets/images/logos/symbol-logo.png" alt="kb_logo" />
@@ -38,7 +38,7 @@ const onClickBackspace = () => {
         class="mt-20 justify-center w-full"
       />
       <div
-        class="fixed bottom-0 left-1/2 bg-gray-5 py-5 px-6 grid grid-cols-4 gap-2 max-w-sm transform -translate-x-1/2 w-full"
+        class="fixed bottom-0 left-1/2 bg-gray-5 py-5 px-6 grid grid-cols-4 gap-2 max-w-md transform -translate-x-1/2 w-full"
       >
         <KBUIButton
           v-for="i in 10"

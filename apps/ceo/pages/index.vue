@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // This is a simple Vue component for testing purposes
 
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const count = ref(0);
 const increment = () => {
@@ -11,7 +11,7 @@ const increment = () => {
 
 <template>
   <div
-    class="max-w-sm mx-auto mt-10 flex flex-col items-center justify-center gap-4"
+    class="max-w-md mx-auto mt-10 flex flex-col items-center justify-center gap-4"
   >
     <div>사장님 전용 페이지 테스트</div>
     <div class="text-2xl font-bold">카운트: {{ count }}</div>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
+import Logo from "../components/common/logo.vue";
+import PointsContainer from "../components/points/container.vue";
 
 const items = ref<TabsItem[]>([
   {
@@ -25,43 +27,32 @@ console.log(runtimeConfig.public.apiBaseUrl);
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen bg-kb-dark-gray text-white">
-    <header class="p-6">로고 들어가야 하는 곳</header>
+  <div
+    class="flex flex-col min-h-screen bg-kb-dark-gray text-white mx-auto max-w-screen-md"
+  >
+    <header class="px-6 py-4">
+      <component :is="Logo" />
+    </header>
     <ClientOnly fallback-tag="div">
       <UTabs
         class="px-4"
         :items="items"
         :ui="{
-          list: 'relative flex p-1 group bg-gray-200 dark:bg-gray-800 rounded-3xl', // 전체 탭 바
+          list: 'relative flex p-1 group bg-gray-4 rounded-3xl', // 전체 탭 바
           indicator:
             'absolute transition-[translate,width] duration-200 bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
           trigger:
-            'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-600 hover:data-[state=inactive]:not-disabled:text-gray-900 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
+            'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-gray-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
           content: 'focus:outline-none w-full',
           label: 'truncate',
-          // 기타 필요한 slots 설정 (app.config.ts에서 가져와서 필요에 따라 수정)
         }"
       >
         <template #point="{ item }: { item: TabsItem }">
-          <main>
-            <NuxtLink to="/auth/login" class="block">
-              <KBUIButton variant="primary" size="large">
-                로그인 페이지 가기
-              </KBUIButton>
-            </NuxtLink>
-            <NuxtLink to="/test" class="block">
-              <KBUIButton variant="primary" size="large">
-                컴포넌트 테스트 페이지 가기
-              </KBUIButton>
-            </NuxtLink>
-            {{ item.label }}
-            <div class="h-[1024px]" />
-          </main>
+          <component :is="PointsContainer" />
         </template>
         <template #receipt="{ item }: { item: TabsItem }">
           <main>
             {{ item.label }}
-            <KBUIPointsIndex />
           </main>
         </template>
         <template #hospital_receipt="{ item }: { item: TabsItem }">
