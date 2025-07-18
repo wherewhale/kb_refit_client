@@ -172,3 +172,31 @@ img {
 li {
   list-style: none;
 }
+
+/* FIXME: 트랜지션 위치 옮기기 */
+/* 예를 들어, style.css 파일이나 컴포넌트의 <style> 블록에 추가 */
+
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  /* opacity와 max-height 두 가지 속성을 동시에 전환합니다. */
+  /* duration과 ease-in-out은 원하는 값으로 조절하세요. */
+  transition:
+    opacity 0.3s ease-out,
+    max-height 0.3s ease-out;
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+  /* 진입 시작 시, 그리고 퇴장 완료 시의 상태 */
+  opacity: 0; /* 투명하게 시작/끝 */
+  max-height: 0; /* 높이 0으로 시작/끝 */
+}
+
+/* 선택 사항: 나타나는/사라지는 최종/초기 상태를 명시적으로 정의 */
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  opacity: 1;
+  /* 콘텐츠의 예상 최대 높이보다 충분히 큰 값으로 설정해야 합니다. */
+  /* Tailwind 클래스를 사용한다면 아래 예시를 참조하세요. */
+  max-height: 500px; /* 예를 들어, 500px. 실제 콘텐츠 높이에 맞춰 조절 */
+}

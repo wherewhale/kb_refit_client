@@ -247,8 +247,20 @@ const computedSizeAndWeightClass = computed(() => {
   @include b12-bold;
 }
 
+.blue-1 {
+  color: $blue-1;
+}
+
+.blue-2 {
+  color: $blue-2;
+}
+
 .green-1 {
   color: $green-1;
+}
+
+.green-2 {
+  color: $green-2;
 }
 
 .purple-1 {
@@ -257,6 +269,10 @@ const computedSizeAndWeightClass = computed(() => {
 
 .red-1 {
   color: $red-1;
+}
+
+.red-2 {
+  color: $red-2;
 }
 
 .yellow-1 {

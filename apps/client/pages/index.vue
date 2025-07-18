@@ -21,19 +21,14 @@ const items = ref<TabsItem[]>([
 
 // 하단 모달 열림/닫힘 상태
 const isBottomSheetOpen = ref(false);
-const runtimeConfig = useRuntimeConfig();
-
-console.log(runtimeConfig.public.apiBaseUrl);
 </script>
 
 <template>
-  <div
-    class="flex flex-col min-h-screen bg-kb-dark-gray text-white mx-auto max-w-screen-md"
-  >
+  <div class="min-h-screen max-w-screen-md mx-auto text-white">
     <header class="px-6 py-4">
       <component :is="Logo" />
     </header>
-    <ClientOnly fallback-tag="div">
+    <ClientOnly fallback-tag="div" :fallback="{ loading: true }">
       <UTabs
         class="px-4"
         :items="items"

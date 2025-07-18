@@ -2,7 +2,7 @@
 import type { CardProps } from "~/interfaces/common/card.interface";
 import Card from "../common/card.vue";
 
-// TODO: 데이터 연동해서 items 배열을 동적으로 생성
+// TODO: 데이터 연동해서 items 배열에 데이터 연결
 const items: CardProps[] = [
   {
     title: "KB스타포인트",
