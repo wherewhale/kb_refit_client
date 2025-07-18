@@ -100,7 +100,7 @@ const handleInput = (event: Event) => {
 
   // input 내부 요소가 포커스 되었을 때 (부모 .field에 적용)
   &:focus-within {
-    border-color: $primary-brand;
+    border-color: $green-2;
   }
 
   // disabled 상태일 때 필드 전체 스타일

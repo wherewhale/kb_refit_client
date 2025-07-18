@@ -60,6 +60,12 @@ export default defineNuxtConfig({
   ui: {
     colorMode: false,
   },
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.API_URI || "http://localhost:3000/api",
+      isDev: process.env.APP_MODE === "development",
+    },
+  },
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",
