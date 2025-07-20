@@ -53,12 +53,10 @@ export default defineNuxtConfig({
       start_url: "/auth/login",
     },
     workbox: {
+      globPatterns: [], // ✅ precache를 완전히 안 하도록 비워버림
       navigateFallback: "/auth/login",
       navigateFallbackDenylist: [
-        // API 요청은 제외
-        /^\/api/,
-        // 정적 자산 제외
-        /\.(?:png|jpg|jpeg|svg|css|js|woff2?|ttf|map)$/,
+        /^\/.*/, // 모든 경로 제외
       ],
     },
     devOptions: {

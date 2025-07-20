@@ -28,33 +28,31 @@ const isBottomSheetOpen = ref(false);
     <header class="px-6 py-4">
       <component :is="Logo" />
     </header>
-    <ClientOnly fallback-tag="div" :fallback="{ loading: true }">
-      <UTabs
-        class="px-4"
-        :items="items"
-        :ui="{
-          list: 'relative flex p-1 group bg-gray-4 rounded-3xl', // 전체 탭 바
-          indicator:
-            'absolute transition-[translate,width] duration-200 bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
-          trigger:
-            'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-gray-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
-          content: 'focus:outline-none w-full',
-          label: 'truncate',
-        }"
-      >
-        <template #point="{ item }: { item: TabsItem }">
-          <component :is="PointsContainer" />
-        </template>
-        <template #receipt="{ item }: { item: TabsItem }">
-          <main>
-            {{ item.label }}
-          </main>
-        </template>
-        <template #hospital_receipt="{ item }: { item: TabsItem }">
-          <main>{{ item.label }}</main>
-        </template>
-      </UTabs>
-    </ClientOnly>
+    <UTabs
+      class="px-4"
+      :items="items"
+      :ui="{
+        list: 'relative flex p-1 group bg-gray-4 rounded-3xl', // 전체 탭 바
+        indicator:
+          'absolute transition-[translate,width] duration-200 bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
+        trigger:
+          'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-gray-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
+        content: 'focus:outline-none w-full',
+        label: 'truncate',
+      }"
+    >
+      <template #point="{ item }: { item: TabsItem }">
+        <component :is="PointsContainer" />
+      </template>
+      <template #receipt="{ item }: { item: TabsItem }">
+        <main>
+          {{ item.label }}
+        </main>
+      </template>
+      <template #hospital_receipt="{ item }: { item: TabsItem }">
+        <main>{{ item.label }}</main>
+      </template>
+    </UTabs>
 
     <div
       class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg rounded-t-lg"
