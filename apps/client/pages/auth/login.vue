@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const router = useRouter();
 const pinNumber = ref<string[]>([]); // PIN 번호를 저장하는 배열
 
 const onClickPinButton = (number: number) => {
@@ -12,6 +13,14 @@ const onClickBackspace = () => {
     pinNumber.value.pop();
   }
 };
+
+const onClickConfirm = () => {
+  router.push({
+    path: "/",
+  });
+};
+
+defineExpose({ pinNumber }); // 🔑 테스트를 위한 노출
 </script>
 
 <template>
@@ -53,20 +62,15 @@ const onClickBackspace = () => {
           <UIcon name="material-symbols-light:backspace" size="24" />
         </KBUIButton>
         <KBUIButton variant="ghost" size="medium"> 취소 </KBUIButton>
-        <NuxtLink
-          to="/"
-          class="w-full block col-span-2"
-          :disabled="pinNumber.length < 6"
+        <KBUIButton
+          variant="primary"
+          size="medium"
+          class-name="w-full col-span-2 block"
+          :disabled="pinNumber.length < 6 ? true : false"
+          @click="onClickConfirm"
         >
-          <KBUIButton
-            variant="primary"
-            size="medium"
-            class-name="w-full"
-            :disabled="pinNumber.length < 6"
-          >
-            확인
-          </KBUIButton>
-        </NuxtLink>
+          확인
+        </KBUIButton>
       </div>
     </main>
   </div>

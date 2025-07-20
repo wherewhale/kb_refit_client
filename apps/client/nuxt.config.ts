@@ -52,6 +52,15 @@ export default defineNuxtConfig({
       ],
       start_url: "/auth/login",
     },
+    workbox: {
+      navigateFallback: "/auth/login",
+      navigateFallbackDenylist: [
+        // API 요청은 제외
+        /^\/api/,
+        // 정적 자산 제외
+        /\.(?:png|jpg|jpeg|svg|css|js|woff2?|ttf|map)$/,
+      ],
+    },
     devOptions: {
       enabled: true,
       type: "module",
