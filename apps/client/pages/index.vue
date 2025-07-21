@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import Logo from "../components/common/logo.vue";
-import PointsContainer from "../components/points/container.vue";
+import PointsContainer from "../containers/points/point-container.vue";
 
 const items = ref<TabsItem[]>([
   {

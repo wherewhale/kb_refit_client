@@ -84,6 +84,7 @@ function updateFilter(label: string, value: string) {
                 </KBUITypography>
               </button>
 
+              <template #title> 날짜 범위 선택 </template>
               <template #content>
                 <aside class="p-6">
                   <UCalendar
