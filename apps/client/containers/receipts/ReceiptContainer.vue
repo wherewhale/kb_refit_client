@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import Card from "~/components/common/Card.vue";
-import { RECEIPT_FILTERS } from "~/constant/filters";
+import { RECEIPT_FILTERS } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
 
 // 필터 선택 상태

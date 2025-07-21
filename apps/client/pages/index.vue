@@ -4,7 +4,7 @@ import type { TabsItem } from "@nuxt/ui";
 import MyWallet from "~/components/wallet/MyWallet.vue";
 import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
 import MyBenefit from "~/components/wallet/MyBenefit.vue";
-import { badgeList } from "~/constant/badgeList";
+import { badgeList } from "~/common/constant/badgeList";
 import PointsContainer from "~/containers/points/PointContainer.vue";
 import ReceiptContainer from "~/containers/receipts/ReceiptContainer.vue";
 import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";

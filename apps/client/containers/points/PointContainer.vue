@@ -2,7 +2,7 @@
 import { reactive } from "vue";
 import PointsCarousel from "~/components/points/Carousel.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
-import { POINT_FILTERS } from "~/constant/filters";
+import { POINT_FILTERS } from "~/common/constant/filters";
 
 // 필터 선택 상태
 const selected = reactive({

@@ -2,6 +2,17 @@ import { resolve } from "path";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    head: {
+      meta: [
+        {
+          name: "viewport",
+          content:
+            "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        },
+      ],
+    },
+  },
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
@@ -50,11 +61,9 @@ export default defineNuxtConfig({
           type: "image/png",
         },
       ],
-      start_url: "/auth/login",
     },
     workbox: {
-      globPatterns: [], // ✅ precache를 완전히 안 하도록 비워버림
-      navigateFallback: "/auth/login",
+      globPatterns: ["**/*.{js,css,html,ico,png,svg}"], // HTML 페이지만 precache
       navigateFallbackDenylist: [
         /^\/.*/, // 모든 경로 제외
       ],
@@ -71,6 +80,8 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: process.env.API_URI || "http://localhost:3000/api",
       isDev: process.env.APP_MODE === "development",
+      accessToken: process.env.ACCESS_TOKEN || "",
+      refreshToken: process.env.REFRESH_TOKEN || "",
     },
   },
   modules: [
