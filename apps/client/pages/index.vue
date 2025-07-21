@@ -38,9 +38,9 @@ const isBottomSheetOpen = ref(false);
       :ui="{
         list: 'relative flex p-1 group bg-gray-4 rounded-3xl', // 전체 탭 바
         indicator:
-          'absolute transition-[translate,width] duration-200 bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
+          'absolute transition-[translate,width] duration-200 text-black bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
         trigger:
-          'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-gray-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
+          'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
         content: 'focus:outline-none w-full',
         label: 'truncate',
       }"

@@ -2,25 +2,29 @@
 import { KBUITypography, USeparator } from "#components";
 import dayjs from "dayjs";
 
+export interface PaymentItem {
+  id: number;
+  label: string;
+  amount: number;
+  icon: {
+    background: string;
+    emoji: string;
+  };
+  completed?: {
+    word: string;
+    icon: string;
+  };
+  href?: string;
+  createdAt: Date;
+}
+
 interface Props {
-  items: Array<{
-    id: number;
-    label: string;
-    amount: number;
-    icon: {
-      background: string;
-      emoji: string;
-    };
-    completed?: {
-      word: string;
-      icon: string;
-    };
-    href?: string;
-    createdAt: Date;
-  }>;
+  items: PaymentItem[];
 }
 
 const props = defineProps<Props>();
+
+const router = useRouter();
 
 const groupedItems = computed(() => {
   const groups: Record<string, Props["items"]> = {};
@@ -39,6 +43,12 @@ const groupedItems = computed(() => {
       items,
     }));
 });
+
+const onClickItem = (item: PaymentItem) => {
+  if (item && item.href) {
+    router.push(item.href);
+  }
+};
 </script>
 
 <template>
@@ -53,7 +63,11 @@ const groupedItems = computed(() => {
         <li
           v-for="item in group.items"
           :key="item.id"
-          class="flex justify-between items-center py-1"
+          :class="[
+            'flex justify-between items-center py-1',
+            item.href ? 'cursor-pointer hover:animate-pulse' : '',
+          ]"
+          @click="onClickItem(item)"
         >
           <div class="flex items-center gap-2">
             <div

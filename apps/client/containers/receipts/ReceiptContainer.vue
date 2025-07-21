@@ -88,6 +88,7 @@ const paymentList = [
             id: item.id,
             label: item.label,
             amount: item.amount,
+            href: `/receipt/${item.id}`,
             icon: getIcon(item.label),
             createdAt: item.createdAt,
             completed: item.isCompleted
