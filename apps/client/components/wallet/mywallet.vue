@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import type { Badge } from '@/constant/badgeList';
+
 const props = defineProps<{
-  badgeList: { image: string }[]
+  badgeList: Badge[];
 }>();
 </script>
 

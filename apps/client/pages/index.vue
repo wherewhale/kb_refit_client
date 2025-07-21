@@ -3,6 +3,10 @@ import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import Logo from "../components/common/logo.vue";
 import PointsContainer from "../containers/points/point-container.vue";
+import MyWallet from '../components/wallet/mywallet.vue';
+import AddBrandBadge from '../components/wallet/addbrandbadge.vue';
+import MyBenefit from '../components/wallet/mybenefit.vue';
+import { badgeList } from '@/constant/badgeList';
 
 const items = ref<TabsItem[]>([
   {
@@ -22,13 +26,6 @@ const items = ref<TabsItem[]>([
 // 하단 모달 열림/닫힘 상태
 const isBottomSheetOpen = ref(false);
 const runtimeConfig = useRuntimeConfig();
-
-const badgeList = [
-  { image: "/assets/images/badges/1.png" },
-  { image: "/assets/images/badges/2.png" },
-  { image: "/assets/images/badges/3.png" },
-  { image: "/assets/images/badges/4.png" },
-];
 
 console.log(runtimeConfig.public.apiBaseUrl);
 </script>
@@ -96,9 +93,9 @@ console.log(runtimeConfig.public.apiBaseUrl);
         </div>
         <div class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scroll scrollbar-hide">
           <div class="h-[1024px]">
-            <mywallet :badge-list="badgeList" />
-            <Addbrandbadge/>
-            <mybenefit/>
+            <MyWallet :badge-list="badgeList"/>
+            <AddBrandBadge />
+            <MyBenefit/>
           </div>
         </div>
       </template>
