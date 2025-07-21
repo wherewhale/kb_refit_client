@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import Card from "~/components/common/Card.vue";
+import { RECEIPT_FILTERS } from "~/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
 
 // 필터 선택 상태
@@ -10,14 +11,6 @@ const selected = reactive({
   정렬: "최신순",
   필터: "전체",
 });
-
-// 옵션 목록
-const FILTERS = {
-  기간: ["1개월", "3개월", "6개월", "직접 입력"],
-  종류: ["전체", "승인", "취소"],
-  정렬: ["최신순", "과거순"],
-  필터: ["전체", "영수 처리", "영수 미처리"],
-};
 
 const card_data: CardProps = {
   title: "최근 한 달 사용 금액",
@@ -85,7 +78,7 @@ const paymentList = [
 
     <div class="w-full rounded-lg bg-white p-6 mt-10 text-black">
       <FilterPanel
-        :filters="FILTERS"
+        :filters="RECEIPT_FILTERS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
       />

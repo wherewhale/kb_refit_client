@@ -2,6 +2,7 @@
 import { reactive } from "vue";
 import PointsCarousel from "~/components/points/Carousel.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
+import { POINT_FILTERS } from "~/constant/filters";
 
 // 필터 선택 상태
 const selected = reactive({
@@ -9,13 +10,6 @@ const selected = reactive({
   카테고리: "전체",
   정렬: "최신순",
 });
-
-// 옵션 목록
-const FILTERS = {
-  기간: ["1개월", "3개월", "6개월", "직접 입력"],
-  카테고리: ["전체", "적립포인트", "할인금액"],
-  정렬: ["최신순", "과거순"],
-};
 
 const getIcon = (label: string): { background: string; emoji: string } => {
   if (label.includes("스타포인트")) {
@@ -100,7 +94,7 @@ const rewardList = [
 
     <div class="w-full rounded-lg bg-white p-6 mt-10 text-black">
       <FilterPanel
-        :filters="FILTERS"
+        :filters="POINT_FILTERS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
       />
