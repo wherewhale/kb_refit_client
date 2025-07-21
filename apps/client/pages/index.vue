@@ -3,10 +3,10 @@ import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import Logo from "../components/common/logo.vue";
 import PointsContainer from "../containers/points/point-container.vue";
-import MyWallet from '../components/wallet/mywallet.vue';
-import AddBrandBadge from '../components/wallet/addbrandbadge.vue';
-import MyBenefit from '../components/wallet/mybenefit.vue';
-import { badgeList } from '@/constant/badgeList';
+import MyWallet from '~/components/wallet/mywallet.vue';
+import AddBrandBadge from '~/components/wallet/addbrandbadge.vue';
+import MyBenefit from '~/components/wallet/mybenefit.vue';
+import { badgeList } from '~/constant/badgeList';
 
 const items = ref<TabsItem[]>([
   {

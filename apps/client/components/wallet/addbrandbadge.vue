@@ -11,7 +11,7 @@
       <KBUIButton variant="outlined" size="small">
         <UIcon name="mdi:plus" class="w-4 h-4" />
       </KBUIButton>
-      <KBUITypography weight="regular" tag="p" size="b12">배지 도감</KBUITypography>
+      <KBUITypography size="b12">배지 도감</KBUITypography>
     </div>
   </div>
 </template>

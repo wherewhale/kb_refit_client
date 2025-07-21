@@ -13,17 +13,15 @@ import { badgeList } from '@/constant/badgeList';
     >
       <!-- 배지 박스 -->
       <div
-        class="w-12 h-12 flex items-center justify-center bg-gray-3 font-bold text-sm rounded-sm shrink-0"
+        class="w-12 h-12 flex items-center justify-center bg-gray-3"
       >
         {{ item.badge }}
       </div>
 
       <!-- 텍스트 영역 -->
       <div>
-        <p class="font-semibold text-base">{{ item.title }}</p>
-        <p v-if="item.description" class="text-sm text-black">
-          {{ item.description }}
-        </p>
+        <KBUITypography weight="medium" size="b18">{{ item.title }}</KBUITypography>
+        <KBUITypography v-if="item.description" size="b14">{{ item.description }}</KBUITypography>
       </div>
     </div>
   </div>
