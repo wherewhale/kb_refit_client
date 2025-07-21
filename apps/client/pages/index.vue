@@ -92,9 +92,9 @@ console.log(runtimeConfig.public.apiBaseUrl);
           />
         </div>
         <div
-          class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scroll scrollbar-hide"
+          class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
         >
-          <div class="h-[1024px]">
+          <div>
             <MyWallet :badge-list="badgeList" />
             <AddBrandBadge />
             <MyBenefit />

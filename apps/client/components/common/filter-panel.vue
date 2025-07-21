@@ -28,7 +28,7 @@ function updateFilter(label: string, value: string) {
 </script>
 
 <template>
-  <div class="w-full rounded-lg bg-white p-6 mt-10">
+  <div>
     <button class="ml-auto block cursor-pointer" @click="toggleFilter">
       <KBUITypography size="b12" weight="bold" class="flex items-center gap-2">
         {{ selected["기간"] !== "직접 입력" ? "최근 " : "" }}
