@@ -53,7 +53,7 @@ const paymentList = [
 </script>
 
 <template>
-  <main class="mt-10">
+  <main class="mt-10 pb-20">
     <Card
       :title="card_data.title"
       :content="card_data.content"

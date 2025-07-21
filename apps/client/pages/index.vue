@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
-import Logo from "../components/common/Logo.vue";
 import MyWallet from "~/components/wallet/MyWallet.vue";
 import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
 import MyBenefit from "~/components/wallet/MyBenefit.vue";
@@ -10,34 +9,30 @@ import PointsContainer from "~/containers/points/PointContainer.vue";
 import ReceiptContainer from "~/containers/receipts/ReceiptContainer.vue";
 import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";
 
+const route = useRoute();
+const router = useRouter();
+
 const items = ref<TabsItem[]>([
-  {
-    label: "포인트",
-    slot: "point" as const,
-  },
-  {
-    label: "구매영수증",
-    slot: "receipt" as const,
-  },
-  {
-    label: "병원영수증",
-    slot: "hospital_receipt" as const,
-  },
+  { label: "포인트", value: "point" },
+  { label: "구매영수증", value: "receipt" },
+  { label: "병원영수증", value: "hospital_receipt" },
 ]);
+
+const active = ref(route.query.tab?.toString() || "point");
+
+watch(active, (tab) => {
+  router.replace({ query: { tab } });
+});
 
 // 하단 모달 열림/닫힘 상태
 const isBottomSheetOpen = ref(false);
-const runtimeConfig = useRuntimeConfig();
-
-console.log(runtimeConfig.public.apiBaseUrl);
 </script>
 
 <template>
   <div class="min-h-screen max-w-screen-md mx-auto text-white">
-    <header class="px-6 py-4">
-      <component :is="Logo" />
-    </header>
+    <CommonHeader />
     <UTabs
+      v-model="active"
       class="px-4"
       :items="items"
       :ui="{
@@ -49,18 +44,14 @@ console.log(runtimeConfig.public.apiBaseUrl);
         content: 'focus:outline-none w-full',
         label: 'truncate',
       }"
-    >
-      <template #point="{ item }: { item: TabsItem }">
-        <component :is="PointsContainer" />
-      </template>
-      <template #receipt="{ item }: { item: TabsItem }">
-        <component :is="ReceiptContainer" />
-      </template>
-      <template #hospital_receipt="{ item }: { item: TabsItem }">
-        <component :is="MedicalContainer" />
-      </template>
-    </UTabs>
+    />
+    <div class="p-4">
+      <PointsContainer v-if="active === 'point'" />
+      <ReceiptContainer v-else-if="active === 'receipt'" />
+      <MedicalContainer v-else-if="active === 'hospital_receipt'" />
+    </div>
 
+    <!-- TODO: 분리 필요 -->
     <div
       class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg rounded-t-lg"
     >
@@ -74,7 +65,6 @@ console.log(runtimeConfig.public.apiBaseUrl);
         />
       </div>
     </div>
-
     <USlideover
       side="bottom"
       title="Slideover with side"
