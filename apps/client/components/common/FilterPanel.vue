@@ -27,21 +27,30 @@ function updateFilter(label: string, value: string) {
 }
 </script>
 
+<!-- TODO: 키 전체 다 보여지게 selected 설정 -->
 <template>
   <div>
-    <button class="ml-auto block cursor-pointer" @click="toggleFilter">
-      <KBUITypography size="b12" weight="bold" class="flex items-center gap-2">
-        {{ selected["기간"] !== "직접 입력" ? "최근 " : "" }}
-        {{ selected["기간"] }} · {{ selected["카테고리"] }} ·
-        {{ selected["정렬"] }}
-        <UIcon
-          name="i-heroicons-chevron-down"
-          :class="[
-            'text-black transition-transform duration-200',
-            isOpen ? 'rotate-180' : '',
-          ]"
-        />
+    <button
+      class="ml-auto flex items-center block cursor-pointer"
+      @click="toggleFilter"
+    >
+      <KBUITypography
+        size="b12"
+        weight="bold"
+        class="flex items-center gap-0.5"
+      >
+        <span v-for="(value, key) in selected" :key="key">
+          <span v-if="key !== '기간'">·</span>
+          {{ value }}
+        </span>
       </KBUITypography>
+      <UIcon
+        name="i-heroicons-chevron-down"
+        :class="[
+          'text-black transition-transform duration-200',
+          isOpen ? 'rotate-180' : '',
+        ]"
+      />
     </button>
 
     <transition name="slide-fade">

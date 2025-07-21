@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useCssModule, useAttrs, computed } from "vue";
-import InputField from "./input-field.vue";
-import Typography from "./typography.vue";
-import HelperText from "./helper-text.vue";
+import InputField from "./InputField.vue";
+import Typography from "./Typography.vue";
+import HelperText from "./HelperText.vue";
 
 const style = useCssModule();
 const attrs = useAttrs();
@@ -78,7 +78,7 @@ const emit = defineEmits<{
 }>();
 
 const currentLength = computed(() =>
-  props.modelValue ? String(props.modelValue).length : 0,
+  props.modelValue ? String(props.modelValue).length : 0
 );
 
 const inputPropsToPass = computed(() => {

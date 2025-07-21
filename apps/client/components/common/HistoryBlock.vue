@@ -91,11 +91,9 @@ const groupedItems = computed(() => {
               weight="medium"
             >
               {{
-                item.amount < 0
-                  ? `-${Math.abs(item.amount)}원`
-                  : item.amount > 0
-                    ? `${item.amount}원`
-                    : `+${Math.abs(item.amount)}P`
+                item.amount > 0
+                  ? `${Math.abs(item.amount).toLocaleString()}원`
+                  : `${Math.abs(item.amount).toLocaleString()}원`
               }}
             </KBUITypography>
           </div>

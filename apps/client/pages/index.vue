@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
-import Logo from "../components/common/logo.vue";
-import MyWallet from "~/components/wallet/mywallet.vue";
-import AddBrandBadge from "~/components/wallet/addbrandbadge.vue";
-import MyBenefit from "~/components/wallet/mybenefit.vue";
+import Logo from "../components/common/Logo.vue";
+import MyWallet from "~/components/wallet/MyWallet.vue";
+import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
+import MyBenefit from "~/components/wallet/MyBenefit.vue";
 import { badgeList } from "~/constant/badgeList";
-import PointsContainer from "~/containers/points/point-container.vue";
-import ReceiptContainer from "~/containers/receipts/receipt-container.vue";
-import MedicalContainer from "~/containers/medicals/medical-container.vue";
+import PointsContainer from "~/containers/points/PointContainer.vue";
+import ReceiptContainer from "~/containers/receipts/ReceiptContainer.vue";
+import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";
 
 const items = ref<TabsItem[]>([
   {

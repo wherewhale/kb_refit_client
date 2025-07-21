@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import PointsCarousel from "~/components/points/carousel.vue";
 import { reactive } from "vue";
-import HistoryBlock from "~/components/common/history-block.vue";
+import PointsCarousel from "~/components/points/Carousel.vue";
+import HistoryBlock from "~/components/common/HistoryBlock.vue";
 
 // 필터 선택 상태
 const selected = reactive({
@@ -111,10 +111,6 @@ const rewardList = [
             label: item.label,
             amount: item.amount,
             icon: getIcon(item.label),
-            // completed: {
-            //   word: '영수 처리 완료',
-            //   icon: 'material-symbols:business-center',
-            // },
             createdAt: item.createdAt,
           }))
         "

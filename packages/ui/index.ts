@@ -1,5 +1,5 @@
-import TextField from "./src/text-field.vue";
-import Typography from "./src/typography.vue";
-import Button from "./src/button.vue";
+import TextField from "./src/TextField.vue";
+import Typography from "./src/Typography.vue";
+import Button from "./src/Button.vue";
 
 export { Button, Typography, TextField };

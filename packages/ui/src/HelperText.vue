@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useCssModule } from "vue";
-import Typography from "./typography.vue"; // Typography 컴포넌트 경로 확인 및 수정
+import Typography from "./Typography.vue"; // Typography 컴포넌트 경로 확인 및 수정
 
 const style = useCssModule();
 
