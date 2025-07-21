@@ -1,12 +1,19 @@
 import axios from "axios";
 
-const config = useRuntimeConfig();
-const API_URI = config.public.apiBaseUrl || "http://localhost:3000/api";
+const API_URI = process.env.NUXT_PUBLIC_API_BASE_URL || "http://54.180.145.172";
 
 export const apiClient = axios.create({
   baseURL: API_URI,
   timeout: 5000,
 });
+
+export const checkBaseUrl = () => {
+  if (!API_URI) {
+    console.error("API_BASE_URL이 설정되지 않았습니다.");
+    throw new Error("API_BASE_URL이 설정되지 않았습니다.");
+  }
+  console.log("API_BASE_URL:", API_URI);
+};
 
 // response 확인을 통해 에러 코드에 따른 처리
 apiClient.interceptors.response.use(

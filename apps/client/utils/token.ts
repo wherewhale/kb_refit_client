@@ -1,9 +1,10 @@
 import { isClient } from "./client";
 import type { Token } from "~/types/auth";
 
-const config = useRuntimeConfig();
-const ACCESS_TOKEN: string = config.public.accessToken ?? "accessToken";
-const REFRESH_TOKEN: string = config.public.refreshToken ?? "refreshToken";
+const ACCESS_TOKEN: string =
+  process.env.NUXT_PUBLIC_ACCESS_TOKEN ?? "kb_refit_access_token";
+const REFRESH_TOKEN: string =
+  process.env.NUXT_PUBLIC_REFRESH_TOKEN ?? "kb_refit_refresh_token";
 
 export const getAccessToken = (): string | null => {
   if (!isClient) return null;
