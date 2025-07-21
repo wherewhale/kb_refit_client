@@ -228,8 +228,10 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $white;
   }
 
-  &:hover:not(.disabled) {
-    background-color: $kb-yellow-neg;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      background-color: $kb-yellow-neg;
+    }
   }
 
   &:active,
@@ -256,9 +258,11 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $black;
   }
 
-  &:hover:not(.disabled) {
-    background-color: $black;
-    color: $white;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      background-color: $black;
+      color: $white;
+    }
   }
 
   &:active,
@@ -285,8 +289,10 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $black;
   }
 
-  &:hover:not(.disabled) {
-    color: $kb-yellow-neg;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      color: $kb-yellow-neg;
+    }
   }
 
   &:active,
@@ -309,10 +315,12 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $white;
   }
 
-  &:hover:not(.disabled) {
-    border-color: $black;
-    background-color: $white;
-    color: $black;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      border-color: $black;
+      background-color: $white;
+      color: $black;
+    }
   }
 
   &:active,
@@ -338,8 +346,10 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $black;
   }
 
-  &:hover:not(.disabled) {
-    color: $gray-1;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      color: $gray-1;
+    }
   }
 
   &.isActive,
@@ -362,10 +372,12 @@ withDefaults(defineProps<ButtonProps>(), {
     border-top-color: $white;
   }
 
-  &:hover:not(.disabled) {
-    border-color: $red-1;
-    color: $red-1;
-    background-color: $white;
+  @media (hover: hover) {
+    &:hover:not(.disabled) {
+      border-color: $red-1;
+      color: $red-1;
+      background-color: $white;
+    }
   }
 
   &:active,
