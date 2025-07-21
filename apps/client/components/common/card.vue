@@ -21,7 +21,12 @@ const props = withDefaults(defineProps<CardProps>(), {
           props.content
         }}</KBUITypography>
       </div>
-      <NuxtImg :src="props.src" alt="KB 프렌즈" width="84px" />
+      <div class="w-20 h-20 relative">
+        <NuxtImg
+          :src="`assets/images/characters/${props.src}.png`"
+          alt="KB 프렌즈"
+        />
+      </div>
     </div>
     <NuxtLink
       v-if="props.href"

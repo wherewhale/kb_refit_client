@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import PointsCarousel from "~/components/points/carousel.vue";
 import { reactive } from "vue";
+import Card from "~/components/common/card.vue";
+import type { CardProps } from "~/interfaces/common/card.interface";
 
 // 필터 선택 상태
 const selected = reactive({
@@ -14,6 +15,15 @@ const FILTERS = {
   기간: ["1개월", "3개월", "6개월", "직접 입력"],
   카테고리: ["전체", "적립포인트", "할인금액"],
   정렬: ["최신순", "과거순"],
+};
+
+const card_data: CardProps = {
+  title: "최근 한 달 사용 금액",
+  content: `${(315240).toLocaleString()}원`,
+  src: "luna-1",
+  className: "bg-blue-1",
+  description: "저번 달보다 replace\n덜쓰고 있어요!",
+  boldText: "323,000원",
 };
 
 // api 호출 결과 테스트 데이터
@@ -35,7 +45,15 @@ const test_data = [
 
 <template>
   <main class="mt-10">
-    <component :is="PointsCarousel" />
+    <Card
+      :title="card_data.title"
+      :content="card_data.content"
+      :src="card_data.src"
+      :class-name="card_data.className"
+      :href="card_data.href"
+      :description="card_data.description"
+      :bold-text="card_data.boldText"
+    />
 
     <FilterPanel
       :filters="FILTERS"

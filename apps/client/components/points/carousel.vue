@@ -66,7 +66,7 @@ const select = (index: number) => {
       :description="item.description"
       :bold-text="item.boldText"
       :href="item.href"
-      :src="`assets/images/characters/${item.src}.png`"
+      :src="item.src"
       :class-name="item.className"
     />
   </UCarousel>

@@ -2,11 +2,13 @@
 import { ref } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import Logo from "../components/common/logo.vue";
-import PointsContainer from "../containers/points/point-container.vue";
-import MyWallet from '~/components/wallet/mywallet.vue';
-import AddBrandBadge from '~/components/wallet/addbrandbadge.vue';
-import MyBenefit from '~/components/wallet/mybenefit.vue';
-import { badgeList } from '~/constant/badgeList';
+import MyWallet from "~/components/wallet/mywallet.vue";
+import AddBrandBadge from "~/components/wallet/addbrandbadge.vue";
+import MyBenefit from "~/components/wallet/mybenefit.vue";
+import { badgeList } from "~/constant/badgeList";
+import PointsContainer from "~/containers/points/point-container.vue";
+import ReceiptContainer from "~/containers/receipts/receipt-container.vue";
+import MedicalContainer from "~/containers/medicals/medical-container.vue";
 
 const items = ref<TabsItem[]>([
   {
@@ -52,12 +54,10 @@ console.log(runtimeConfig.public.apiBaseUrl);
         <component :is="PointsContainer" />
       </template>
       <template #receipt="{ item }: { item: TabsItem }">
-        <main>
-          {{ item.label }}
-        </main>
+        <component :is="ReceiptContainer" />
       </template>
       <template #hospital_receipt="{ item }: { item: TabsItem }">
-        <main>{{ item.label }}</main>
+        <component :is="MedicalContainer" />
       </template>
     </UTabs>
 
@@ -91,11 +91,13 @@ console.log(runtimeConfig.public.apiBaseUrl);
             @click="isBottomSheetOpen = !isBottomSheetOpen"
           />
         </div>
-        <div class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scroll scrollbar-hide">
+        <div
+          class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scroll scrollbar-hide"
+        >
           <div class="h-[1024px]">
-            <MyWallet :badge-list="badgeList"/>
+            <MyWallet :badge-list="badgeList" />
             <AddBrandBadge />
-            <MyBenefit/>
+            <MyBenefit />
           </div>
         </div>
       </template>

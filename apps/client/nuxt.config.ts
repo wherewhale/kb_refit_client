@@ -34,8 +34,8 @@ export default defineNuxtConfig({
   },
   pwa: {
     manifest: {
-      name: "KB Refit Client",
-      short_name: "KB Refit",
+      name: "KB Refit",
+      short_name: "KB 리핏",
       description: "전자 영수증은 KB Refit에서 현명하게 관리하세요.",
       theme_color: "#545045",
       icons: [
