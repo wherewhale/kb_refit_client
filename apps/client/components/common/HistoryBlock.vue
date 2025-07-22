@@ -52,7 +52,7 @@ const onClickItem = (item: PaymentItem) => {
 </script>
 
 <template>
-  <ul class="w-full">
+  <ul v-if="props.items.length > 0" class="w-full">
     <li v-for="group in groupedItems" :key="group.date">
       <USeparator class="my-2" />
       <KBUITypography size="b12" class="mb-1">{{
@@ -115,4 +115,17 @@ const onClickItem = (item: PaymentItem) => {
       </ul>
     </li>
   </ul>
+  <div
+    v-else
+    class="w-full mt-10 flex flex-col items-center justify-center pb-10"
+  >
+    <UIcon
+      name="material-symbols:sd-card-alert-sharp"
+      size="80"
+      class="text-gray-3"
+    />
+    <KBUITypography size="b18" color="gray-2" class-name="mt-4 text-center">
+      검색 조건에 맞는<br />이용 내역이 없어요!
+    </KBUITypography>
+  </div>
 </template>
