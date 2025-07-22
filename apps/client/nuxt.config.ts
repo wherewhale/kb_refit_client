@@ -73,6 +73,13 @@ export default defineNuxtConfig({
       type: "module",
     },
   },
+  i18n: {
+    locales: [
+      {code: 'en', language: 'en-US', file: 'en.json'},
+      {code: 'ko', language: 'ko-KR', file: 'ko.json'}
+    ],
+    defaultLocale: 'ko'
+  },
   ui: {
     colorMode: false,
   },
@@ -82,6 +89,7 @@ export default defineNuxtConfig({
       isDev: process.env.APP_MODE === "development",
       accessToken: process.env.ACCESS_TOKEN || "",
       refreshToken: process.env.REFRESH_TOKEN || "",
+      googleSheetApiKey: process.env.GOOGLE_SHEET_API_KEY,
     },
   },
   modules: [
@@ -90,5 +98,6 @@ export default defineNuxtConfig({
     "@nuxt/ui",
     "@nuxt/test-utils",
     "@vite-pwa/nuxt",
+    "@nuxtjs/i18n",
   ],
 });

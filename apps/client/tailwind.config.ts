@@ -1,5 +1,4 @@
 import type { Config } from 'tailwindcss'
-import scrollbarHide from 'tailwind-scrollbar-hide'
 
 const config: Config = {
   content: [
@@ -11,7 +10,6 @@ const config: Config = {
     "./error.vue",
     "./node_modules/@nuxt/ui/dist/runtime/**/*.{vue,js,ts}",
   ],
-  plugins: [scrollbarHide],
 }
 
 export default config
