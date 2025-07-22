@@ -87,6 +87,7 @@ const paymentList = [
               background: 'bg-blue-1',
               emoji: '🏥',
             },
+            href: `/medical/${item.id}`,
           }))
         "
       />

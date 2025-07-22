@@ -17,12 +17,12 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const route = useRoute();
 const printRef = ref<HTMLElement | null>(null);
 
-const calculatedTotalPrice = props.goods?.reduce(
-  (sum, item) => sum + item.price * item.quantity,
-  0
-);
+const calculatedTotalPrice =
+  props.goods?.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
+  props.totalPrice;
 const vat = calculatedTotalPrice ? Math.floor(calculatedTotalPrice / 11) : 0;
 
 defineExpose({ printRef });
@@ -57,50 +57,52 @@ defineExpose({ printRef });
         props.address
       }}</KBUITypography>
     </div>
-    <hr class="my-1 border-b-0.5 border-gray-4" />
-    <!-- 영수증 헤더 -->
-    <div class="grid grid-cols-12">
-      <div class="col-span-5 text-start">
-        <KBUITypography size="b14">명칭</KBUITypography>
-      </div>
-      <div class="col-span-2 text-start">
-        <KBUITypography size="b14">단가</KBUITypography>
-      </div>
-      <div class="col-span-2 text-center">
-        <KBUITypography size="b14">수량</KBUITypography>
-      </div>
-      <div class="col-span-3 text-end">
-        <KBUITypography size="b14">금액</KBUITypography>
-      </div>
-    </div>
-    <hr class="my-1 border-b-0.5 border-gray-4" />
-    <!-- 영수증 내용 -->
-    <ul>
-      <li
-        v-for="(item, index) in props.goods"
-        :key="index"
-        class="grid grid-cols-12"
-      >
+    <div v-if="props.goods">
+      <hr class="my-1 border-b-0.5 border-gray-4" />
+      <!-- 영수증 헤더 -->
+      <div class="grid grid-cols-12">
         <div class="col-span-5 text-start">
-          <KBUITypography size="b12" class-name="truncate">{{
-            item.name
-          }}</KBUITypography>
+          <KBUITypography size="b14">명칭</KBUITypography>
         </div>
         <div class="col-span-2 text-start">
-          <KBUITypography size="b12">{{
-            item.price.toLocaleString()
-          }}</KBUITypography>
+          <KBUITypography size="b14">단가</KBUITypography>
         </div>
         <div class="col-span-2 text-center">
-          <KBUITypography size="b12">{{ item.quantity }}</KBUITypography>
+          <KBUITypography size="b14">수량</KBUITypography>
         </div>
         <div class="col-span-3 text-end">
-          <KBUITypography size="b12">{{
-            (item.price * item.quantity).toLocaleString()
-          }}</KBUITypography>
+          <KBUITypography size="b14">금액</KBUITypography>
         </div>
-      </li>
-    </ul>
+      </div>
+      <hr class="my-1 border-b-0.5 border-gray-4" />
+      <!-- 영수증 내용 -->
+      <ul>
+        <li
+          v-for="(item, index) in props.goods"
+          :key="index"
+          class="grid grid-cols-12"
+        >
+          <div class="col-span-5 text-start">
+            <KBUITypography size="b12" class-name="truncate">{{
+              item.name
+            }}</KBUITypography>
+          </div>
+          <div class="col-span-2 text-start">
+            <KBUITypography size="b12">{{
+              item.price.toLocaleString()
+            }}</KBUITypography>
+          </div>
+          <div class="col-span-2 text-center">
+            <KBUITypography size="b12">{{ item.quantity }}</KBUITypography>
+          </div>
+          <div class="col-span-3 text-end">
+            <KBUITypography size="b12">{{
+              (item.price * item.quantity).toLocaleString()
+            }}</KBUITypography>
+          </div>
+        </li>
+      </ul>
+    </div>
 
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center">
@@ -161,7 +163,9 @@ defineExpose({ printRef });
         class-name="text-center"
         color="green-2"
       >
-        경비 처리 완료
+        {{
+          route.path.startsWith("/medical") ? "보험처리 완료" : "경비처리 완료"
+        }}
       </KBUITypography>
       <div v-else class="flex flex-col gap-2 items-center justify-center">
         <KBUITypography
@@ -170,7 +174,11 @@ defineExpose({ printRef });
           class-name="text-center"
           color="red-2"
         >
-          경비 처리 불가
+          {{
+            route.path.startsWith("/medical")
+              ? "보험처리 불가"
+              : "경비처리 불가"
+          }}
         </KBUITypography>
         <KBUITypography size="b14" class-name="text-center" color="red-2">
           {{ props.complete.message ?? "처리할 수 없는 영수증입니다." }}
