@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
 
 // TODO: 영수증 정보 불러오기 API 연동
@@ -18,32 +17,26 @@ const receiptId = route.params.receiptId as string;
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 
-const onDownloadPDF = async () => {
+const onDownloadImage = async () => {
   const el = receiptRef.value?.printRef;
 
   if (!el) {
     console.warn("⚠️ ref가 null이거나 문서에 붙지 않았습니다.");
     return;
   }
+
   if (!document.body.contains(el)) {
     console.warn("⚠️ DOM이 아직 문서에 attach되지 않았습니다.");
     return;
   }
 
   const canvas = await html2canvas(el, { scale: 2 });
-  const imgData = canvas.toDataURL("image/png");
 
-  const pdf = new jsPDF({
-    unit: "mm",
-    format: "a4",
-    orientation: "portrait",
-  });
-
-  const width = pdf.internal.pageSize.getWidth();
-  const height = (canvas.height * width) / canvas.width;
-
-  pdf.addImage(imgData, "PNG", 0, 0, width, height);
-  pdf.save(`${TEST_DATA.title}-${TEST_DATA.datetime}.pdf`);
+  // PNG 이미지로 저장
+  const link = document.createElement("a");
+  link.href = canvas.toDataURL("image/png");
+  link.download = "receipt.png";
+  link.click();
 };
 </script>
 
@@ -67,9 +60,9 @@ const onDownloadPDF = async () => {
           size="large"
           variant="outlined"
           class-name="w-full"
-          @click="onDownloadPDF"
+          @click="onDownloadImage"
         >
-          PDF로 저장하기
+          이미지로 저장하기
         </KBUIButton>
         <KBUIButton size="large" variant="outlined" class-name="w-full">
           진료비 세부산정내역 다운로드 (PDF)
