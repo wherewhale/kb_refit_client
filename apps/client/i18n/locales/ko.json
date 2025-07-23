@@ -1,4 +1,14 @@
 {
-  "hello": "안녕하세요",
-  "welcome": "KB Refit에 오신 것을 환영합니다"
+  "common": {
+    "translateResult": "기본 번역내용",
+    "point": "포인트",
+    "Purchase receipt": "구매영수증",
+    "Hospital receipt": "병원영수증",
+    "star points": "스타포인트 사용하러 가기",
+    "loss insurance": "실손보험금 청구하기",
+    "period": "기간",
+    "type": "종류",
+    "array": "정렬",
+    "filter": "필터"
+  }
 }

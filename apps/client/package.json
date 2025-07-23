@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "build:locales": "node ./scripts/build-locales.js", 
     "dev": "nuxt dev --force",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

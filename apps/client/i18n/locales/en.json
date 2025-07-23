@@ -1,4 +1,14 @@
 {
-  "hello": "Hello",
-  "welcome": "Welcome to KB Refit"
+  "common": {
+    "translateResult": "Basic translation content",
+    "point": "point",
+    "Purchase receipt": "Purchase receipt",
+    "Hospital receipt": "Hospital receipt",
+    "star points": "Go to use star points",
+    "loss insurance": "Claiming loss insurance",
+    "period": "period",
+    "type": "type",
+    "array": "array",
+    "filter": "filter"
+  }
 }
