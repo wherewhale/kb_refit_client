@@ -161,13 +161,14 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
       >{{ stepIndex === 2 ? "보내기" : "다음" }}</KBUIButton
-    ><KBUIButton
+    >
+    <KBUIButton
+      v-if="stepIndex === 3"
       size="large"
       variant="primary"
-      class="w-full"
+      class="w-full mt-10"
       @click="onClickComplete"
       >완료</KBUIButton
-    >
     >
     <KBUIButton
       v-if="stepIndex === 2"
