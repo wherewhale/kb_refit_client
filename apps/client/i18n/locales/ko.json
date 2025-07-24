@@ -1,14 +1,270 @@
 {
+  "client": {
+    "tab": {
+      "point": "포인트",
+      "purchase_receipt": "구매영수증",
+      "hospital_receipt": "병원영수증"
+    }
+  },
+  "point": {
+    "card": {
+      "button": "스타포인트 사용하러 가기",
+      "title": "KB 스타포인트",
+      "description": "전자영수증으로 벌써 나무를 살렸어요!"
+    },
+    "filter": {
+      "accumulated_points": "적립포인트",
+      "discount_amount": "할인금액"
+    },
+    "filter_result": {
+      "no_usage": "검색 조건에 맞는 이용내역이 없어요."
+    }
+  },
+  "receipt": {
+    "card": {
+      "title": "최근 한 달 사용 금액",
+      "description": "저번 달보다 덜 쓰고 있어요!"
+    },
+    "filter": {
+      "approval": "승인",
+      "cancel": "취소",
+      "receipt_processing": "영수 처리",
+      "receipt_unprocessing": "영수 미처리"
+    },
+    "filter_result": {
+      "no_receipts": "검색 조건에 맞는 영수증 내역이 없어요"
+    }
+  },
+  "medical": {
+    "card": {
+      "title": "최근 3년 간 병원비",
+      "description": "보험 청구 가능한 병원비가 현재 남아 있어요!"
+    },
+    "filter": {
+      "insurance_claim": "보험 청구",
+      "insurance_non-claim": "보험 미청구"
+    }
+  },
+  "receipt_detail": {
+    "button": {
+      "save_image": "이미지로 저장하기",
+      "processing_receipt": "영수 처리하기",
+      "already_check": "이미 처리된 영수증입니다"
+    },
+    "title": {
+      "check_receipt": "영수증 확인"
+    }
+  },
+  "medical_detail": {
+    "button": {
+      "save_image": "이미지로 저장하기",
+      "download_PDF": "진료비 세부산정내역 다운로드 (PDF)",
+      "claim_insurance": "실손보험금 청구하기"
+    }
+  },
   "common": {
-    "translateResult": "기본 번역내용",
-    "point": "포인트",
-    "Purchase receipt": "구매영수증",
-    "Hospital receipt": "병원영수증",
-    "star points": "스타포인트 사용하러 가기",
-    "loss insurance": "실손보험금 청구하기",
-    "period": "기간",
-    "type": "종류",
-    "array": "정렬",
-    "filter": "필터"
+    "filter": {
+      "title": "필터",
+      "1month": "1개월",
+      "3month": "3개월",
+      "6month": "6개월",
+      "input": "직접입력",
+      "entire": "전체",
+      "latest": "최신순",
+      "past_order": "과거순"
+    },
+    "button": {
+      "cancel": "취소",
+      "input_completed": "입력 완료",
+      "next": "다음",
+      "send": "보내기",
+      "complete": "완료",
+      "select": "선택하기",
+      "back": "돌아가기",
+      "close": "닫기"
+    },
+    "comeon": "이거 오면 진자 다 오는거임 ㅋㅋ 오냐? 야 오냐? 오냐고"
+  },
+  "login": {
+    "title": {
+      "national_certificate": "KB 국민인증서"
+    },
+    "placeholder": {
+      "certificate_password": "인증서 비밀번호 6자리를 입력해주세요"
+    }
+  },
+  "main": {
+    "card": {
+      "description": "가장 많이 할인받은 카테고리는"
+    }
+  },
+  "ceo": {
+    "filter_result": {
+      "no_receipts": "검색 조건에 맞는 영수증 내역이 없어요"
+    },
+    "tab": {
+      "expense_receipt": "경비 처리 영수증",
+      "business_receipt": "사업자 영수증"
+    },
+    "card": {
+      "title": "처리가 필요한 경비",
+      "description": "이번 달 총 경비 처리를 리핏과 함께했어요!",
+      "label": "이번 달에는 아직 리핏과 경비 처리를 진행하지 않았어요!"
+    },
+    "receipt": {
+      "list": "처리 완료된 경비 목록",
+      "button": "결과 보내기"
+    },
+    "filter": {
+      "security_clearance": "경비 승인",
+      "security_dismissed": "경비 기각"
+    }
+  },
+  "common_receipt": {
+    "label": {
+      "completed_processing": "경비처리 완료",
+      "not-completed_processing": "경비처리 불가"
+    },
+    "label_description": {
+      "cannot_processed": "처리할 수 없는 영수증입니다."
+    }
+  },
+  "receipt_process": {
+    "title": {
+      "processing_receipt": "영수 처리하기",
+      "check_business_info": "사업자 정보 확인",
+      "process_completed": "영수 처리 완료"
+    },
+    "label": {
+      "enter_business_into": "사업자 정보 입력",
+      "business_num": "사업자 번호",
+      "representative_name": "대표자명",
+      "opening_date": "개업일자",
+      "auth_business": "사업자 진위 여부 확인",
+      "confirm_public": "행정안전부 정보 확인중",
+      "auth_complete": "진위여부 확인 완료!",
+      "auth_failed": "진위여부 확인 실패!",
+      "verification_failed": "사업자 확인에 실패했습니다",
+      "receipt_info": "영수 처리 정보 확인",
+      "mutual": "상호",
+      "business_address": "사업장 주소",
+      "expense_items": "경비 처리 항목",
+      "write_details": "세부 내용 작성",
+      "process_completed": "영수 처리를 완료했어요!"
+    },
+    "placeholder": {
+      "business_number": "사업자 번호를 입력하세요",
+      "representative_name": "대표자명을 입력하세요",
+      "date": "날짜를 선택해주세요",
+      "enter_80_char": "최대 80자까지 입력 가능합니다"
+    },
+    "description": {
+      "required_num": "사업자 번호는 필수 항목입니다",
+      "required_name": "대표자명은 필수 항목입니다",
+      "before_today": "날짜는 오늘 이전으로 설정해야 합니다",
+      "business_num": "사업자 번호는 '-'를 제외한 10자리로 입력해주세요"
+    },
+    "dropbox": {
+      "select": "선택하세요",
+      "traffic": "교통",
+      "business_trip": "출장",
+      "business_promotion": "업무 추진",
+      "education": "교육",
+      "communication": "통신",
+      "welfare": "복리후생"
+    }
+  },
+  "common_medical": {
+    "label": {
+      "insurance_completed": "보험처리 완료",
+      "insurance_not_completed": "보험처리 불가"
+    },
+    "label_description": {
+      "not_possible": "비급여 항목이 1만원을 넘지 않아 처리 불가 통보"
+    }
+  },
+  "medical_process": {
+    "label": {
+      "check_insurance_coverage": "가입된 보험 확인하기",
+      "verifying_data": "마이데이터 확인중...",
+      "insurance_confirmed": "보험 정보 확인 완료!",
+      "choose_insurance": "보험 선택하기",
+      "check_medical_info": "진료 정보 확인하기",
+      "hospital_name": "방문한 병원명",
+      "date": "방문 날짜",
+      "sick_date": "아프기 시작한 날짜",
+      "reason": "병원 방문 사유",
+      "claim_completed": "보험금 청구 완료"
+    },
+    "title": {
+      "check_insurance_info": "보험 가입 정보 확인",
+      "insurance_info": "가입된 보험 정보",
+      "claim_completed": "보험금 청구 완료"
+    },
+    "description": {
+      "no_insurance": "가입된 보험 정보가 없어요! 새로운 보험에 가입해볼까요?",
+      "prior_vistit_date": "날짜는 방문 날짜 이전으로 설정해야 합니다",
+      "required_reason": "병원 방문 사유는 필수 항목입니다",
+      "claim_completed": "보험금 청구를 완료했어요!"
+    },
+    "button": {
+      "goto_KBInsurance": "KB 손해보험으로 이동하기",
+      "fee_details": "진료비 세부산정내역"
+    }
+  },
+  "wallet": {
+    "brand": {
+      "label": "보유중인 브랜드가 없어요"
+    },
+    "badge": {
+      "label": "배지가 수정되었습니다",
+      "title": "배지 위치 선택"
+    },
+    "benefit": {
+      "title": "현재 받고 있는 혜택",
+      "label": "아직 받고 있는 혜택이 없어요"
+    },
+    "common": {
+      "label": "보유중"
+    },
+    "button": {
+      "purchase": "구매하기",
+      "mounting": "장착하기",
+      "shortage": "포인트 부족",
+      "equip_brand": "브랜드 장착하기"
+    },
+    "label": {
+      "purchase_badge": "배지를 구매하시겠습니까?"
+    }
+  },
+  "ceo_details": {
+    "label": {
+      "check_security-processing": "경비 처리 신청 정보 확인",
+      "proposer": "신청자",
+      "tax_processing": "세무 처리 진행",
+      "sending_taxoffice": "담당 세무서에 정보를 보내는 중...",
+      "complete_transmission": "회계 정보 송신 완료!",
+      "complete_security": "경비 처리를 완료했어요!",
+      "security_complete": "경비 처리 완료",
+      "reason_rejection": "반려 사유 작성",
+      "write_rejection": "반려 사유",
+      "security_num": "경비 처리 수",
+      "receive_email": "처리 내용을 받을 이메일",
+      "send_expense-items": "경비 처리 항목을 보냈습니다"
+    },
+    "button": {
+      "approve": "승인하기",
+      "companion": "반려하기"
+    },
+    "title": {
+      "reason_rejection": "경비 처리 반려 사유 작성",
+      "send_expense-items": "경비 처리 항목 보내기"
+    },
+    "placeholder": {
+      "enter_40_char": "최대 40자까지 입력 가능합니다"
+    },
+    "description": {
+      "required_rejection": "반려 사유는 필수 항목입니다"
+    }
   }
 }

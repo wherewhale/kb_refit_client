@@ -4,7 +4,7 @@ export default defineEventHandler(async () => {
 
 
   const sheetId = "1bNpGMCoW2ylIQSxIppLCrNXuqOFZyNtL2HH8Nzng2SI"
-  const range = "dictionary!A1:F100"
+  const range = "dictionary!A1:F155"
 
   const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
 

@@ -1,14 +1,270 @@
 {
+  "client": {
+    "tab": {
+      "point": "Point",
+      "purchase_receipt": "Purchase receipt",
+      "hospital_receipt": "Hospital receipt"
+    }
+  },
+  "point": {
+    "card": {
+      "button": "Go to use star points",
+      "title": "KB Star Points",
+      "description": "We've already saved a tree with an e-receipt!"
+    },
+    "filter": {
+      "accumulated_points": "Accumulated points",
+      "discount_amount": "Discount amount"
+    },
+    "filter_result": {
+      "no_usage": "There are no usage records that match the search criteria."
+    }
+  },
+  "receipt": {
+    "card": {
+      "title": "Amount spent in the past month",
+      "description": "You spending less than last month!"
+    },
+    "filter": {
+      "approval": "Approval",
+      "cancel": "Cancel",
+      "receipt_processing": "Receipt processing",
+      "receipt_unprocessing": "Receipt unprocessed"
+    },
+    "filter_result": {
+      "no_receipts": "There are no receipts matching your search criteria."
+    }
+  },
+  "medical": {
+    "card": {
+      "title": "Hospital expenses for the past 3 years",
+      "description": "Insurance claimable hospital bills are currently available!"
+    },
+    "filter": {
+      "insurance_claim": "Insurance claim",
+      "insurance_non-claim": "Insurance non-claim"
+    }
+  },
+  "receipt_detail": {
+    "button": {
+      "save_image": "Save as image",
+      "processing_receipt": "Processing receipt",
+      "already_check": "This is a receipt that has already been processed."
+    },
+    "title": {
+      "check_receipt": "Check receipt"
+    }
+  },
+  "medical_detail": {
+    "button": {
+      "save_image": "Save as image",
+      "download_PDF": "Download medical fee details (PDF)",
+      "claim_insurance": "Claiming loss insurance"
+    }
+  },
   "common": {
-    "translateResult": "Basic translation content",
-    "point": "point",
-    "Purchase receipt": "Purchase receipt",
-    "Hospital receipt": "Hospital receipt",
-    "star points": "Go to use star points",
-    "loss insurance": "Claiming loss insurance",
-    "period": "period",
-    "type": "type",
-    "array": "array",
-    "filter": "filter"
+    "filter": {
+      "title": "Filter",
+      "1month": "1 month",
+      "3month": "3 months",
+      "6month": "6 months",
+      "input": "Direct input",
+      "entire": "Entire",
+      "latest": "Latest",
+      "past_order": "Past order"
+    },
+    "button": {
+      "cancel": "Cancel",
+      "input_completed": "Input completed",
+      "next": "Next",
+      "send": "Send",
+      "complete": "Complete",
+      "select": "Select",
+      "back": "Go back",
+      "close": "Close"
+    },
+    "comeon": "If this comes, everyone will really come lol Are you coming? Hey, are you coming? Are you coming?"
+  },
+  "login": {
+    "title": {
+      "national_certificate": "KB National Certificate"
+    },
+    "placeholder": {
+      "certificate_password": "Please enter the 6-digit certificate password"
+    }
+  },
+  "main": {
+    "card": {
+      "description": "The most discounted categories are"
+    }
+  },
+  "ceo": {
+    "filter_result": {
+      "no_receipts": "There are no receipts matching your search criteria."
+    },
+    "tab": {
+      "expense_receipt": "Expense processing receipt",
+      "business_receipt": "Business receipt"
+    },
+    "card": {
+      "title": "Expenses that require processing",
+      "description": "I've done all my expenses this month with refit!",
+      "label": "I haven't done any repeats or expenses yet this month!"
+    },
+    "receipt": {
+      "list": "List of completed expenses",
+      "button": "Send results"
+    },
+    "filter": {
+      "security_clearance": "Security clearance",
+      "security_dismissed": "Security guard dismissed"
+    }
+  },
+  "common_receipt": {
+    "label": {
+      "completed_processing": "Security processing completed",
+      "not-completed_processing": "Security processing not possible"
+    },
+    "label_description": {
+      "cannot_processed": "This receipt cannot be processed."
+    }
+  },
+  "receipt_process": {
+    "title": {
+      "processing_receipt": "Processing receipt",
+      "check_business_info": "Check business information",
+      "process_completed": "Receipt processing completed"
+    },
+    "label": {
+      "enter_business_into": "Enter business information",
+      "business_num": "Business Number",
+      "representative_name": "Representative name",
+      "opening_date": "Opening date",
+      "auth_business": "Verify the authenticity of the business",
+      "confirm_public": "Confirming information from the Ministry of Public Administration and Security",
+      "auth_complete": "Authenticity verification complete!",
+      "auth_failed": "Authenticity verification failed!",
+      "verification_failed": "Business verification failed",
+      "receipt_info": "Check receipt processing information",
+      "mutual": "Mutual",
+      "business_address": "Business address",
+      "expense_items": "Expense processing items",
+      "write_details": "Write details",
+      "process_completed": "Receipt processing completed!"
+    },
+    "placeholder": {
+      "business_number": "Enter your business number",
+      "representative_name": "Enter the representative name",
+      "date": "Please select a date",
+      "enter_80_char": "You can enter up to 80 characters."
+    },
+    "description": {
+      "required_num": "Business number is required",
+      "required_name": "Representative name is required",
+      "before_today": "The date must be set before today",
+      "business_num": "Please enter 10 digits for your business number, excluding '-'."
+    },
+    "dropbox": {
+      "select": "Please select",
+      "traffic": "traffic",
+      "business_trip": "business trip",
+      "business_promotion": "Business promotion",
+      "education": "education",
+      "communication": "communication",
+      "welfare": "Welfare"
+    }
+  },
+  "common_medical": {
+    "label": {
+      "insurance_completed": "Insurance processing completed",
+      "insurance_not_completed": "Not covered by insurance"
+    },
+    "label_description": {
+      "not_possible": "Notification that processing is not possible because the non-covered items do not exceed 10,000 won"
+    }
+  },
+  "medical_process": {
+    "label": {
+      "check_insurance_coverage": "Check your insurance coverage",
+      "verifying_data": "Verifying my data...",
+      "insurance_confirmed": "Insurance information confirmed!",
+      "choose_insurance": "Choosing Insurance",
+      "check_medical_info": "Check medical information",
+      "hospital_name": "Name of hospital visited",
+      "date": "Date of visit",
+      "sick_date": "Date you started feeling sick",
+      "reason": "Reason for visiting the hospital",
+      "claim_completed": "Insurance claim completed"
+    },
+    "title": {
+      "check_insurance_info": "Check your insurance subscription information",
+      "insurance_info": "Subscribed insurance information",
+      "claim_completed": "Insurance claim completed"
+    },
+    "description": {
+      "no_insurance": "There is no insurance information registered! Should I sign up for a new insurance?",
+      "prior_vistit_date": "The date must be set prior to the visit date",
+      "required_reason": "Reason for hospital visit is required",
+      "claim_completed": "Completed the insurance claim!"
+    },
+    "button": {
+      "goto_KBInsurance": "Go to KB Insurance",
+      "fee_details": "Medical Fee Calculation Details"
+    }
+  },
+  "wallet": {
+    "brand": {
+      "label": "I don't have any brands"
+    },
+    "badge": {
+      "label": "The badge has been modified",
+      "title": "Select badge location"
+    },
+    "benefit": {
+      "title": "Benefits currently being received",
+      "label": "I haven't received any benefits yet"
+    },
+    "common": {
+      "label": "In stock"
+    },
+    "button": {
+      "purchase": "Purchase",
+      "mounting": "Mounting",
+      "shortage": "Points shortage",
+      "equip_brand": "Equip your brand"
+    },
+    "label": {
+      "purchase_badge": "Would you like to purchase a badge?"
+    }
+  },
+  "ceo_details": {
+    "label": {
+      "check_security-processing": "Check the security processing application information",
+      "proposer": "Proposer",
+      "tax_processing": "Tax processing in progress",
+      "sending_taxoffice": "Sending information to the appropriate tax office...",
+      "complete_transmission": "Accounting information transmission complete!",
+      "complete_security": "The security processing has been completed!",
+      "security_complete": "Security processing complete",
+      "reason_rejection": "Write the reason for rejection",
+      "write_rejection": "Reason for rejection",
+      "security_num": "Number of security processing",
+      "receive_email": "Email to receive processing information",
+      "send_expense-items": "Sent the expense processing item"
+    },
+    "button": {
+      "approve": "Approve",
+      "companion": "Companion"
+    },
+    "title": {
+      "reason_rejection": "Write the reason for rejection of expense processing",
+      "send_expense-items": "Send expense processing items"
+    },
+    "placeholder": {
+      "enter_40_char": "You can enter up to 40 characters."
+    },
+    "description": {
+      "required_rejection": "Reason for rejection is required"
+    }
   }
 }
