@@ -83,7 +83,7 @@ const handleInput = (event: Event) => {
   align-items: center;
   column-gap: $spacing-16;
   height: 40px;
-  padding: 0 $spacing-16;
+  padding: 0 $spacing-4;
   border-bottom: 1px solid;
   border-color: $gray-3;
   background-color: $white;

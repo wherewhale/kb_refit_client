@@ -75,10 +75,10 @@ export default defineNuxtConfig({
   },
   i18n: {
     locales: [
-      {code: 'en', language: 'en-US', file: 'en.json'},
-      {code: 'ko', language: 'ko-KR', file: 'ko.json'}
+      { code: "en", language: "en-US", file: "en.json" },
+      { code: "ko", language: "ko-KR", file: "ko.json" },
     ],
-    defaultLocale: 'ko'
+    defaultLocale: "ko",
   },
   ui: {
     colorMode: false,
@@ -99,5 +99,6 @@ export default defineNuxtConfig({
     "@nuxt/test-utils",
     "@vite-pwa/nuxt",
     "@nuxtjs/i18n",
+    "@pinia/nuxt",
   ],
 });

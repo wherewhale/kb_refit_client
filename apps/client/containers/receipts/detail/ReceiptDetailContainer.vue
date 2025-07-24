@@ -68,9 +68,11 @@ const onDownloadImage = async () => {
         >
           이미지로 저장하기
         </KBUIButton>
-        <KBUIButton size="large" variant="primary" class-name="w-full">
-          영수 처리하기
-        </KBUIButton>
+        <NuxtLink :href="`/receipt/${receiptId}/submit`" class="w-full block">
+          <KBUIButton size="large" variant="primary" class-name="w-full">
+            영수 처리하기
+          </KBUIButton>
+        </NuxtLink>
       </div>
     </ClientOnly>
   </main>
