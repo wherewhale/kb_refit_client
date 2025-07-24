@@ -3,7 +3,8 @@ import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import dayjs from "dayjs";
 
 const props = defineProps<{
-  openDate: Date;
+  store: ReturnType<typeof useReceiptSubmitStore>;
+  errors: Record<string, string>;
   onChangeBusinessNumber: (e: Event) => void;
   onChangeCeoName: (e: Event) => void;
   onChangeOpenDate: (date: Date) => void;
@@ -16,6 +17,12 @@ const onChangeDate = () => {
   props.onChangeOpenDate(date.value.toDate(getLocalTimeZone()));
   isModalOpen.value = false;
 };
+
+onMounted(() => {
+  console.log("ceoName", props.store.ceoName);
+  console.log("businessNumber", props.store.businessNumber);
+  console.log("openDate", props.store.openDate);
+});
 </script>
 
 <template>
@@ -24,7 +31,10 @@ const onChangeDate = () => {
       사업자번호
     </KBUITypography>
     <KBUITextField
+      :model-value="props.store.businessNumber"
       placeholder="사업자번호를 입력하세요."
+      :error="props.errors.businessNumber ? true : false"
+      :error-message="props.errors.businessNumber"
       @input="props.onChangeBusinessNumber"
     />
 
@@ -32,7 +42,10 @@ const onChangeDate = () => {
       대표자 이름
     </KBUITypography>
     <KBUITextField
+      :model-value="props.store.ceoName"
       placeholder="대표자 이름을 입력하세요."
+      :error="props.errors.ceoName ? true : false"
+      :error-message="props.errors.ceoName"
       @input="props.onChangeCeoName"
     />
 
@@ -47,8 +60,8 @@ const onChangeDate = () => {
           <UIcon name="heroicons:calendar-16-solid" class="mb-0.5" />
           <KBUITypography size="b14" weight="bold">
             {{
-              openDate
-                ? dayjs(openDate).format("YYYY-MM-DD")
+              props.store.openDate
+                ? dayjs(props.store.openDate).format("YYYY-MM-DD")
                 : "선택된 날짜가 없습니다."
             }}
           </KBUITypography>

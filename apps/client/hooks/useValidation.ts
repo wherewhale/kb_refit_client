@@ -1,31 +1,30 @@
-import { ref } from "vue";
-import type { ValidationRule } from "~/interfaces/common/validation.interface";
+// ~/hooks/useValidation.ts
+import { reactive, toRefs } from "vue";
+import type { Validator } from "~/interfaces/common/validation.interface";
 
-export const useValidation = <T>() => {
-  const errorMessage = ref("");
-  const isValidated = ref(false);
-  const guideMessage = ref("");
+export function useValidation() {
+  const errors = reactive<Record<string, string>>({});
 
-  const validate = (value: T, rules: ValidationRule<T>[]) => {
-    for (const rule of rules) {
-      const result = rule(value);
+  function validate<T>(key: string, value: T, validators: Validator<T>[]) {
+    for (const v of validators) {
+      const result = v(value);
       if (!result.isValid) {
-        isValidated.value = false;
-        errorMessage.value = result.errorMessage ?? "";
-        return;
-      } else {
-        guideMessage.value = result.guideMessage ?? "";
+        errors[key] = result.errorMessage || "유효하지 않은 값입니다.";
+        return false;
       }
     }
+    errors[key] = "";
+    return true;
+  }
 
-    isValidated.value = true;
-    errorMessage.value = "";
-  };
+  function resetErrors() {
+    Object.keys(errors).forEach((key) => (errors[key] = ""));
+  }
 
   return {
-    isValidated,
-    errorMessage,
-    guideMessage,
+    ...toRefs(errors),
+    errors,
     validate,
+    resetErrors,
   };
-};
+}

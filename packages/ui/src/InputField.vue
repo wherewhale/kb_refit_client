@@ -95,7 +95,7 @@ const handleInput = (event: Event) => {
 
   // error 상태일 때
   &.error {
-    border-color: $red-1;
+    border-color: $red-2;
   }
 
   // input 내부 요소가 포커스 되었을 때 (부모 .field에 적용)

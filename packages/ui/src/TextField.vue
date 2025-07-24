@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCssModule, useAttrs, computed } from "vue";
+import { computed, ref, watch, useCssModule, useAttrs } from "vue";
 import InputField from "./InputField.vue";
 import Typography from "./Typography.vue";
 import HelperText from "./HelperText.vue";
@@ -12,6 +12,7 @@ interface InputFieldProps {
   modelValue?: string | number;
   disabled?: boolean;
   error?: boolean;
+  errorMessage?: string;
   className?: string;
   type?: string;
   name?: string;
@@ -20,41 +21,11 @@ interface InputFieldProps {
 }
 
 interface TextFieldProps extends InputFieldProps {
-  /**
-   * @type {boolean}
-   * @description 하단 메시지(에러/도움말)를 위한 여백을 미리 확보할지 여부.
-   */
   gutterBottom?: boolean;
-  /**
-   * @type {string}
-   * @description input 필드 상단에 표시될 라벨 텍스트.
-   */
   label?: string;
-  /**
-   * @type {string}
-   * @description input 필드의 도움말 메시지 텍스트 (에러가 아닐 경우).
-   */
   helperMessage?: string;
-  /**
-   * @type {string}
-   * @description 에러 메시지 텍스트. `error` prop과 함께 사용됩니다.
-   */
-  errorMessage?: string;
-  /**
-   * @type {boolean}
-   * @description 글자 수 텍스트 (예: '5 / 10') 표시 여부. `maxLength`가 있을 경우 기본값 `true`.
-   */
   isMaxLengthText?: boolean;
-  /**
-   * @type {boolean}
-   * @description TextField가 여러 줄 입력 필드인지 여부 (예: textarea 대신 `<Input type="textarea">` 가정).
-   * SCSS의 `.multilineTextfield` 클래스 적용에 사용됩니다.
-   */
   multiline?: boolean;
-  /**
-   * @type {string}
-   * @description 최상위 컨테이너에 추가될 사용자 정의 CSS 클래스.
-   */
   containerClass?: string;
 }
 
@@ -77,8 +48,21 @@ const emit = defineEmits<{
   (e: "update:modelValue", value: string | number): void;
 }>();
 
+// ✅ v-model 연동용 내부 값
+const inputValue = ref(props.modelValue);
+
+watch(
+  () => props.modelValue,
+  (val) => {
+    inputValue.value = val;
+  }
+);
+watch(inputValue, (val) => {
+  emit("update:modelValue", val);
+});
+
 const currentLength = computed(() =>
-  props.modelValue ? String(props.modelValue).length : 0
+  inputValue.value ? String(inputValue.value).length : 0
 );
 
 const inputPropsToPass = computed(() => {
@@ -102,15 +86,13 @@ const inputPropsToPass = computed(() => {
   };
 });
 
-const displayMessage = computed(() => {
-  return props.error && props.errorMessage
-    ? props.errorMessage
-    : props.helperMessage;
-});
+const displayMessage = computed(() =>
+  props.error && props.errorMessage ? props.errorMessage : props.helperMessage
+);
 
-const shouldDisplayHelperText = computed(() => {
-  return (props.error && props.errorMessage) || props.helperMessage;
-});
+const shouldDisplayHelperText = computed(
+  () => (props.error && props.errorMessage) || props.helperMessage
+);
 </script>
 
 <template>
@@ -167,11 +149,8 @@ const shouldDisplayHelperText = computed(() => {
     </div>
 
     <div :class="{ [style.gutterBottom]: gutterBottom }">
-      <InputField
-        v-bind="inputPropsToPass"
-        :modelValue="modelValue"
-        @update:modelValue="emit('update:modelValue', $event)"
-      />
+      <!-- ✅ 내부 v-model은 inputValue로 연결됨 -->
+      <InputField v-bind="inputPropsToPass" v-model="inputValue" />
 
       <HelperText
         v-if="shouldDisplayHelperText"

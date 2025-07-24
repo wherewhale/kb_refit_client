@@ -39,7 +39,7 @@ const props = withDefaults(defineProps<HelperTextProps>(), {
   <Typography
     tag="span"
     size="b12"
-    :color="props.error ? 'red-1' : 'green-2'"
+    :color="props.error ? 'red-2' : 'green-2'"
     :class="[style.text, style[props.placement], props.className]"
   >
     <span> • </span>
