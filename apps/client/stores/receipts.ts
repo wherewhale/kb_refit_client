@@ -6,7 +6,7 @@ export const useReceiptSubmitStore = defineStore("addPayments", {
     businessNumber: "",
     ceoName: "",
     openDate: new Date(),
-    category: "",
+    category: "업무 추진",
     description: "",
   }),
 

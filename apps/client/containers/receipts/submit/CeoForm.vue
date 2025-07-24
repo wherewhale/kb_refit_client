@@ -17,12 +17,6 @@ const onChangeDate = () => {
   props.onChangeOpenDate(date.value.toDate(getLocalTimeZone()));
   isModalOpen.value = false;
 };
-
-onMounted(() => {
-  console.log("ceoName", props.store.ceoName);
-  console.log("businessNumber", props.store.businessNumber);
-  console.log("openDate", props.store.openDate);
-});
 </script>
 
 <template>
@@ -77,11 +71,13 @@ onMounted(() => {
               :year-controls="false"
             />
             <KBUIButton
-              size="large"
+              type="button"
+              size="medium"
               variant="primary"
-              class-name="mt-4"
+              class-name="mt-4 w-full"
               @click="onChangeDate"
             >
+              {{ dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD") }}
               선택
             </KBUIButton>
           </aside>

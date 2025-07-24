@@ -8,6 +8,8 @@ import { useReceiptSubmitStore } from "~/stores/receipts";
 import { BUSINESS_NUMBER_REGEX } from "~/utils/regex";
 
 import CeoForm from "~/containers/receipts/submit/CeoForm.vue";
+import BusinessInfoCheck from "~/containers/receipts/submit/BusinessInfoCheck.vue";
+import ReceiptProcessingInfo from "~/containers/receipts/submit/ReceiptProcessingInfo.vue";
 
 const STEPS = [
   "사업자 정보 입력",
@@ -31,6 +33,19 @@ const {
   onChangeDescription,
   onChangeCategory,
 } = useReceiptExpenseForm(); // validate는 useForm 안에서 하지 않음
+
+const onClickNext = () => {
+  console.log(store);
+  const isValid = currentStepConfig.value?.validateStep?.();
+  if (isValid === false) return;
+
+  nextStep();
+};
+
+const onClickPrev = () => {
+  console.log(store.category);
+  prevStep();
+};
 
 // step 구성 객체
 const stepsMap: Record<
@@ -75,21 +90,43 @@ const stepsMap: Record<
         ]),
       ].every(Boolean),
   },
-
-  // 이후 스텝은 필요 시 확장
+  "사업자 진위 여부 확인": {
+    component: BusinessInfoCheck,
+    props: { onNext: onClickNext, onPrev: onClickPrev },
+    validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
+  },
+  "영수 처리 정보 확인": {
+    component: ReceiptProcessingInfo,
+    props: {
+      onChangeDescription,
+      onChangeCategory,
+      store,
+    },
+    validateStep: () =>
+      [
+        validate("category", store.category, [
+          (v) =>
+            v.length > 0
+              ? { isValid: true }
+              : {
+                  isValid: false,
+                  errorMessage: "경비 처리 항목을 선택해주세요.",
+                },
+        ]),
+        validate("description", store.description, [
+          (v) =>
+            v.length <= 80 && v.length > 0
+              ? { isValid: true }
+              : {
+                  isValid: false,
+                  errorMessage: "경비 처리 항목을 선택해주세요.",
+                },
+        ]),
+      ].every(Boolean),
+  },
 } as const;
 
 const currentStepConfig = computed(() => stepsMap[currentStep.value]);
-
-const onClickNext = () => {
-  console.log(store);
-  const isValid = currentStepConfig.value?.validateStep?.();
-  if (isValid === false) return;
-
-  nextStep();
-};
-
-const onClickPrev = () => prevStep();
 </script>
 
 <template>
@@ -109,7 +146,15 @@ const onClickPrev = () => prevStep();
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
-      >다음</KBUIButton
+      >{{ stepIndex === 2 ? "보내기" : "다음" }}</KBUIButton
+    >
+    <KBUIButton
+      v-if="stepIndex !== 1"
+      size="large"
+      variant="secondary"
+      class-name="w-full mt-2"
+      @click="onClickPrev"
+      >이전</KBUIButton
     >
   </main>
 </template>

@@ -119,6 +119,10 @@ withDefaults(defineProps<ButtonProps>(), {
 
   @include default-transition(color, background-color);
 
+  &.disabled {
+    cursor: not-allowed;
+  }
+
   &:not(.disabled) {
     cursor: pointer;
   }
