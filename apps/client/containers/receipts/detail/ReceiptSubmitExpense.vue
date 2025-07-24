@@ -10,6 +10,7 @@ import { BUSINESS_NUMBER_REGEX } from "~/utils/regex";
 import CeoForm from "~/containers/receipts/submit/CeoForm.vue";
 import BusinessInfoCheck from "~/containers/receipts/submit/BusinessInfoCheck.vue";
 import ReceiptProcessingInfo from "~/containers/receipts/submit/ReceiptProcessingInfo.vue";
+import SubmitComplete from "~/containers/receipts/submit/SubmitComplete.vue";
 
 const STEPS = [
   "사업자 정보 입력",
@@ -18,6 +19,9 @@ const STEPS = [
   "영수 처리 완료",
 ];
 
+const route = useRoute();
+const router = useRouter();
+const receiptId = route.params.receiptId as string;
 const { currentStep, direction, nextStep, prevStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
@@ -45,6 +49,11 @@ const onClickNext = () => {
 const onClickPrev = () => {
   console.log(store.category);
   prevStep();
+};
+
+const onClickComplete = () => {
+  store.reset(); // 폼 초기화
+  router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
 };
 
 // step 구성 객체
@@ -124,6 +133,11 @@ const stepsMap: Record<
         ]),
       ].every(Boolean),
   },
+  "영수 처리 완료": {
+    component: SubmitComplete,
+    props: {},
+    validateStep: () => true, // 완료 단계는 검증이 필요 없으므로 always true 반환
+  },
 } as const;
 
 const currentStepConfig = computed(() => stepsMap[currentStep.value]);
@@ -140,16 +154,23 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
       </transition>
     </FormContainer>
     <KBUIButton
-      v-if="stepIndex !== 1"
+      v-if="[0, 2].includes(stepIndex)"
       size="large"
       variant="primary"
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
       >{{ stepIndex === 2 ? "보내기" : "다음" }}</KBUIButton
+    ><KBUIButton
+      size="large"
+      variant="primary"
+      class="w-full"
+      @click="onClickComplete"
+      >완료</KBUIButton
+    >
     >
     <KBUIButton
-      v-if="stepIndex !== 1"
+      v-if="stepIndex === 2"
       size="large"
       variant="secondary"
       class-name="w-full mt-2"

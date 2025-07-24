@@ -31,7 +31,7 @@ export const useReceiptSubmitStore = defineStore("addPayments", {
       this.businessNumber = "";
       this.ceoName = "";
       this.openDate = new Date();
-      this.category = "";
+      this.category = "업무 추진";
       this.description = "";
     },
   },
