@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "build:locales": "node ./scripts/build-locales.js", 
+    "build:locales": "node ./scripts/build-locales.js",
     "dev": "nuxt dev --force",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
@@ -24,13 +24,13 @@
     "eslint": "^9.31.0",
     "html2canvas": "^1.4.1",
     "nuxt": "^3.17.7",
+    "typescript": "^5.8.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^18.0.1",
-    "typescript": "^5.8.3",
     "vitest": "^3.2.4"
   }
 }
