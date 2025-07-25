@@ -9,7 +9,10 @@
   "point": {
     "card": {
       "button": "Go to use star points",
-      "title": "KB Star Points",
+      "title3": "Carbon neutral points received from refit",
+      "title2": "Discounted amount received through refit",
+      "title1": "KB Star Points",
+      "description2": "The most discounted categories are",
       "description": "We've already saved a tree with an e-receipt!"
     },
     "filter": {
@@ -83,7 +86,8 @@
       "back": "Go back",
       "close": "Close"
     },
-    "comeon": "If this comes, everyone will really come lol Are you coming? Hey, are you coming? Are you coming?"
+    "comeon": "If this comes, everyone will really come lol Are you coming? Hey, are you coming? Are you coming?",
+    "translateResult": "Basic translation content"
   },
   "login": {
     "title": {
@@ -91,11 +95,6 @@
     },
     "placeholder": {
       "certificate_password": "Please enter the 6-digit certificate password"
-    }
-  },
-  "main": {
-    "card": {
-      "description": "The most discounted categories are"
     }
   },
   "ceo": {
@@ -214,7 +213,7 @@
   },
   "wallet": {
     "brand": {
-      "label": "I don't have any brands"
+      "label": "I don't have any brands in stock"
     },
     "badge": {
       "label": "The badge has been modified",
@@ -230,7 +229,7 @@
     "button": {
       "purchase": "Purchase",
       "mounting": "Mounting",
-      "shortage": "Points shortage",
+      "shortage": "Lack of points",
       "equip_brand": "Equip your brand"
     },
     "label": {

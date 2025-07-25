@@ -9,7 +9,10 @@
   "point": {
     "card": {
       "button": "스타포인트 사용하러 가기",
-      "title": "KB 스타포인트",
+      "title3": "리핏에서 받은 탄소중립포인트",
+      "title2": "리핏으로 할인 받은 금액",
+      "title1": "KB 스타포인트",
+      "description2": "가장 많이 할인받은 카테고리는 {replace}",
       "description": "전자영수증으로 벌써 나무를 살렸어요!"
     },
     "filter": {
@@ -23,7 +26,7 @@
   "receipt": {
     "card": {
       "title": "최근 한 달 사용 금액",
-      "description": "저번 달보다 덜 쓰고 있어요!"
+      "description": "저번 달보다 replace\n덜 쓰고 있어요!"
     },
     "filter": {
       "approval": "승인",
@@ -83,7 +86,8 @@
       "back": "돌아가기",
       "close": "닫기"
     },
-    "comeon": "이거 오면 진자 다 오는거임 ㅋㅋ 오냐? 야 오냐? 오냐고"
+    "comeon": "이거 오면 진자 다 오는거임 ㅋㅋ 오냐? 야 오냐? 오냐고",
+    "translateResult": "기본 번역내용"
   },
   "login": {
     "title": {
@@ -91,11 +95,6 @@
     },
     "placeholder": {
       "certificate_password": "인증서 비밀번호 6자리를 입력해주세요"
-    }
-  },
-  "main": {
-    "card": {
-      "description": "가장 많이 할인받은 카테고리는"
     }
   },
   "ceo": {

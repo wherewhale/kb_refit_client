@@ -1,37 +1,41 @@
 <script lang="tsx" setup>
+import { computed } from "vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
 import Card from "~/components/common/Card.vue";
 
+const { t } = useI18n();
+
 // TODO: 데이터 연동해서 items 배열에 데이터 연결
-const items: CardProps[] = [
+
+const items = computed<CardProps[]>(() => [
   {
-    title: "KB스타포인트",
+    title: t('point.card.title1'),
     content: `${(1978).toLocaleString()}P`,
-    src: "bibi",
-    className: "bg-yellow-1",
-    href: "https://www.kbstar.com/",
+    src: 'bibi',
+    className: 'bg-yellow-1',
+    href: 'https://www.kbstar.com/',
   },
   {
-    title: "리핏으로 할인받은 금액",
+    title: t('point.card.title2'),
     content: `${(32520).toLocaleString()}원`,
-    src: "ageo",
-    className: "bg-purple-1",
-    description: "가장 많이 할인 받은 카테고리는\nreplace 에요!",
-    boldText: "돈까스",
+    src: 'ageo',
+    className: 'bg-purple-1',
+    description: t('point.card.description2'),
+    boldText: '돈까스',
   },
   {
-    title: "리핏에서 받은 탄소중립포인트",
+    title: t('point.card.title3'),
     content: `${(8350).toLocaleString()}P`,
-    src: "coli",
-    className: "bg-green-1",
-    description: "전자 영수증으로 벌써\nreplace의 나무를 살렸어요!",
-    boldText: "2.5그루",
+    src: 'coli',
+    className: 'bg-green-1',
+    description: t('point.card.description'),
+    boldText: '2.5그루',
   },
-];
+]);
 
 const carousel = useTemplateRef("carousel");
 const activeIndex = ref(0);
-const itemsCount = ref(items.length);
+const itemsCount = computed(() => items.value.length);
 
 function onClickPrev() {
   activeIndex.value--;

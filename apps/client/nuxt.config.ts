@@ -79,6 +79,7 @@ export default defineNuxtConfig({
       { code: "ko", language: "ko-KR", file: "ko.json" },
     ],
     defaultLocale: "ko",
+    strategy: "no_prefix"
   },
   ui: {
     colorMode: false,

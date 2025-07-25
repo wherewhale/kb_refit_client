@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import MyWallet from "~/components/wallet/MyWallet.vue";
 import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
@@ -12,10 +12,12 @@ import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";
 const route = useRoute();
 const router = useRouter();
 
-const items = ref<TabsItem[]>([
-  { label: "포인트", value: "point" },
-  { label: "구매영수증", value: "receipt" },
-  { label: "병원영수증", value: "hospital_receipt" },
+const { t } = useI18n();
+
+const items = computed<TabsItem[]>(() => [
+  { label: t("client.tab.point"), value: "point" },
+  { label: t("client.tab.purchase_receipt"), value: "receipt" },
+  { label: t("client.tab.hospital_receipt"), value: "hospital_receipt" },
 ]);
 
 const active = ref(route.query.tab?.toString() || "point");

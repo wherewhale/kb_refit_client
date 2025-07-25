@@ -36,12 +36,12 @@ const props = withDefaults(defineProps<CardProps>(), {
       class="mt-auto block w-full"
     >
       <KBUIButton size="medium" variant="primary" class="w-full"
-        >스타포인트 사용하러 가기</KBUIButton
+        >{{ $t('point.card.button') }}</KBUIButton
       >
     </NuxtLink>
     <KBUITypography v-if="props.description" size="b14">
-      {{ props.description.split("replace")[0] }}<b>{{ props.boldText }}</b
-      >{{ props.description.split("replace")[1] }}
+      {{ props.description.split("{replace}")[0] }}<b>{{ props.boldText }}</b
+      >{{ props.description.split("{replace}")[1] }}
     </KBUITypography>
   </div>
 </template>
