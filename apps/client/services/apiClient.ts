@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URI = "https://kb-refit.cloud/api/";
+const API_URI = process.env.API_BASE_URL || "https://kb-refit.cloud/api/";
 
 export const apiClient = axios.create({
   baseURL: API_URI,
@@ -32,7 +32,7 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     // 정상 응답일 경우 그대로 반환
-    return response.data;
+    return response;
   },
   (error) => {
     // 에러 응답을 처리하는 로직

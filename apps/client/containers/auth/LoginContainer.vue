@@ -1,7 +1,39 @@
 <script setup lang="ts">
+import { useMutation } from "@tanstack/vue-query";
+import { postLogin } from "~/services/auth";
 import { setTokens } from "~/utils/token";
+
 const router = useRouter();
 const pinNumber = ref<string[]>([]); // PIN 번호를 저장하는 배열
+const toast = useToast(); // 토스트 알림을 위한 훅
+
+const { mutate: postLoginApi } = useMutation({
+  mutationKey: ["login", pinNumber.value.join("")],
+  mutationFn: async () => {
+    const response = await postLogin({
+      username: pinNumber.value.join(""),
+      password: pinNumber.value.join(""),
+    });
+    // 여기에 로그인 API 호출 로직을 추가할 수 있습니다.
+    // 예시로, 토큰을 설정하는 함수를 호출합니다.
+    return response.data;
+  },
+  onSuccess: (res) => {
+    setTokens({ accessToken: res.accessToken, refreshToken: res.refreshToken });
+    router.replace("/"); // 로그인 성공 후 홈으로 리다이렉트
+  },
+  onError: (error) => {
+    console.error("로그인 실패:", error);
+    pinNumber.value = []; // PIN 번호 초기화
+    // 로그인 실패 시 사용자에게 알림을 표시하거나 다른 처리를 할 수 있습니다.
+    toast.add({
+      title: "로그인 실패",
+      description: "비밀번호가 올바르지 않습니다. 다시 시도해주세요.",
+      color: "error",
+      duration: 3000,
+    });
+  },
+});
 
 const onClickPinButton = (number: number) => {
   if (pinNumber.value.length < 6) {
@@ -16,13 +48,7 @@ const onClickBackspace = () => {
 };
 
 const onClickConfirm = () => {
-  setTokens({
-    accessToken: `${pinNumber.value.join("")}-access`,
-    refreshToken: `${pinNumber.value.join("")}-refresh`,
-  });
-  router.push({
-    path: "/",
-  });
+  postLoginApi();
 };
 
 defineExpose({ pinNumber }); // 🔑 테스트를 위한 노출
