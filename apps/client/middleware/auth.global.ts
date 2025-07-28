@@ -9,14 +9,10 @@ export default defineNuxtRouteMiddleware((to) => {
     const cookieHeader = reqHeaders.cookie ?? "";
     const cookies = parse(cookieHeader);
     token = cookies["kb_refit_access_token"];
-    if (process.env.NODE_ENV === "development") {
-      console.log("🔎 [SSR] 쿠키에서 토큰:", token);
-    }
+    // 서버 사이드 렌더링(SSR)에서 쿠키에서 토큰 추출
   } else {
     token = getAccessToken() ?? undefined;
-    if (process.env.NODE_ENV === "development") {
-      console.log("🔎 [CSR] localStorage에서 토큰:", token);
-    }
+    // 클라이언트 사이드에서 토큰 추출
   }
 
   const isAuthenticated = !!token;
@@ -25,14 +21,10 @@ export default defineNuxtRouteMiddleware((to) => {
   const isPublic = publicPages.includes(to.path);
 
   if (!isAuthenticated && !isPublic) {
-    console.log("🚫 비인증 상태 → 로그인 페이지로 이동");
     return navigateTo("/auth/login");
   }
 
   if (isAuthenticated && to.path === "/auth/login") {
-    if (process.env.NODE_ENV === "development") {
-      console.log("✅ 인증 상태에서 로그인 페이지 접근 → 홈으로 이동");
-    }
     return navigateTo("/");
   }
 });

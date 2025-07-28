@@ -11,7 +11,6 @@ const { data, error } = useQuery({
 
 const onClickCheckUrl = () => {
   checkBaseUrl();
-  console.log(data.value);
 };
 
 onMounted(() => {

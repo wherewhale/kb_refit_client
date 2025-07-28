@@ -26,7 +26,6 @@ const items = computed(() => [
 const value = ref(initCategory);
 
 const onUpdateCategory = () => {
-  console.log("Selected category:", value.value);
   props.onChangeCategory(value.value);
 };
 </script>
