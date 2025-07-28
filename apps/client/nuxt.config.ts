@@ -42,6 +42,8 @@ export default defineNuxtConfig({
         "@repo/ui": resolve(__dirname, "../../packages/ui"),
       },
     },
+    optimizeDeps: { exclude: ["axios", "form-data"] },
+    ssr: { noExternal: true },
   },
   pwa: {
     manifest: {
@@ -93,6 +95,7 @@ export default defineNuxtConfig({
       googleSheetApiKey: process.env.GOOGLE_SHEET_API_KEY,
     },
   },
+  plugins: ["~/plugins/vue-query.ts"],
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",

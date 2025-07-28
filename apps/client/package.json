@@ -19,6 +19,7 @@
     "@nuxt/ui": "^3.2.0",
     "@nuxtjs/i18n": "^10.0.1",
     "@pinia/nuxt": "^0.11.2",
+    "@tanstack/vue-query": "^5.83.0",
     "@vite-pwa/nuxt": "^1.0.4",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",

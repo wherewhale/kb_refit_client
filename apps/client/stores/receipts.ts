@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { ReceiptSubmissionForm } from "~/interfaces/receipt/form.interface";
 
-export const useReceiptSubmitStore = defineStore("addPayments", {
+export const useReceiptSubmitStore = defineStore("submitReceipt", {
   state: (): ReceiptSubmissionForm => ({
     businessNumber: "",
     ceoName: "",

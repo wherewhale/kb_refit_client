@@ -47,7 +47,6 @@ const {
 } = useReceiptExpenseForm(); // validate는 useForm 안에서 하지 않음
 
 const onClickNext = () => {
-  console.log(store);
   const isValid = currentStepConfig.value?.validateStep?.();
   if (isValid === false) return;
 
@@ -55,7 +54,6 @@ const onClickNext = () => {
 };
 
 const onClickPrev = () => {
-  console.log(store.category);
   prevStep();
 };
 

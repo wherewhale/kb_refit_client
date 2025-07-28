@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URI = process.env.NUXT_PUBLIC_API_BASE_URL || "http://54.180.145.172";
+const API_URI = "https://kb-refit.cloud/api/";
 
 export const apiClient = axios.create({
   baseURL: API_URI,
@@ -15,11 +15,24 @@ export const checkBaseUrl = () => {
   console.log("API_BASE_URL:", API_URI);
 };
 
+apiClient.interceptors.request.use(
+  // Authorization header 등의 요청에 공통헤더가 들어가는 경우 여기서 set
+  (config) => {
+    if (!isClient) return config;
+
+    const accessToken = getAccessToken();
+
+    if (accessToken) config.headers.Authorization = `Bearer ${accessToken}`;
+
+    return config;
+  }
+);
+
 // response 확인을 통해 에러 코드에 따른 처리
 apiClient.interceptors.response.use(
   (response) => {
     // 정상 응답일 경우 그대로 반환
-    return response;
+    return response.data;
   },
   (error) => {
     // 에러 응답을 처리하는 로직
@@ -28,7 +41,7 @@ apiClient.interceptors.response.use(
 
       console.error(
         `❌ [HTTP ${status}] 요청 실패:`,
-        data?.message || "알 수 없는 오류",
+        data?.message || "알 수 없는 오류"
       );
 
       switch (status) {
@@ -52,10 +65,10 @@ apiClient.interceptors.response.use(
       }
     } else {
       console.error("🚨 네트워크 오류:", error.message);
-      alert("네트워크 연결을 확인해주세요.");
+      // alert("네트워크 연결을 확인해주세요.");
     }
 
     // 에러를 던져서 각 API 함수에서도 추가 처리가 가능하도록 함
     return Promise.reject(error);
-  },
+  }
 );
