@@ -7,20 +7,18 @@ import { useReceiptExpenseForm } from "~/hooks/form/useReceiptExpenseForm";
 import { useReceiptSubmitStore } from "~/stores/receipts";
 import { BUSINESS_NUMBER_REGEX } from "~/utils/regex";
 
+import JobInfoCheck from "~/containers/receipts/submit/JobInfoCheck.vue";
+import SelectCompany from "../submit/SelectCompany.vue";
 import CeoForm from "~/containers/receipts/submit/CeoForm.vue";
 import BusinessInfoCheck from "~/containers/receipts/submit/BusinessInfoCheck.vue";
 import ReceiptProcessingInfo from "~/containers/receipts/submit/ReceiptProcessingInfo.vue";
 import SubmitComplete from "~/containers/receipts/submit/SubmitComplete.vue";
 
 const { t } = useI18n();
-// const STEPS = [
-//   "사업자 정보 입력",
-//   "사업자 진위 여부 확인",
-//   "영수 처리 정보 확인",
-//   "영수 처리 완료",
-// ];
 
 const STEPS = [
+  "고용 정보 확인하기",
+  "사업장 선택하기",
   "receipt_submit.step.ceoInfo",
   "receipt_submit.step.verifyBusiness",
   "receipt_submit.step.processingInfo",
@@ -30,7 +28,8 @@ const STEPS = [
 const route = useRoute();
 const router = useRouter();
 const receiptId = route.params.receiptId as string;
-const { currentStep, direction, nextStep, prevStep } = useFunnel(STEPS);
+const { currentStep, direction, nextStep, prevStep, setStep } =
+  useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
   direction.value === "forward" ? "slide-left" : "slide-right"
@@ -57,6 +56,11 @@ const onClickPrev = () => {
   prevStep();
 };
 
+const onSelectCompany = (companyId: string) => {
+  store.onChangeCompanyId(companyId);
+  setStep("receipt_submit.step.processingInfo");
+};
+
 const onClickComplete = () => {
   router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
 };
@@ -70,6 +74,17 @@ const stepsMap: Record<
     validateStep?: () => boolean;
   }
 > = {
+  // FIXME: step 이름은 i18n 키로 변경
+  "고용 정보 확인하기": {
+    component: JobInfoCheck,
+    props: { onNext: onClickNext },
+    validateStep: () => true,
+  },
+  "사업장 선택하기": {
+    component: SelectCompany,
+    props: { onNext: onClickNext, onSelectCompany: onSelectCompany },
+    validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
+  },
   "receipt_submit.step.ceoInfo": {
     component: CeoForm,
     props: {
@@ -94,13 +109,19 @@ const stepsMap: Record<
           (v) =>
             v.length > 0
               ? { isValid: true }
-              : { isValid: false, errorMessage: t("receipt_submit.description.required_name") },
+              : {
+                  isValid: false,
+                  errorMessage: t("receipt_submit.description.required_name"),
+                },
         ]),
         validate("openDate", store.openDate, [
           (v) =>
             v instanceof Date && !isNaN(v.getTime())
               ? { isValid: true }
-              : { isValid: false, errorMessage: t("receipt_submit.description.select_date") },
+              : {
+                  isValid: false,
+                  errorMessage: t("receipt_submit.description.select_date"),
+                },
         ]),
       ].every(Boolean),
   },
@@ -163,16 +184,18 @@ onMounted(() => {
       </transition>
     </FormContainer>
     <KBUIButton
-      v-if="[0, 2].includes(stepIndex)"
+      v-if="[2, 4].includes(stepIndex)"
       size="large"
       variant="primary"
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
-      >{{ stepIndex === 2 ? t("common.button.send") : t("common.button.next") }}</KBUIButton
+      >{{
+        stepIndex === 2 ? t("common.button.send") : t("common.button.next")
+      }}</KBUIButton
     >
     <KBUIButton
-      v-if="stepIndex === 3"
+      v-if="stepIndex === 5"
       size="large"
       variant="primary"
       class="w-full mt-10"
@@ -180,7 +203,7 @@ onMounted(() => {
       >{{ t("common.button.complete") }}</KBUIButton
     >
     <KBUIButton
-      v-if="stepIndex === 2"
+      v-if="stepIndex === 4"
       size="large"
       variant="secondary"
       class-name="w-full mt-2"

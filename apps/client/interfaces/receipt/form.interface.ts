@@ -4,4 +4,5 @@ export interface ReceiptSubmissionForm {
   openDate: Date;
   category: string;
   description: string;
+  companyId: string;
 }
