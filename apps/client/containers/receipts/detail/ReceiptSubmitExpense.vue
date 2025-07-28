@@ -58,7 +58,6 @@ const onClickPrev = () => {
 };
 
 const onClickComplete = () => {
-  store.reset(); // 폼 초기화
   router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
 };
 
@@ -147,6 +146,10 @@ const stepsMap: Record<
 } as const;
 
 const currentStepConfig = computed(() => stepsMap[currentStep.value]);
+
+onMounted(() => {
+  store.reset(); // 컴포넌트가 마운트될 때 스토어 초기화
+});
 </script>
 
 <template>

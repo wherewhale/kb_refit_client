@@ -67,9 +67,11 @@ const onDownloadImage = async () => {
         <KBUIButton size="large" variant="outlined" class-name="w-full">
           진료비 세부산정내역 다운로드 (PDF)
         </KBUIButton>
-        <KBUIButton size="large" variant="primary" class-name="w-full">
-          실손보험금 청구하기
-        </KBUIButton>
+        <NuxtLink class="w-full block" :href="`/medical/${receiptId}/submit`">
+          <KBUIButton size="large" variant="primary" class-name="w-full">
+            실손보험금 청구하기
+          </KBUIButton>
+        </NuxtLink>
       </div>
     </ClientOnly>
   </main>
