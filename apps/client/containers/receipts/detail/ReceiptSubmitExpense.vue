@@ -12,11 +12,19 @@ import BusinessInfoCheck from "~/containers/receipts/submit/BusinessInfoCheck.vu
 import ReceiptProcessingInfo from "~/containers/receipts/submit/ReceiptProcessingInfo.vue";
 import SubmitComplete from "~/containers/receipts/submit/SubmitComplete.vue";
 
+const { t } = useI18n();
+// const STEPS = [
+//   "사업자 정보 입력",
+//   "사업자 진위 여부 확인",
+//   "영수 처리 정보 확인",
+//   "영수 처리 완료",
+// ];
+
 const STEPS = [
-  "사업자 정보 입력",
-  "사업자 진위 여부 확인",
-  "영수 처리 정보 확인",
-  "영수 처리 완료",
+  "receipt_submit.step.ceoInfo",
+  "receipt_submit.step.verifyBusiness",
+  "receipt_submit.step.processingInfo",
+  "receipt_submit.step.process_completed",
 ];
 
 const route = useRoute();
@@ -65,7 +73,7 @@ const stepsMap: Record<
     validateStep?: () => boolean;
   }
 > = {
-  "사업자 정보 입력": {
+  "receipt_submit.step.ceoInfo": {
     component: CeoForm,
     props: {
       store,
@@ -82,29 +90,29 @@ const stepsMap: Record<
               ? { isValid: true }
               : {
                   isValid: false,
-                  errorMessage: "사업자 번호는 10자리 숫자여야 합니다.",
+                  errorMessage: t("receipt_submit.description.business_num"),
                 },
         ]),
         validate("ceoName", store.ceoName, [
           (v) =>
             v.length > 0
               ? { isValid: true }
-              : { isValid: false, errorMessage: "대표자 이름은 필수입니다." },
+              : { isValid: false, errorMessage: t("receipt_submit.description.required_name") },
         ]),
         validate("openDate", store.openDate, [
           (v) =>
             v instanceof Date && !isNaN(v.getTime())
               ? { isValid: true }
-              : { isValid: false, errorMessage: "개업일자를 선택해주세요." },
+              : { isValid: false, errorMessage: t("receipt_submit.description.select_date") },
         ]),
       ].every(Boolean),
   },
-  "사업자 진위 여부 확인": {
+  "receipt_submit.step.verifyBusiness": {
     component: BusinessInfoCheck,
     props: { onNext: onClickNext, onPrev: onClickPrev },
     validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
   },
-  "영수 처리 정보 확인": {
+  "receipt_submit.step.processingInfo": {
     component: ReceiptProcessingInfo,
     props: {
       onChangeDescription,
@@ -119,7 +127,7 @@ const stepsMap: Record<
               ? { isValid: true }
               : {
                   isValid: false,
-                  errorMessage: "경비 처리 항목을 선택해주세요.",
+                  errorMessage: t("receipt_detail.error.select_item"),
                 },
         ]),
         validate("description", store.description, [
@@ -128,12 +136,12 @@ const stepsMap: Record<
               ? { isValid: true }
               : {
                   isValid: false,
-                  errorMessage: "경비 처리 항목을 선택해주세요.",
+                  errorMessage: t("receipt_detail.error.select_item"),
                 },
         ]),
       ].every(Boolean),
   },
-  "영수 처리 완료": {
+  "receipt_submit.step.process_completed": {
     component: SubmitComplete,
     props: {},
     validateStep: () => true, // 완료 단계는 검증이 필요 없으므로 always true 반환
@@ -160,7 +168,7 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
-      >{{ stepIndex === 2 ? "보내기" : "다음" }}</KBUIButton
+      >{{ stepIndex === 2 ? t("common.button.send") : t("common.button.next") }}</KBUIButton
     >
     <KBUIButton
       v-if="stepIndex === 3"
@@ -168,7 +176,7 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
       variant="primary"
       class="w-full mt-10"
       @click="onClickComplete"
-      >완료</KBUIButton
+      >{{ t("common.button.complete") }}</KBUIButton
     >
     <KBUIButton
       v-if="stepIndex === 2"
@@ -176,7 +184,7 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
       variant="secondary"
       class-name="w-full mt-2"
       @click="onClickPrev"
-      >이전</KBUIButton
+      >{{ t("common.button.before") }}</KBUIButton
     >
   </main>
 </template>

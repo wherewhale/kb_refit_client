@@ -15,7 +15,7 @@ interface Props {
     message?: string;
   };
 }
-
+const { t } = useI18n();
 const props = defineProps<Props>();
 const route = useRoute();
 const printRef = ref<HTMLElement | null>(null);
@@ -44,15 +44,15 @@ defineExpose({ printRef });
       props.title
     }}</KBUITypography>
     <div class="mt-1 flex items-start gap-1">
-      <KBUITypography size="b12">사업자번호:</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.num") }}:</KBUITypography>
       <KBUITypography size="b12">{{ props.businessNumber }}</KBUITypography>
     </div>
     <div class="mt-1 flex items-start gap-1">
-      <KBUITypography size="b12">대표:</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.representative") }}:</KBUITypography>
       <KBUITypography size="b12">{{ props.ceo }}</KBUITypography>
     </div>
     <div class="mt-1 flex items-start gap-1">
-      <KBUITypography size="b12">주소:</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.address") }}:</KBUITypography>
       <KBUITypography size="b12" :ellipsis="2">{{
         props.address
       }}</KBUITypography>
@@ -62,16 +62,16 @@ defineExpose({ printRef });
       <!-- 영수증 헤더 -->
       <div class="grid grid-cols-12">
         <div class="col-span-5 text-start">
-          <KBUITypography size="b14">명칭</KBUITypography>
+          <KBUITypography size="b14">{{ t("receipt_detail.designation") }}</KBUITypography>
         </div>
         <div class="col-span-2 text-start">
-          <KBUITypography size="b14">단가</KBUITypography>
+          <KBUITypography size="b14">{{ t("receipt_detail.price") }}</KBUITypography>
         </div>
         <div class="col-span-2 text-center">
-          <KBUITypography size="b14">수량</KBUITypography>
+          <KBUITypography size="b14">{{ t("receipt_detail.quantity") }}</KBUITypography>
         </div>
         <div class="col-span-3 text-end">
-          <KBUITypography size="b14">금액</KBUITypography>
+          <KBUITypography size="b14">{{ t("receipt_detail.amount") }}</KBUITypography>
         </div>
       </div>
       <hr class="my-1 border-b-0.5 border-gray-4" />
@@ -106,7 +106,7 @@ defineExpose({ printRef });
 
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">합계</KBUITypography>
+      <KBUITypography size="b14">{{ t("receipt_detail.total") }}</KBUITypography>
       <KBUITypography size="b14">
         {{
           props.totalPrice
@@ -116,7 +116,7 @@ defineExpose({ printRef });
       </KBUITypography>
     </div>
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">공급가액</KBUITypography>
+      <KBUITypography size="b14">{{ t("receipt_detail.supply_price") }}</KBUITypography>
       <KBUITypography size="b14">{{
         calculatedTotalPrice
           ? (calculatedTotalPrice - vat).toLocaleString()
@@ -124,12 +124,12 @@ defineExpose({ printRef });
       }}</KBUITypography>
     </div>
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">부가세</KBUITypography>
+      <KBUITypography size="b14">{{ t("receipt_detail.surtax") }}</KBUITypography>
       <KBUITypography size="b14">{{ vat.toLocaleString() }}</KBUITypography>
     </div>
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center my-4">
-      <KBUITypography weight="bold"> 총액 </KBUITypography>
+      <KBUITypography weight="bold"> {{ t("receipt_detail.total_amount") }} </KBUITypography>
       <KBUITypography weight="bold">
         {{
           props.totalPrice
@@ -140,11 +140,11 @@ defineExpose({ printRef });
     </div>
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex items-start gap-1">
-      <KBUITypography size="b12">거래종류:</KBUITypography>
-      <KBUITypography size="b12">카드거래</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.transaction") }}:</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.card_transaction") }}</KBUITypography>
     </div>
     <div class="flex items-start gap-1">
-      <KBUITypography size="b12">승인일시:</KBUITypography>
+      <KBUITypography size="b12">{{ t("receipt_detail.approval_date") }}:</KBUITypography>
       <KBUITypography size="b12">{{
         dayjs(props.createdAt).format("YYYY.MM.DD HH:mm:ss")
       }}</KBUITypography>
@@ -164,7 +164,7 @@ defineExpose({ printRef });
         color="green-2"
       >
         {{
-          route.path.startsWith("/medical") ? "보험처리 완료" : "경비처리 완료"
+          route.path.startsWith("/medical") ? t("common_medical.label.insurance_completed") : t("common_receipt.label.completed_processing")
         }}
       </KBUITypography>
       <div v-else class="flex flex-col gap-2 items-center justify-center">
@@ -176,12 +176,12 @@ defineExpose({ printRef });
         >
           {{
             route.path.startsWith("/medical")
-              ? "보험처리 불가"
-              : "경비처리 불가"
+              ? t("common_receipt.label.completed_processing")
+              : t("common_receipt.label.not-completed_processing")
           }}
         </KBUITypography>
         <KBUITypography size="b14" class-name="text-center" color="red-2">
-          {{ props.complete.message ?? "처리할 수 없는 영수증입니다." }}
+          {{ props.complete.message ?? t("common_receipt.label_description.cannot_processed") }}
         </KBUITypography>
       </div>
     </div>

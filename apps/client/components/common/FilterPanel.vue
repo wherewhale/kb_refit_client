@@ -2,6 +2,8 @@
 import { ref, shallowRef } from "vue";
 import { today, getLocalTimeZone } from "@internationalized/date";
 
+const { t } = useI18n();
+
 // props: 필터 목록과 선택된 값
 const props = defineProps<{
   filters: Record<string, string[]>;
@@ -40,8 +42,8 @@ function updateFilter(label: string, value: string) {
         class="flex items-center gap-0.5"
       >
         <span v-for="(value, key) in selected" :key="key">
-          <span v-if="key !== '기간'">·</span>
-          {{ value }}
+          <span v-if="key !== 'common.filter.period'">·</span>
+          {{ t(value) }}
         </span>
       </KBUITypography>
       <UIcon
@@ -62,7 +64,7 @@ function updateFilter(label: string, value: string) {
         >
           <div class="flex items-center gap-4">
             <KBUITypography size="b14" weight="bold">{{
-              label
+              t(label)
             }}</KBUITypography>
             <div class="flex items-center gap-2">
               <KBUITypography
@@ -74,14 +76,14 @@ function updateFilter(label: string, value: string) {
                 class="cursor-pointer"
                 @click="updateFilter(label, option)"
               >
-                · {{ option }}
+                · {{ t(option) }}
               </KBUITypography>
             </div>
           </div>
 
           <!-- 직접 입력 날짜 입력 -->
           <div
-            v-if="label === '기간' && selected[label] === '직접 입력'"
+            v-if="label === 'common.filter.input' && selected[label] === 'common.filter.input'"
             class="px-4 py-2 border border-black rounded-sm bg-white flex items-center justify-between text-black"
           >
             <UModal>

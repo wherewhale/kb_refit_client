@@ -5,10 +5,10 @@ import { useI18n } from "vue-i18n";
 
 const { locale, setLocale } = useI18n();
 
-const isKorean = ref(locale.value === "ko");
+const isEnglish = ref(locale.value === "en");
 
-watch(isKorean, (val) => {
-  setLocale(val ? "ko" : "en");
+watch(isEnglish, (val) => {
+  setLocale(val ? "en" : "ko");
 });
 // import { removeTokens } from "@/utils/token";
 // FIXME: 추후 개발 과정에서는 setToken 관련 내용 삭제
@@ -26,10 +26,9 @@ watch(isKorean, (val) => {
     <Logo />
 
     <USwitch
-      v-model="isKorean"
-      unchecked-icon="mdi:alphabetical"
-      checked-icon="material-symbols:language-korean-latin"
-      default-value
+      v-model="isEnglish"
+      unchecked-icon="material-symbols:language-korean-latin"
+      checked-icon="mdi:alphabetical"
     />
     <!-- <KBUIButton
       class="ml-auto"

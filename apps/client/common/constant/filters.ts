@@ -1,20 +1,70 @@
-// 옵션 목록
-export const POINT_FILTERS = {
-  기간: ["1개월", "3개월", "6개월", "직접 입력"],
-  종류: ["전체", "적립포인트", "할인금액"],
-  정렬: ["최신순", "과거순"],
+export const FILTER_LABEL_KEYS: Record<string, string> = {
+  기간: "common.filter.period",
+  종류: "common.filter.type",
+  정렬: "common.filter.sort",
+  필터: "common.filter.filter",
 };
 
-export const RECEIPT_FILTERS = {
-  기간: ["1개월", "3개월", "6개월", "직접 입력"],
-  종류: ["전체", "승인", "취소"],
-  정렬: ["최신순", "과거순"],
-  필터: ["전체", "영수 처리", "영수 미처리"],
+export const POINT_FILTER_KEYS = {
+  기간: [
+    "common.filter.1month",
+    "common.filter.3month",
+    "common.filter.6month",
+    "common.filter.input",
+  ],
+  종류: [
+    "common.filter.entire",
+    "point.filter.accumulated_points",
+    "point.filter.discount_amount",
+  ],
+  정렬: [
+    "common.filter.latest",
+    "common.filter.past_order",
+  ],
 };
 
-export const MEDICAL_FILTERS = {
-  기간: ["1개월", "3개월", "6개월", "직접 입력"],
-  종류: ["전체", "승인", "취소"],
-  정렬: ["최신순", "과거순"],
-  필터: ["전체", "보험 청구", "보험 미청구"],
+export const RECEIPT_FILTER_KEYS = {
+  기간: [
+    "common.filter.1month",
+    "common.filter.3month",
+    "common.filter.6month",
+    "common.filter.input",
+  ],
+  종류: [
+    "common.filter.entire",
+    "receipt.filter.approval",
+    "receipt.filter.cancel",
+  ],
+  정렬: [
+    "common.filter.latest",
+    "common.filter.past_order",
+  ],
+  필터: [
+    "common.filter.entire",
+    "receipt.filter.receipt_processing",
+    "receipt.filter.receipt_unprocessing",
+  ],
+};
+
+export const MEDICAL_FILTER_KEYS = {
+  기간: [
+    "common.filter.1month",
+    "common.filter.3month",
+    "common.filter.6month",
+    "common.filter.input",
+  ],
+  종류: [
+    "common.filter.entire",
+    "receipt.filter.approval",
+    "receipt.filter.cancel",
+  ],
+  정렬: [
+    "common.filter.latest",
+    "common.filter.past_order",
+  ],
+  필터: [
+    "common.filter.entire",
+    "medical.filter.insurance_claim",
+    "medical.filter.insurance_non-claim",
+  ],
 };

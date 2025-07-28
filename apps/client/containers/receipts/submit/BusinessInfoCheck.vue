@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import LoadingDots from "~/components/common/LoadingDots.vue";
 
+const { t } = useI18n();
+
 const props = defineProps<{
   onNext: () => void;
   onPrev: () => void;
@@ -13,7 +15,7 @@ const contents = computed(() => {
     case 1:
       return {
         loading1: "loading",
-        description: "행정안전부 정보 확인중...",
+        description: t("receipt_submit.label.confirm_public"),
         loading2: "not-started",
         background: "bg-gray-3",
         icon: "ic:round-check",
@@ -21,7 +23,7 @@ const contents = computed(() => {
     case 2:
       return {
         loading1: "complete",
-        description: "진위여부 확인 완료!",
+        description: t("receipt_submit.label.auth_complete"),
         loading2: "complete",
         background: "bg-kb-yellow-pos",
         icon: "ic:round-check",
@@ -29,7 +31,7 @@ const contents = computed(() => {
     default:
       return {
         loading1: "complete",
-        description: "진위여부 확인 실패!",
+        description: t("receipt_submit.label.auth_failed"),
         loading2: "complete",
         background: "bg-kb-yellow-pos",
         icon: "ic:round-close",
@@ -49,8 +51,8 @@ const proceedStep = async () => {
     step.value = 3;
     await new Promise((resolve) => setTimeout(resolve, 1500));
     toast.add({
-      title: "진위여부 확인 실패",
-      description: "사업자 정보가 올바르지 않아요!",
+      title: t("receipt_submit.label.auth_failed"),
+      description: t("receipt_submit.label.verification_failed"),
       color: "error",
     });
     props.onPrev(); // 실패 시 이전 단계로 이동

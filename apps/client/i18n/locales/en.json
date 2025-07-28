@@ -41,7 +41,7 @@
   "medical": {
     "card": {
       "title": "Hospital expenses for the past 3 years",
-      "description": "Insurance claimable hospital bills are currently available!"
+      "description": "There are currently replaceable hospital bills remaining!"
     },
     "filter": {
       "insurance_claim": "Insurance claim",
@@ -56,6 +56,26 @@
     },
     "title": {
       "check_receipt": "Check receipt"
+    },
+    "complete": {
+      "message": "Notice of non-processing of expenses due to items that cannot be processed as company expenses"
+    },
+    "num": "Business registration number",
+    "representative": "Representative",
+    "address": "Address",
+    "designation": "designation",
+    "price": "unit price",
+    "quantity": "quantity",
+    "amount": "amount",
+    "total": "Total",
+    "supply_price": "Supply price",
+    "surtax": "Surtax",
+    "transaction": "Type of transaction",
+    "card_transaction": "Card Transactions",
+    "approval_date": "Approval date and time",
+    "total_amount": "Total amount",
+    "error": {
+      "select_item": "Please select the expense processing item."
     }
   },
   "medical_detail": {
@@ -67,7 +87,10 @@
   },
   "common": {
     "filter": {
-      "title": "Filter",
+      "period": "Period",
+      "type": "Type",
+      "sort": "Array",
+      "filter": "Filter",
       "1month": "1 month",
       "3month": "3 months",
       "6month": "6 months",
@@ -84,9 +107,9 @@
       "complete": "Complete",
       "select": "Select",
       "back": "Go back",
-      "close": "Close"
+      "close": "Close",
+      "before": "Before"
     },
-    "comeon": "If this comes, everyone will really come lol Are you coming? Hey, are you coming? Are you coming?",
     "translateResult": "Basic translation content"
   },
   "login": {
@@ -128,28 +151,31 @@
       "cannot_processed": "This receipt cannot be processed."
     }
   },
-  "receipt_process": {
+  "receipt_submit": {
     "title": {
       "processing_receipt": "Processing receipt",
-      "check_business_info": "Check business information",
+      "check_business_info": "Check business information"
+    },
+    "step": {
+      "ceoInfo": "Enter business information",
+      "verifyBusiness": "Verify the authenticity of the business",
+      "processingInfo": "Check receipt processing information",
       "process_completed": "Receipt processing completed"
     },
     "label": {
-      "enter_business_into": "Enter business information",
       "business_num": "Business Number",
       "representative_name": "Representative name",
       "opening_date": "Opening date",
-      "auth_business": "Verify the authenticity of the business",
       "confirm_public": "Confirming information from the Ministry of Public Administration and Security",
       "auth_complete": "Authenticity verification complete!",
       "auth_failed": "Authenticity verification failed!",
       "verification_failed": "Business verification failed",
-      "receipt_info": "Check receipt processing information",
       "mutual": "Mutual",
       "business_address": "Business address",
       "expense_items": "Expense processing items",
       "write_details": "Write details",
-      "process_completed": "Receipt processing completed!"
+      "process_completed": "Receipt processing completed!",
+      "success": "Receipt submission completed"
     },
     "placeholder": {
       "business_number": "Enter your business number",
@@ -161,7 +187,8 @@
       "required_num": "Business number is required",
       "required_name": "Representative name is required",
       "before_today": "The date must be set before today",
-      "business_num": "Please enter 10 digits for your business number, excluding '-'."
+      "business_num": "Please enter 10 digits for your business number, excluding '-'.",
+      "select_date": "Please select an opening date."
     },
     "dropbox": {
       "select": "Please select",
@@ -182,7 +209,7 @@
       "not_possible": "Notification that processing is not possible because the non-covered items do not exceed 10,000 won"
     }
   },
-  "medical_process": {
+  "medical_submit": {
     "label": {
       "check_insurance_coverage": "Check your insurance coverage",
       "verifying_data": "Verifying my data...",

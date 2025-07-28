@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { UTextarea } from "#components";
 
+const { t } = useI18n();
+
 // TODO: 상호명, 사업장 주소 가져오는 API 연동
 // TODO: 영수증 정보 가져오기
 
@@ -13,7 +15,14 @@ interface Props {
 const props = defineProps<Props>();
 
 const initCategory = props.store.category;
-const items = ref(["교통", "출장", "업무 추진", "교육", "통신", "복리후생"]);
+const items = computed(() => [
+  t("receipt_submit.dropbox.traffic"),
+  t("receipt_submit.dropbox.business_trip"),
+  t("receipt_submit.dropbox.business_promotion"),
+  t("receipt_submit.dropbox.education"),
+  t("receipt_submit.dropbox.communication"),
+  t("receipt_submit.dropbox.welfare"),
+]);
 const value = ref(initCategory);
 
 const onUpdateCategory = () => {
@@ -24,18 +33,18 @@ const onUpdateCategory = () => {
 
 <template>
   <form>
-    <KBUITypography size="b14" color="gray-2"> 상호 </KBUITypography>
+    <KBUITypography size="b14" color="gray-2"> {{ t("receipt_submit.label.mutual") }} </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
       KB국민은행
     </KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      사업장 주소
+      {{ t("receipt_submit.label.business_address") }}
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2"
       >서울특별시 영등포구 국제금융로8길 26(여의도동)</KBUITypography
     >
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      경비 처리 항목
+      {{ t("receipt_submit.label.expense_items") }}
     </KBUITypography>
     <USelectMenu
       v-model="value"
@@ -44,7 +53,7 @@ const onUpdateCategory = () => {
       @update:model-value="onUpdateCategory"
     />
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      세부 내용 작성
+      {{ t("receipt_submit.label.write_details") }}
     </KBUITypography>
     <UTextarea
       :model-value="props.store.description"
@@ -54,7 +63,7 @@ const onUpdateCategory = () => {
       :autoresize="true"
       color="warning"
       size="lg"
-      placeholder="최대 80자까지 입력 가능합니다."
+      :placeholder="t('receipt_submit.placeholder.enter_80_char')"
       @input="props.onChangeDescription"
     />
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">

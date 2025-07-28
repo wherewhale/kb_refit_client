@@ -12,7 +12,7 @@
       "title3": "리핏에서 받은 탄소중립포인트",
       "title2": "리핏으로 할인 받은 금액",
       "title1": "KB 스타포인트",
-      "description2": "가장 많이 할인받은 카테고리는 {replace}",
+      "description2": "가장 많이 할인받은 카테고리는",
       "description": "전자영수증으로 벌써 나무를 살렸어요!"
     },
     "filter": {
@@ -26,7 +26,7 @@
   "receipt": {
     "card": {
       "title": "최근 한 달 사용 금액",
-      "description": "저번 달보다 replace\n덜 쓰고 있어요!"
+      "description": "저번 달보다 덜 쓰고 있어요!"
     },
     "filter": {
       "approval": "승인",
@@ -41,7 +41,7 @@
   "medical": {
     "card": {
       "title": "최근 3년 간 병원비",
-      "description": "보험 청구 가능한 병원비가 현재 남아 있어요!"
+      "description": "보험 청구 가능한 병원비가\\n현재 replace 남아 있어요!"
     },
     "filter": {
       "insurance_claim": "보험 청구",
@@ -56,6 +56,26 @@
     },
     "title": {
       "check_receipt": "영수증 확인"
+    },
+    "complete": {
+      "message": "회사 경비 처리 불가 항목으로 인한 경비 처리 불가 통보"
+    },
+    "num": "사업자번호",
+    "representative": "대표",
+    "address": "주소",
+    "designation": "명칭",
+    "price": "단가",
+    "quantity": "수량",
+    "amount": "금액",
+    "total": "합계",
+    "supply_price": "공급가액",
+    "surtax": "부가세",
+    "transaction": "거래종류",
+    "card_transaction": "카드거래",
+    "approval_date": "승인일시",
+    "total_amount": "총액",
+    "error": {
+      "select_item": "경비 처리 항목을 선택해주세요."
     }
   },
   "medical_detail": {
@@ -67,7 +87,10 @@
   },
   "common": {
     "filter": {
-      "title": "필터",
+      "period": "기간",
+      "type": "종류",
+      "sort": "정렬",
+      "filter": "필터",
       "1month": "1개월",
       "3month": "3개월",
       "6month": "6개월",
@@ -84,9 +107,9 @@
       "complete": "완료",
       "select": "선택하기",
       "back": "돌아가기",
-      "close": "닫기"
+      "close": "닫기",
+      "before": "이전"
     },
-    "comeon": "이거 오면 진자 다 오는거임 ㅋㅋ 오냐? 야 오냐? 오냐고",
     "translateResult": "기본 번역내용"
   },
   "login": {
@@ -128,28 +151,31 @@
       "cannot_processed": "처리할 수 없는 영수증입니다."
     }
   },
-  "receipt_process": {
+  "receipt_submit": {
     "title": {
       "processing_receipt": "영수 처리하기",
-      "check_business_info": "사업자 정보 확인",
+      "check_business_info": "사업자 정보 확인"
+    },
+    "step": {
+      "ceoInfo": "사업자 정보 입력",
+      "verifyBusiness": "사업자 진위 여부 확인",
+      "processingInfo": "영수 처리 정보 확인",
       "process_completed": "영수 처리 완료"
     },
     "label": {
-      "enter_business_into": "사업자 정보 입력",
       "business_num": "사업자 번호",
       "representative_name": "대표자명",
       "opening_date": "개업일자",
-      "auth_business": "사업자 진위 여부 확인",
       "confirm_public": "행정안전부 정보 확인중",
       "auth_complete": "진위여부 확인 완료!",
       "auth_failed": "진위여부 확인 실패!",
       "verification_failed": "사업자 확인에 실패했습니다",
-      "receipt_info": "영수 처리 정보 확인",
       "mutual": "상호",
       "business_address": "사업장 주소",
       "expense_items": "경비 처리 항목",
       "write_details": "세부 내용 작성",
-      "process_completed": "영수 처리를 완료했어요!"
+      "process_completed": "영수 처리를 완료했어요!",
+      "success": "영수증 제출 완료"
     },
     "placeholder": {
       "business_number": "사업자 번호를 입력하세요",
@@ -161,7 +187,8 @@
       "required_num": "사업자 번호는 필수 항목입니다",
       "required_name": "대표자명은 필수 항목입니다",
       "before_today": "날짜는 오늘 이전으로 설정해야 합니다",
-      "business_num": "사업자 번호는 '-'를 제외한 10자리로 입력해주세요"
+      "business_num": "사업자 번호는 '-'를 제외한 10자리로 입력해주세요",
+      "select_date": "개업일자를 선택해주세요."
     },
     "dropbox": {
       "select": "선택하세요",
@@ -182,7 +209,7 @@
       "not_possible": "비급여 항목이 1만원을 넘지 않아 처리 불가 통보"
     }
   },
-  "medical_process": {
+  "medical_submit": {
     "label": {
       "check_insurance_coverage": "가입된 보험 확인하기",
       "verifying_data": "마이데이터 확인중...",

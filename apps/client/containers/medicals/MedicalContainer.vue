@@ -1,25 +1,36 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import Card from "~/components/common/Card.vue";
-import { MEDICAL_FILTERS } from "~/common/constant/filters";
+import { FILTER_LABEL_KEYS, MEDICAL_FILTER_KEYS } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
+
+const { t } = useI18n();
 
 // 필터 선택 상태
 const selected = reactive({
-  기간: "1개월",
-  종류: "전체",
-  정렬: "최신순",
-  필터: "전체",
+  기간: "common.filter.1month",
+  종류: "common.filter.entire",
+  정렬: "common.filter.latest",
+  필터: "common.filter.entire",
 });
 
-const card_data: CardProps = {
-  title: "최근 3년 간 병원비",
+const MEDICAL_FILTERS = computed<Record<string, string[]>>(() => {
+  return Object.fromEntries(
+    Object.entries(MEDICAL_FILTER_KEYS).map(([key, values]) => [
+      t(FILTER_LABEL_KEYS[key]),
+      values.map((v) => t(v)),
+    ])
+  );
+});
+
+const card_data = computed<CardProps>(() => ({
+  title: t("medical.card.title"),
   content: `${(21234200).toLocaleString()}원`,
   src: "ramu",
   className: "bg-red-1",
-  description: "보험 청구 가능한 병원비가\n현재 replace 남아 있어요!",
+  description: t("medical.card.description"),
   boldText: "7건",
-};
+}));
 
 // api 호출 결과 테스트 데이터
 const paymentList = [

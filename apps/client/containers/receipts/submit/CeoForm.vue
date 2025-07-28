@@ -2,6 +2,8 @@
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
 import dayjs from "dayjs";
 
+const { t } = useI18n();
+
 const props = defineProps<{
   store: ReturnType<typeof useReceiptSubmitStore>;
   errors: Record<string, string>;
@@ -22,29 +24,29 @@ const onChangeDate = () => {
 <template>
   <form>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      사업자번호
+      {{ t("receipt_submit.label.business_num") }}
     </KBUITypography>
     <KBUITextField
       :model-value="props.store.businessNumber"
-      placeholder="사업자번호를 입력하세요."
+      :placeholder="t('receipt_submit.placeholder.business_number')"
       :error="props.errors.businessNumber ? true : false"
       :error-message="props.errors.businessNumber"
       @input="props.onChangeBusinessNumber"
     />
 
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      대표자 이름
+      {{ t("receipt_submit.label.representative_name") }}
     </KBUITypography>
     <KBUITextField
       :model-value="props.store.ceoName"
-      placeholder="대표자 이름을 입력하세요."
+      :placeholder="t('receipt_submit.placeholder.representative_name')"
       :error="props.errors.ceoName ? true : false"
       :error-message="props.errors.ceoName"
       @input="props.onChangeCeoName"
     />
 
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      개업일자
+      {{ t("receipt_submit.label.opening_date") }}
     </KBUITypography>
     <div
       class="px-4 py-2 border border-black rounded-sm bg-white flex items-center justify-between text-black"
@@ -56,7 +58,7 @@ const onChangeDate = () => {
             {{
               props.store.openDate
                 ? dayjs(props.store.openDate).format("YYYY-MM-DD")
-                : "선택된 날짜가 없습니다."
+                : "t('receipt_submit.placeholder.date')"
             }}
           </KBUITypography>
         </button>
@@ -78,7 +80,7 @@ const onChangeDate = () => {
               @click="onChangeDate"
             >
               {{ dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD") }}
-              선택
+              {{ t("common.button.select") }}
             </KBUIButton>
           </aside>
         </template>

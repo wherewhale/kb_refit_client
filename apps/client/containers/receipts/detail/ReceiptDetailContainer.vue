@@ -2,6 +2,12 @@
 import html2canvas from "html2canvas";
 import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
 
+const { t } = useI18n();
+
+const receiptMessage = computed(() =>
+  t("receipt_detail.complete.message")
+);
+
 // TODO: 영수증 정보 불러오기 API 연동
 
 const TEST_DATA = {
@@ -56,7 +62,7 @@ const onDownloadImage = async () => {
         ]"
         :complete="{
           result: false,
-          message: '회사 경비 처리 불가 항목으로 인한 경비 처리 불가 통보',
+          message: receiptMessage,
         }"
       />
       <div class="flex flex-col items-center mt-10 gap-2">
@@ -66,11 +72,11 @@ const onDownloadImage = async () => {
           class-name="w-full"
           @click="onDownloadImage"
         >
-          이미지로 저장하기
+          {{ t('receipt_detail.button.save_image') }}
         </KBUIButton>
         <NuxtLink :href="`/receipt/${receiptId}/submit`" class="w-full block">
           <KBUIButton size="large" variant="primary" class-name="w-full">
-            영수 처리하기
+            {{ t('receipt_detail.button.processing_receipt') }}
           </KBUIButton>
         </NuxtLink>
       </div>

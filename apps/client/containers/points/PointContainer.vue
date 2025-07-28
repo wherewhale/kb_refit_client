@@ -2,13 +2,24 @@
 import { reactive } from "vue";
 import PointsCarousel from "~/components/points/Carousel.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
-import { POINT_FILTERS } from "~/common/constant/filters";
+import { FILTER_LABEL_KEYS, POINT_FILTER_KEYS } from "~/common/constant/filters";
+
+const { t } = useI18n();
 
 // 필터 선택 상태
 const selected = reactive({
-  기간: "1개월",
-  카테고리: "전체",
-  정렬: "최신순",
+  기간: "common.filter.1month",
+  카테고리: "common.filter.entire",
+  정렬: "common.filter.latest",
+});
+
+const POINT_FILTERS = computed<Record<string, string[]>>(() => {
+  return Object.fromEntries(
+    Object.entries(POINT_FILTER_KEYS).map(([key, values]) => [
+      t(FILTER_LABEL_KEYS[key]),
+      values.map((v) => t(v)),
+    ])
+  );
 });
 
 const getIcon = (label: string): { background: string; emoji: string } => {

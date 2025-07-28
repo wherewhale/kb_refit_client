@@ -1,3 +1,7 @@
+<script setup lang="ts">
+const { t } = useI18n();
+</script>
+
 <template>
   <div class="flex flex-col items-center justify-center">
     <div
@@ -5,6 +9,6 @@
     >
       <UIcon name="ic:round-check" :size="60" />
     </div>
-    <KBUITypography weight="medium">영수증 제출 완료</KBUITypography>
+    <KBUITypography weight="medium">{{ t("receipt_submit.label.success") }}</KBUITypography>
   </div>
 </template>

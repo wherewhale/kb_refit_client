@@ -1,25 +1,39 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
+import { useI18n } from "vue-i18n";
 import Card from "~/components/common/Card.vue";
-import { RECEIPT_FILTERS } from "~/common/constant/filters";
+import { FILTER_LABEL_KEYS, RECEIPT_FILTER_KEYS } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
 
-// 필터 선택 상태
+const { t } = useI18n();
+
+// ① selected 상태
 const selected = reactive({
-  기간: "1개월",
-  종류: "전체",
-  정렬: "최신순",
-  필터: "전체",
+  기간: "common.filter.1month",
+  종류: "common.filter.entire",
+  정렬: "common.filter.latest",
+  필터: "common.filter.entire",
 });
 
-const card_data: CardProps = {
-  title: "최근 한 달 사용 금액",
+// ② RECEIPT_FILTER_KEYS + t()로 번역된 필터 생성
+const RECEIPT_FILTERS = computed<Record<string, string[]>>(() => {
+  return Object.fromEntries(
+    Object.entries(RECEIPT_FILTER_KEYS).map(([key, values]) => [
+      t(FILTER_LABEL_KEYS[key]),
+      values.map((v) => t(v)),
+    ])
+  );
+});
+
+// 카드 데이터
+const card_data = computed<CardProps>(() => ({
+  title: t("receipt.card.title"),
   content: `${(315240).toLocaleString()}원`,
   src: "luna-1",
   className: "bg-blue-1",
-  description: "저번 달보다 replace\n덜쓰고 있어요!",
+  description: t("receipt.card.description"),
   boldText: "323,000원",
-};
+}));
 
 // TODO: 공통 Util 함수로 분리
 const getIcon = (label: string): { background: string; emoji: string } => {
@@ -32,7 +46,7 @@ const getIcon = (label: string): { background: string; emoji: string } => {
   }
 };
 
-// TODO: API 연동해서 사용
+// TODO: API 연동
 const paymentList = [
   {
     id: 21,
