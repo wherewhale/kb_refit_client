@@ -76,7 +76,7 @@ const onUpdateCategory = () => {
         business-number="123-45-67890"
         ceo="홍길동"
         address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date().toLocaleDateString()"
+        :created-at="new Date()"
         :goods="[
           { name: '상품1', price: 10000, quantity: 2 },
           { name: '상품2', price: 15000, quantity: 1 },

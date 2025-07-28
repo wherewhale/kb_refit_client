@@ -49,7 +49,7 @@ const onDownloadImage = async () => {
         business-number="123-45-67890"
         ceo="홍길동"
         address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date().toLocaleDateString()"
+        :created-at="new Date()"
         :total-price="11000"
         :complete="{
           result: true,

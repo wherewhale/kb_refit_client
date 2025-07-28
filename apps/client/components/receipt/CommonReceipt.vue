@@ -7,7 +7,7 @@ interface Props {
   businessNumber: string;
   ceo: string;
   address: string;
-  createdAt: string;
+  createdAt: Date;
   goods?: Goods[];
   totalPrice?: number;
   complete?: {
