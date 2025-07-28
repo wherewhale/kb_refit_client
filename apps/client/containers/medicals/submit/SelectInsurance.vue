@@ -7,24 +7,24 @@ const INSURANCE_DATA: Array<{
   registerDate: Date;
   logo: string;
 }> = [
-  // {
-  //   id: "insurance1",
-  //   name: "(무)KB손보간편가입실손의료비보험",
-  //   registerDate: new Date("2023-03-16"),
-  //   logo: "kb",
-  // },
-  // {
-  //   id: "insurance2",
-  //   name: "(무)KB손보간편가입실손의료비보험",
-  //   registerDate: new Date("2017-03-05"),
-  //   logo: "db",
-  // },
-  // {
-  //   id: "insurance3",
-  //   name: "(무)KB손보간편가입실손의료비보험",
-  //   registerDate: new Date("2025-03-02"),
-  //   logo: "meritz",
-  // },
+  {
+    id: "insurance1",
+    name: "(무)KB손보간편가입실손의료비보험",
+    registerDate: new Date("2023-03-16"),
+    logo: "kb",
+  },
+  {
+    id: "insurance2",
+    name: "(무)KB손보간편가입실손의료비보험",
+    registerDate: new Date("2017-03-05"),
+    logo: "db",
+  },
+  {
+    id: "insurance3",
+    name: "(무)KB손보간편가입실손의료비보험",
+    registerDate: new Date("2025-03-02"),
+    logo: "meritz",
+  },
 ];
 const props = defineProps<{
   onNext: () => void;
@@ -81,10 +81,7 @@ const onClickInsurance = (insuranceId: string) => {
       </KBUIButton>
     </li>
   </ul>
-  <div
-    v-else
-    class="w-full mt-10 flex flex-col items-center justify-center pb-10"
-  >
+  <div v-else class="w-full mt-10 flex flex-col items-center justify-center">
     <UIcon
       name="material-symbols:sd-card-alert-sharp"
       size="80"
@@ -94,5 +91,14 @@ const onClickInsurance = (insuranceId: string) => {
       가입된 보험 정보가 없어요!<br />
       새로운 보험에 가입해볼까요?
     </KBUITypography>
+    <NuxtLink
+      to="https://kbinsure-online.co.kr/"
+      target="_blank"
+      class="block w-full mt-10"
+    >
+      <KBUIButton size="large" variant="primary" class="w-full">
+        KB 손해보험으로 이동하기
+      </KBUIButton>
+    </NuxtLink>
   </div>
 </template>

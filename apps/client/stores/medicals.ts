@@ -5,7 +5,7 @@ export const useInsuranceClaimStore = defineStore("claimInsurance", {
   state: (): InsuranceClaimForm => ({
     receiptId: "",
     insuranceId: "",
-    startDate: new Date(),
+    visitedDate: new Date(),
     description: "",
   }),
 
@@ -17,15 +17,15 @@ export const useInsuranceClaimStore = defineStore("claimInsurance", {
     onSelectInsurance(insuranceId: string) {
       this.insuranceId = insuranceId;
     },
-    onChangeStartDate(date: Date) {
-      this.startDate = date;
+    onChangeVisitedDate(date: Date) {
+      this.visitedDate = date;
     },
     onChangeDescription(description: string) {
       this.description = description;
     },
     reset() {
       this.receiptId = "";
-      this.startDate = new Date();
+      this.visitedDate = new Date();
       this.description = "";
     },
   },

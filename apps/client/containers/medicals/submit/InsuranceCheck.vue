@@ -22,7 +22,7 @@ const contents = computed(() => {
         description: "보험 정보 확인 완료!",
         loading2: "complete",
         background: "bg-kb-yellow-pos",
-        icon: "ic:round-close",
+        icon: "ic:round-check",
       };
   }
 });

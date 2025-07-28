@@ -11,8 +11,8 @@ export const useInsuranceClaimForm = () => {
     store.onSelectInsurance(insuranceId);
   };
 
-  const onChangeStartDate = (date: Date) => {
-    store.onChangeStartDate(date);
+  const onChangeVisitedDate = (date: Date) => {
+    store.onChangeVisitedDate(date);
   };
 
   const onChangeDescription = (e: Event) => {
@@ -23,7 +23,7 @@ export const useInsuranceClaimForm = () => {
   return {
     onChangeReceiptId,
     onSelectInsurance,
-    onChangeStartDate,
+    onChangeVisitedDate,
     onChangeDescription,
   };
 };

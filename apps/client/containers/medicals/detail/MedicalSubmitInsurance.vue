@@ -3,13 +3,13 @@
 import { computed } from "vue";
 import { useFunnel } from "~/hooks/useFunnel";
 import { useValidation } from "~/hooks/useValidation";
-import { useReceiptSubmitStore } from "~/stores/receipts";
+import { useInsuranceClaimStore } from "~/stores/medicals";
+import { useInsuranceClaimForm } from "~/hooks/form/useInsuranceClaimForm";
 
 import InsuranceCheck from "~/containers/medicals/submit/InsuranceCheck.vue";
-import BusinessInfoCheck from "~/containers/receipts/submit/BusinessInfoCheck.vue";
 import SubmitComplete from "~/containers/medicals/submit/SubmitComplete.vue";
+import MedicalInfoCheck from "~/containers/medicals/submit/MedicalInfoCheck.vue";
 import SelectInsurance from "~/containers/medicals/submit/SelectInsurance.vue";
-import { useInsuranceClaimForm } from "~/hooks/form/useInsuranceClaimForm";
 
 const STEPS = [
   "가입된 보험 확인하기",
@@ -27,12 +27,12 @@ const transitionName = computed(() =>
   direction.value === "forward" ? "slide-left" : "slide-right"
 );
 
-const store = useReceiptSubmitStore();
+const store = useInsuranceClaimStore();
 const { validate, errors } = useValidation();
 const {
   onChangeReceiptId,
   onSelectInsurance,
-  onChangeStartDate,
+  onChangeVisitedDate,
   onChangeDescription,
 } = useInsuranceClaimForm();
 
@@ -75,8 +75,12 @@ const stepsMap: Record<
     validateStep: () => true,
   },
   "진료 정보 확인하기": {
-    component: BusinessInfoCheck,
-    props: { onNext: onClickNext, onPrev: onClickPrev },
+    component: MedicalInfoCheck,
+    props: {
+      store,
+      onChangeDescription,
+      onChangeVisitedDate,
+    },
     validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
   },
 
@@ -106,13 +110,13 @@ onMounted(() => {
       </transition>
     </FormContainer>
     <KBUIButton
-      v-if="[0, 2].includes(stepIndex)"
+      v-if="[2].includes(stepIndex)"
       size="large"
       variant="primary"
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
-      >{{ stepIndex === 2 ? "보내기" : "다음" }}</KBUIButton
+      >보내기</KBUIButton
     >
     <KBUIButton
       v-if="stepIndex === 3"
@@ -121,14 +125,6 @@ onMounted(() => {
       class="w-full mt-10"
       @click="onClickComplete"
       >완료</KBUIButton
-    >
-    <KBUIButton
-      v-if="stepIndex === 2"
-      size="large"
-      variant="secondary"
-      class-name="w-full mt-2"
-      @click="onClickPrev"
-      >이전</KBUIButton
     >
   </main>
 </template>
