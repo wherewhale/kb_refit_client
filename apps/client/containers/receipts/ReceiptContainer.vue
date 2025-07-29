@@ -2,7 +2,10 @@
 import { reactive, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import Card from "~/components/common/Card.vue";
-import { FILTER_LABEL_KEYS, RECEIPT_FILTER_KEYS } from "~/common/constant/filters";
+import {
+  FILTER_LABEL_KEYS,
+  RECEIPT_FILTER_KEYS,
+} from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
 
 const { t } = useI18n();
@@ -76,6 +79,22 @@ const paymentList = [
     createdAt: new Date("2025-07-15T10:05:00"),
   },
 ];
+
+// TODO: 거절된 법인카드 결제 내역
+const REJECTED_PAYMENTS = [
+  {
+    id: 25,
+    label: "브네",
+    amount: -15000,
+    createdAt: new Date("2025-07-15T11:20:00"),
+  },
+  {
+    id: 26,
+    label: "스타벅스",
+    amount: -4500,
+    createdAt: new Date("2025-07-13T13:45:00"),
+  },
+];
 </script>
 
 <template>
@@ -89,6 +108,28 @@ const paymentList = [
       :description="card_data.description"
       :bold-text="card_data.boldText"
     />
+
+    <div
+      v-if="REJECTED_PAYMENTS.length > 0"
+      class="w-full rounded-lg bg-white p-6 mt-10 text-black"
+    >
+      <KBUITypography tag="h3" weight="bold"
+        >법인 처리 불가 항목 (총
+        {{ REJECTED_PAYMENTS.length }}개)</KBUITypography
+      >
+      <HistoryBlock
+        :items="
+          REJECTED_PAYMENTS.map((item) => ({
+            id: item.id,
+            label: item.label,
+            amount: item.amount,
+            href: `/receipt/${item.id}`,
+            icon: getIcon(item.label),
+            createdAt: item.createdAt,
+          }))
+        "
+      />
+    </div>
 
     <div class="w-full rounded-lg bg-white p-6 mt-10 text-black">
       <FilterPanel

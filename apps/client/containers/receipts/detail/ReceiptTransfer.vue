@@ -2,20 +2,19 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useFunnel } from "~/hooks/useFunnel";
-import { useValidation } from "~/hooks/useValidation";
-import { useInsuranceClaimStore } from "~/stores/medicals";
-import { useInsuranceClaimForm } from "~/hooks/form/useInsuranceClaimForm";
 
-import InsuranceCheck from "~/containers/medicals/submit/InsuranceCheck.vue";
-import SubmitComplete from "~/containers/medicals/submit/SubmitComplete.vue";
-import MedicalInfoCheck from "~/containers/medicals/submit/MedicalInfoCheck.vue";
-import SelectInsurance from "~/containers/medicals/submit/SelectInsurance.vue";
+import AccountInfo from "~/containers/receipts/transfer/AccountInfo.vue";
+import SelectAccount from "~/containers/receipts/transfer/SelectAccount.vue";
+import TransferInfoCheck from "~/containers/receipts/transfer/TransferInfoCheck.vue";
+import TransferComplete from "~/containers/receipts/transfer/TransferComplete.vue";
+
+const { t } = useI18n();
 
 const STEPS = [
-  "가입된 보험 확인하기",
-  "보험 선택하기",
-  "나의 진료 정보",
-  "보험금 청구 완료",
+  "계좌 정보 확인하기",
+  "내 계좌 선택하기",
+  "이체 정보 확인하기",
+  "가상 계좌 이체 완료",
 ];
 
 const route = useRoute();
@@ -26,15 +25,6 @@ const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
   direction.value === "forward" ? "slide-left" : "slide-right"
 );
-
-const store = useInsuranceClaimStore();
-const { validate, errors } = useValidation();
-const {
-  onChangeReceiptId,
-  onSelectInsurance,
-  onChangeVisitedDate,
-  onChangeDescription,
-} = useInsuranceClaimForm();
 
 const onClickNext = () => {
   const isValid = currentStepConfig.value?.validateStep?.();
@@ -48,7 +38,6 @@ const onClickPrev = () => {
 };
 
 const onClickComplete = () => {
-  store.reset(); // 폼 초기화
   router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
 };
 
@@ -61,42 +50,28 @@ const stepsMap: Record<
     validateStep?: () => boolean;
   }
 > = {
-  "가입된 보험 확인하기": {
-    component: InsuranceCheck,
+  // FIXME: step 이름은 i18n 키로 변경
+  "계좌 정보 확인하기": {
+    component: AccountInfo,
     props: { onNext: onClickNext },
     validateStep: () => true,
   },
-  "보험 선택하기": {
-    component: SelectInsurance,
-    props: {
-      onNext: onClickNext,
-      onSelectInsurance: onSelectInsurance,
-    },
+  "내 계좌 선택하기": {
+    component: SelectAccount,
+    props: { onNext: onClickNext },
+  },
+  "이체 정보 확인하기": {
+    component: TransferInfoCheck,
+    props: {},
     validateStep: () => true,
   },
-  "나의 진료 정보": {
-    component: MedicalInfoCheck,
-    props: {
-      store,
-      onChangeDescription,
-      onChangeVisitedDate,
-    },
-    validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
-  },
-
-  "보험금 청구 완료": {
-    component: SubmitComplete,
+  "가상 계좌 이체 완료": {
+    component: TransferComplete,
     props: {},
-    validateStep: () => true, // 완료 단계는 검증이 필요 없으므로 always true 반환
   },
 } as const;
 
 const currentStepConfig = computed(() => stepsMap[currentStep.value]);
-
-onMounted(() => {
-  store.reset(); // 컴포넌트가 마운트될 때 스토어 초기화
-  onChangeReceiptId(receiptId);
-});
 </script>
 
 <template>
@@ -110,13 +85,13 @@ onMounted(() => {
       </transition>
     </FormContainer>
     <KBUIButton
-      v-if="[2].includes(stepIndex)"
+      v-if="[0, 2].includes(stepIndex)"
       size="large"
       variant="primary"
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
       @click="onClickNext"
-      >보내기</KBUIButton
+      >{{ stepIndex === 2 ? t("common.button.send") : "이체하기" }}</KBUIButton
     >
     <KBUIButton
       v-if="stepIndex === 3"
@@ -124,7 +99,7 @@ onMounted(() => {
       variant="primary"
       class="w-full mt-10"
       @click="onClickComplete"
-      >완료</KBUIButton
+      >{{ t("common.button.complete") }}</KBUIButton
     >
   </main>
 </template>

@@ -95,7 +95,12 @@ const onChangeDate = () => {
       :placeholder="'최대 80자까지 입력 가능합니다.'"
       @input="props.onChangeDescription"
     />
-    <KBUIButton size="large" variant="outlined" class-name="mt-10 w-full">
+    <KBUIButton
+      size="large"
+      variant="outlined"
+      class-name="mt-10 w-full"
+      type="button"
+    >
       진료비 세부산정내역
     </KBUIButton>
   </form>

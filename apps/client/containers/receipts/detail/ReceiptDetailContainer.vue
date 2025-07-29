@@ -4,22 +4,15 @@ import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
 
 const { t } = useI18n();
 
-const receiptMessage = computed(() =>
-  t("receipt_detail.complete.message")
-);
+const receiptMessage = computed(() => t("receipt_detail.complete.message"));
 
 // TODO: 영수증 정보 불러오기 API 연동
 
-const TEST_DATA = {
-  id: 1,
-  title: "영수증 상세",
-  datetime: "2025-07-14 12:00:00",
-  amount: -32500,
-  label: "브네",
-};
-
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
+// FIXME: 영수증 정보 API에서 받아온 데이터로 대체
+const isCompanyPayment = true;
+const isRejected = true;
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 
@@ -72,11 +65,24 @@ const onDownloadImage = async () => {
           class-name="w-full"
           @click="onDownloadImage"
         >
-          {{ t('receipt_detail.button.save_image') }}
+          {{ t("receipt_detail.button.save_image") }}
         </KBUIButton>
-        <NuxtLink :href="`/receipt/${receiptId}/submit`" class="w-full block">
+        <NuxtLink
+          v-if="isCompanyPayment && isRejected"
+          :href="`/receipt/${receiptId}/transfer`"
+          class="w-full block"
+        >
           <KBUIButton size="large" variant="primary" class-name="w-full">
-            {{ t('receipt_detail.button.processing_receipt') }}
+            가상 계좌 이체하기
+          </KBUIButton>
+        </NuxtLink>
+        <NuxtLink
+          v-else
+          :href="`/receipt/${receiptId}/submit`"
+          class="w-full block"
+        >
+          <KBUIButton size="large" variant="primary" class-name="w-full">
+            {{ t("receipt_detail.button.processing_receipt") }}
           </KBUIButton>
         </NuxtLink>
       </div>
