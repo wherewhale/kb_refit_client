@@ -21,7 +21,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <header class="grid grid-cols-3 px-6 py-4">
+  <header class="grid grid-cols-6 px-6 py-4">
     <div class="flex items-center justify-start text-white">
       <UIcon
         name="i-heroicons-chevron-left"
@@ -30,7 +30,7 @@ const goBack = () => {
         @click="goBack"
       />
     </div>
-    <div class="flex items-center justify-center">
+    <div class="flex items-center justify-center col-span-4">
       <KBUITypography tag="h2" weight="bold" color="white">{{
         props.title
       }}</KBUITypography>

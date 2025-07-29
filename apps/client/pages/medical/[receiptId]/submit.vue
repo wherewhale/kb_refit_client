@@ -7,7 +7,10 @@ const receiptId = route.params.receiptId as string;
 
 <template>
   <div class="min-h-screen max-w-screen-md mx-auto text-white">
-    <DetailHeader title="영수 처리하기" :back-link="`/medical/${receiptId}`" />
+    <DetailHeader
+      title="실손보험금 청구하기"
+      :back-link="`/medical/${receiptId}`"
+    />
     <ClientOnly>
       <MedicalSubmitInsurance />
     </ClientOnly>

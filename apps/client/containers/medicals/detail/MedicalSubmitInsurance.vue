@@ -43,13 +43,9 @@ const onClickNext = () => {
   nextStep();
 };
 
-const onClickPrev = () => {
-  prevStep();
-};
-
 const onClickComplete = () => {
   store.reset(); // 폼 초기화
-  router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
+  router.push(`/medical/${receiptId}`); // 영수증 목록으로 이동
 };
 
 // step 구성 객체
@@ -81,7 +77,21 @@ const stepsMap: Record<
       onChangeDescription,
       onChangeVisitedDate,
     },
-    validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
+    validateStep: () =>
+      [
+        validate("description", store.description, [
+          (v) =>
+            v.length > 0 && v.length <= 80
+              ? {
+                  isValid: true,
+                }
+              : {
+                  isValid: false,
+                  message:
+                    "병원 방문 사유는 1자 이상 80자 이하로 입력해주세요.",
+                },
+        ]),
+      ].every(Boolean), // 이 단계는 검증이 필요 없으므로 항상 true 반환
   },
 
   "보험금 청구 완료": {

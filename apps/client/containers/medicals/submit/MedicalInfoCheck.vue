@@ -74,7 +74,10 @@ const onChangeDate = () => {
               class-name="mt-4 w-full"
               @click="onChangeDate"
             >
-              {{ dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD") }}
+              {{
+                dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD")
+              }}
+              선택하기
             </KBUIButton>
           </aside>
         </template>
