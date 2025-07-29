@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import { BRAND_COMPONENTS } from "~/components/wallet/BrandComponentMap";
 import type { Badge } from "@/interfaces/common/badge.interface";
-import { useBackgroundLoader } from "~/hooks/useBackgroundLoader";
 import type { WalletTheme } from "~/interfaces/wallet/theme";
 
 const props = defineProps<{
@@ -8,8 +8,6 @@ const props = defineProps<{
   theme?: WalletTheme;
 }>();
 
-const background = ref<WalletTheme | null>(props.theme ?? null);
-const BackgroundComponent = useBackgroundLoader(background);
 const badgeImagePrefix = "/assets/images/badges/";
 </script>
 
@@ -20,7 +18,7 @@ const badgeImagePrefix = "/assets/images/badges/";
       'bg-gray-2',
     ]"
   >
-    <component :is="BackgroundComponent" />
+    <component :is="BRAND_COMPONENTS[theme]" v-if="theme" />
     <div
       class="absolute top-0 bottom-0 left-0 right-0 flex flex-col items-center gap-4 z-20 p-4"
     >

@@ -1,10 +1,61 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script setup lang="ts">
-import MyWallet from "~/components/wallet/MyWallet.vue";
-import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
-import MyBenefit from "~/components/wallet/MyBenefit.vue";
-import { badgeList } from "~/common/constant/badgeList";
+import { useFunnel } from "~/hooks/useFunnel";
+import WalletHome from "~/containers/wallets/WalletHome.vue";
+import WalletBrandStore from "~/containers/wallets/WalletBrandStore.vue";
+import WalletBadgeCollection from "~/containers/wallets/WalletBadgeCollection.vue";
 
 const isBottomSheetOpen = ref(false);
+
+const PAGES = ["내 지갑", "브랜드 상점", "배지 도감"];
+const direction = ref("forward");
+
+const { currentStep, setStep } = useFunnel(PAGES);
+const transitionName = computed(() =>
+  direction.value === "forward" ? "slide-left" : "slide-right"
+);
+
+const onBack = (page: string) => {
+  direction.value = "backward";
+  setStep(page);
+};
+
+const onNext = (page: string) => {
+  direction.value = "forward";
+  setStep(page);
+};
+
+const stepsMap: Record<
+  string,
+  {
+    component: any;
+    props: Record<string, any>;
+  }
+> = {
+  "내 지갑": {
+    component: WalletHome,
+    props: {
+      onNext,
+      onBack,
+    },
+  },
+  "브랜드 상점": {
+    component: WalletBrandStore,
+    props: {
+      onNext,
+      onBack,
+    },
+  },
+  "배지 도감": {
+    component: WalletBadgeCollection,
+    props: {
+      onNext,
+      onBack,
+    },
+  },
+} as const;
+
+const currentStepConfig = computed(() => stepsMap[currentStep.value]);
 </script>
 
 <template>
@@ -38,11 +89,15 @@ const isBottomSheetOpen = ref(false);
         />
       </div>
       <div
-        class="p-4 pt-8 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
+        class="p-4 pt-8 h-[600px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
       >
-        <MyWallet :badge-list="badgeList" theme="Hermes" />
-        <AddBrandBadge />
-        <MyBenefit />
+        <transition :name="transitionName" mode="out-in">
+          <component
+            :is="currentStepConfig?.component"
+            :key="currentStep"
+            v-bind="currentStepConfig?.props"
+          />
+        </transition>
       </div>
     </template>
   </USlideover>
