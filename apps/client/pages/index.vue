@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import type { TabsItem } from "@nuxt/ui";
-import MyWallet from "~/components/wallet/MyWallet.vue";
-import AddBrandBadge from "~/components/wallet/AddBrandBadge.vue";
-import MyBenefit from "~/components/wallet/MyBenefit.vue";
-import { badgeList } from "~/common/constant/badgeList";
 import PointsContainer from "~/containers/points/PointContainer.vue";
 import ReceiptContainer from "~/containers/receipts/ReceiptContainer.vue";
 import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";
+import WalletContainer from "~/containers/wallets/WalletContainer.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -25,9 +22,6 @@ const active = ref(route.query.tab?.toString() || "point");
 watch(active, (tab) => {
   router.replace({ query: { tab } });
 });
-
-// 하단 모달 열림/닫힘 상태
-const isBottomSheetOpen = ref(false);
 </script>
 
 <template>
@@ -52,47 +46,6 @@ const isBottomSheetOpen = ref(false);
       <ReceiptContainer v-else-if="active === 'receipt'" />
       <MedicalContainer v-else-if="active === 'hospital_receipt'" />
     </div>
-
-    <!-- TODO: 분리 필요 -->
-    <div
-      class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg rounded-t-lg"
-    >
-      <div class="relative">
-        <UButton
-          icon="i-heroicons-chevron-up"
-          block
-          size="lg"
-          class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute bottom-0 left-1/2 transform -translate-x-1/2"
-          @click="isBottomSheetOpen = !isBottomSheetOpen"
-        />
-      </div>
-    </div>
-    <USlideover
-      side="bottom"
-      title="Slideover with side"
-      :open="isBottomSheetOpen"
-      @update:open="isBottomSheetOpen = $event"
-    >
-      <template #content>
-        <div class="relative w-full">
-          <UButton
-            icon="i-heroicons-chevron-down"
-            block
-            size="lg"
-            class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-            @click="isBottomSheetOpen = !isBottomSheetOpen"
-          />
-        </div>
-        <div
-          class="p-4 max-h-[500px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
-        >
-          <div>
-            <MyWallet :badge-list="badgeList" />
-            <AddBrandBadge />
-            <MyBenefit />
-          </div>
-        </div>
-      </template>
-    </USlideover>
+    <WalletContainer />
   </div>
 </template>

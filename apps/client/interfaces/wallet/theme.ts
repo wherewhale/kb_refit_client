@@ -1,0 +1,17 @@
+export type WalletTheme =
+  | "SaintLaurant"
+  | "Chanel"
+  | "Gucci"
+  | "Miumiu"
+  | "Prada"
+  | "Hermes"
+  | "Dior"
+  | "Coach"
+  | "Balenciaga"
+  | "Cartier"
+  | "Louisvuitton"
+  | "Nike"
+  | "Adidas"
+  | "Celine"
+  | "Burberry"
+  | "Fendi";
