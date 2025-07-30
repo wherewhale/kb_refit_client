@@ -25,4 +25,7 @@
   --color-gray-4: #eaedef;
   --color-gray-5: #f5f6f7;
   --color-white: #ffffff;
+
+  /* Opacity */
+  --color-black-60: rgba(0, 0, 0, 0.6);
 }

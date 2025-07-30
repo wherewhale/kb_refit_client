@@ -1,14 +1,33 @@
+<script setup lang="ts">
+const props = defineProps<{
+  size: "sm" | "lg";
+}>();
+</script>
+
 <template>
   <div
-    class="size-6 rounded-full bg-kb-silver-1 flex items-center justify-center"
+    :class="[
+      props.size === 'lg' ? 'size-6' : 'size-4',
+      'rounded-full bg-kb-silver-1 flex items-center justify-center',
+    ]"
   >
     <div
-      class="size-[18px] rounded-full bg-kb-yellow-neg flex items-center justify-center"
+      :class="[
+        props.size === 'lg' ? 'size-[18px]' : 'size-3',
+        'rounded-full bg-kb-yellow-neg flex items-center justify-center',
+      ]"
     >
       <div
-        class="size-4 rounded-full bg-kb-yellow-pos flex items-center justify-center"
+        :class="[
+          props.size === 'lg' ? 'size-4' : 'size-[10px]',
+          'rounded-full bg-kb-yellow-pos flex items-center justify-center',
+        ]"
       >
-        <KBUITypography size="b14" weight="bold" color="white"
+        <KBUITypography
+          :size="props.size === 'lg' ? 'b14' : 'b12'"
+          weight="bold"
+          color="white"
+          :class="props.size === 'lg' ? '' : '!text-[10px]'"
           >P</KBUITypography
         >
       </div>

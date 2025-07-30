@@ -4,14 +4,6 @@ import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
 
 // TODO: 영수증 정보 불러오기 API 연동
 
-const TEST_DATA = {
-  id: 1,
-  title: "영수증 상세",
-  datetime: "2025-07-14 12:00:00",
-  amount: -32500,
-  label: "브네",
-};
-
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
 

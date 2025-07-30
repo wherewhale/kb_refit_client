@@ -2,8 +2,8 @@
 <script setup lang="ts">
 import { useFunnel } from "~/hooks/useFunnel";
 import WalletHome from "~/containers/wallets/WalletHome.vue";
-import WalletBrandStore from "~/containers/wallets/WalletBrandStore.vue";
 import WalletBadgeCollection from "~/containers/wallets/WalletBadgeCollection.vue";
+import WalletBrandStoreContainer from "~/containers/wallets/brandStore/WalletBrandStoreContainer.vue";
 
 const isBottomSheetOpen = ref(false);
 
@@ -40,7 +40,7 @@ const stepsMap: Record<
     },
   },
   "브랜드 상점": {
-    component: WalletBrandStore,
+    component: WalletBrandStoreContainer,
     props: {
       onNext,
       onBack,
@@ -79,7 +79,7 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
     @update:open="isBottomSheetOpen = $event"
   >
     <template #content>
-      <div class="relative w-full">
+      <div class="relative w-full scrollbar-hide">
         <UButton
           icon="i-heroicons-chevron-down"
           block
