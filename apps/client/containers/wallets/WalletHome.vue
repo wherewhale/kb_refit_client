@@ -3,6 +3,7 @@ import MyWallet from "~/components/wallet/MyWallet.vue";
 import type { Badge } from "~/interfaces/common/badge.interface";
 
 const props = defineProps<{
+  onClickBadge: (badgeIndex: number) => void;
   onNext: (page: string) => void;
   onBack: (page: string) => void;
 }>();
@@ -22,25 +23,15 @@ const BADGE_TEST_DATA: Badge[] = [
     image: "beauty",
     isOwned: true, // 배지를 보유하고 있는지 여부
   },
-  // {
-  //   badgeId: "3",
-  //   title: "코끼리",
-  //   description: "샐러드 주문 시 100원 페이백",
-  //   image: "salad",
-  //   isOwned: true,
-  // },
-  // {
-  //   badgeId: "4",
-  //   title: "집좀가",
-  //   description: "야놀자 100원 페이백",
-  //   image: "stay",
-  //   isOwned: true,
-  // },
 ];
 </script>
 <template>
   <div>
-    <MyWallet :badge-list="BADGE_TEST_DATA" theme="Hermes" />
+    <MyWallet
+      :badge-list="BADGE_TEST_DATA"
+      theme="Hermes"
+      @click-badge="props.onClickBadge"
+    />
     <div class="mt-4 flex justify-center items-start gap-8">
       <div class="flex flex-col items-center">
         <KBUIButton

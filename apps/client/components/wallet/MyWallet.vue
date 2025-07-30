@@ -6,6 +6,7 @@ import type { WalletTheme } from "~/interfaces/wallet/theme";
 const props = defineProps<{
   badgeList: Badge[];
   theme?: WalletTheme;
+  onClickBadge: (badgeIndex: number) => void;
 }>();
 </script>
 
@@ -31,8 +32,14 @@ const props = defineProps<{
             :src="`assets/images/badges/${props.badgeList[index].image}.png`"
             class="size-12 object-cover rounded"
             loading="lazy"
+            @click="props.onClickBadge(index)"
           />
-          <KBUIButton v-else variant="secondary-ghost" size="large">
+          <KBUIButton
+            v-else
+            variant="secondary-ghost"
+            size="large"
+            @click="props.onClickBadge(index)"
+          >
             <UIcon name="mdi:plus" />
           </KBUIButton>
         </figure>
