@@ -1,6 +1,14 @@
+<script setup lang="ts">
+import { useImageUpload } from "~/hooks/useImageUpload";
+
+const { imageUrl, onFileChange } = useImageUpload();
+</script>
+
 <template>
   <div>
-    <!-- 버튼 테스트 전체를 감싸는 루트 div -->
+    <!-- 이미지 업로드 테스트 -->
+    <input type="file" accept="image/*" @change="onFileChange" />
+    <img v-if="imageUrl" :src="imageUrl" alt="uploaded" class="w-32 mt-4" />
 
     <!-- 버튼 그룹 -->
     <div

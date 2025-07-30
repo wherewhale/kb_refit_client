@@ -12,6 +12,8 @@
     "test": "vitest --run"
   },
   "dependencies": {
+    "@firebase/app": "^0.14.0",
+    "@firebase/storage": "^0.14.0",
     "@internationalized/date": "^3.8.2",
     "@nuxt/eslint": "^1.5.2",
     "@nuxt/image": "^1.10.0",
