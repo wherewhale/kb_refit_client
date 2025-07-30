@@ -1,33 +1,44 @@
 <script setup lang="ts">
-// This is a simple Vue component for testing purposes
+import { ref, computed } from "vue";
+import type { TabsItem } from "@nuxt/ui";
+import ExpenseContainer from "~/containers/expense/ExpenseContainer.vue";
+import BusinessContainer from "~/containers/business/BusinessContainer.vue";
 
-import { ref } from "vue";
+const route = useRoute();
+const router = useRouter();
 
-const count = ref(0);
-const increment = () => {
-  count.value++;
-};
+const items = computed<TabsItem[]>(() => [
+  { label: "경비 처리 영수증", value: "expense" },
+  { label: "사업자 영수증", value: "business" },
+]);
+
+const active = ref(route.query.tab?.toString() || "expense");
+
+watch(active, (tab) => {
+  router.replace({ query: { tab } });
+});
 </script>
 
 <template>
-  <div
-    class="max-w-md mx-auto mt-10 flex flex-col items-center justify-center gap-4"
-  >
-    <div>사장님 전용 페이지 테스트</div>
-    <div class="text-2xl font-bold">카운트: {{ count }}</div>
-    <UButton
-      variant="solid"
-      class="px-8 py-3 text-lg cursor-pointer active:bg-blue-600 active:text-white w-full"
-      @click="increment"
-    >
-      <span class="w-full">카운트 증가</span>
-    </UButton>
-    <div class="w-full h-20 bg-kb-yellow-neg">
-      <span class="text-kb-gold-1">노란색 배경</span>
+  <div class="min-h-screen max-w-screen-md mx-auto text-white">
+    <CommonHeader />
+    <UTabs
+      v-model="active"
+      class="px-4"
+      :items="items"
+      :ui="{
+        list: 'relative flex p-1 group bg-gray-4 rounded-3xl', // 전체 탭 바
+        indicator:
+          'absolute transition-[translate,width] duration-200 text-black bg-white rounded-2xl shadow-sm inset-y-1', // 활성 탭 배경
+        trigger:
+          'group relative inline-flex items-center min-w-0 data-[state=inactive]:text-gray-2 hover:data-[state=inactive]:not-disabled:text-gray-2 font-medium rounded-md disabled:cursor-not-allowed disabled:opacity-75 transition-colors justify-center data-[state=active]:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 grow', // 각 탭 버튼
+        content: 'focus:outline-none w-full',
+        label: 'truncate',
+      }"
+    />
+    <div class="p-4">
+      <ExpenseContainer v-if="active === 'expense'" />
+      <BusinessContainer v-else-if="active === 'business'" />
     </div>
-    <UIcon name="fluent-color:alert-20" class="text-4xl text-blue-500" />
-    <KBUITypography tag="h1" weight="bold" size="h36" color="purple-1"
-      >테스트</KBUITypography
-    >
   </div>
 </template>
