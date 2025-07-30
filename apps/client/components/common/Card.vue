@@ -21,13 +21,13 @@ const props = withDefaults(defineProps<CardProps>(), {
           props.content
         }}</KBUITypography>
       </div>
-      <div class="size-20 relative">
+      <figure class="size-20 relative">
         <NuxtImg
           :src="`assets/images/characters/${props.src}.png`"
           alt="KB 프렌즈"
           width="80"
         />
-      </div>
+      </figure>
     </div>
     <NuxtLink
       v-if="props.href"
@@ -35,9 +35,9 @@ const props = withDefaults(defineProps<CardProps>(), {
       target="_blank"
       class="mt-auto block w-full"
     >
-      <KBUIButton size="medium" variant="primary" class="w-full"
-        >{{ $t('point.card.button') }}</KBUIButton
-      >
+      <KBUIButton size="medium" variant="primary" class="w-full">{{
+        $t("point.card.button")
+      }}</KBUIButton>
     </NuxtLink>
     <KBUITypography v-if="props.description" size="b14">
       {{ props.description.split("{replace}")[0] }}<b>{{ props.boldText }}</b

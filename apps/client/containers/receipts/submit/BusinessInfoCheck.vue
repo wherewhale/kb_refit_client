@@ -67,7 +67,7 @@ onMounted(() => {
 <template>
   <div class="mt-10 flex flex-col items-center">
     <div class="flex justify-between items-center w-full">
-      <div
+      <figure
         class="size-10 flex justify-center items-center bg-kb-gray relative rounded-full"
       >
         <NuxtImg
@@ -75,11 +75,11 @@ onMounted(() => {
           alt="kb_logo"
           width="30"
         />
-      </div>
+      </figure>
       <LoadingDots :state="contents.loading1" />
-      <div class="size-15 relative flex justify-center items-center">
+      <figure class="size-15 relative flex justify-center items-center">
         <NuxtImg src="assets/images/logos/k-logo.png" alt="k_logo" />
-      </div>
+      </figure>
       <LoadingDots :state="contents.loading2" />
       <div
         :class="[

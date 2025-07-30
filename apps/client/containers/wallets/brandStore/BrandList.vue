@@ -193,12 +193,14 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
             <KBUITypography weight="bold" color="white">보유중</KBUITypography>
           </div>
           <component :is="BRAND_COMPONENTS[brand.file]" />
-          <div class="size-20 relative flex items-center justify-center z-20">
+          <figure
+            class="size-20 relative flex items-center justify-center z-20"
+          >
             <NuxtImg
               :src="`assets/images/brands/${brand.file}.png`"
               loading="lazy"
             />
-          </div>
+          </figure>
         </div>
         <div class="flex items-center justify-center gap-1 mt-1">
           <Coin size="sm" />
@@ -239,7 +241,7 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
               class="w-full"
               @click="selectedBrand = null"
             >
-              취소하기
+              닫기
             </KBUIButton>
 
             <KBUIButton

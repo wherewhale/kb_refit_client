@@ -48,7 +48,7 @@ const onClickInsurance = (insuranceId: string) => {
       class="p-4 rounded-lg bg-white border border-gray-2 w-full"
     >
       <div class="flex items-center gap-1">
-        <div
+        <figure
           class="size-10 rounded-lg relative flex items-center justify-center shrink-0"
         >
           <NuxtImg
@@ -57,7 +57,7 @@ const onClickInsurance = (insuranceId: string) => {
             width="40"
             height="40"
           />
-        </div>
+        </figure>
         <div class="flex flex-col">
           <KBUITypography size="b14" :ellipsis="1" class="truncate max-w-48">{{
             insurance.name

@@ -55,9 +55,9 @@ defineExpose({ pinNumber }); // 🔑 테스트를 위한 노출
 <template>
   <div class="max-w-md mx-auto">
     <main class="px-6">
-      <div class="w-10 mt-20 mx-auto">
+      <figure class="w-10 mt-20 mx-auto">
         <NuxtImg src="assets/images/logos/symbol-logo.png" alt="kb_logo" />
-      </div>
+      </figure>
 
       <KBUITypography
         tag="h2"

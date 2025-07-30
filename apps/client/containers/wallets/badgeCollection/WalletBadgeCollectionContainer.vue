@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import BadgeList from "~/containers/wallets/badgeCollection/BadgeList.vue";
+
 const props = defineProps<{
   onNext: (page: string) => void;
   onBack: (page: string) => void;
@@ -14,6 +16,6 @@ const props = defineProps<{
       <KBUITypography size="b14" weight="medium">배지 도감</KBUITypography>
     </button>
 
-    <div>배지 도감 페이지</div>
+    <BadgeList />
   </div>
 </template>

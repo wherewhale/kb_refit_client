@@ -21,24 +21,29 @@ const props = defineProps<{
       class="absolute top-0 bottom-0 left-0 right-0 flex flex-col items-center gap-4 z-20 p-4"
     >
       <div class="grid grid-cols-4 w-full">
-        <div
-          v-for="item in props.badgeList"
-          :key="item.badgeId"
-          class="size-12 mx-auto cursor-pointer"
+        <figure
+          v-for="(slot, index) in 4"
+          :key="index"
+          class="size-12 mx-auto cursor-pointer flex items-center justify-center"
         >
           <NuxtImg
-            :src="`assets/images/badges/${item.image}.png`"
-            class="size-12 object-cover rounded mx-auto cursor-pointer"
+            v-if="props.badgeList[index]"
+            :src="`assets/images/badges/${props.badgeList[index].image}.png`"
+            class="size-12 object-cover rounded"
             loading="lazy"
           />
-        </div>
+          <KBUIButton v-else variant="secondary-ghost" size="large">
+            <UIcon name="mdi:plus" />
+          </KBUIButton>
+        </figure>
       </div>
-      <div class="size-28 relative flex items-center justify-center">
+
+      <figure class="size-28 relative flex items-center justify-center">
         <NuxtImg
           :src="`assets/images/brands/${props.theme ? props.theme.toLocaleLowerCase() : 'default'}.png`"
           loading="lazy"
         />
-      </div>
+      </figure>
     </div>
   </div>
 </template>

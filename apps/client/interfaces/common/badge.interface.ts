@@ -22,4 +22,6 @@ export interface Badge {
    * @type {string}
    */
   image: string;
+
+  isOwned: boolean; // 배지를 보유하고 있는지 여부
 }

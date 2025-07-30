@@ -13,24 +13,28 @@ const BADGE_TEST_DATA: Badge[] = [
     title: "술고래",
     description: "숙취해소제 10원 페이백",
     image: "alcohol",
+    isOwned: true, // 배지를 보유하고 있는지 여부
   },
   {
     badgeId: "2",
     title: "호박",
     description: "올리브영 100원 페이백",
     image: "beauty",
+    isOwned: true, // 배지를 보유하고 있는지 여부
   },
   // {
   //   badgeId: "3",
   //   title: "코끼리",
   //   description: "샐러드 주문 시 100원 페이백",
   //   image: "salad",
+  //   isOwned: true,
   // },
   // {
   //   badgeId: "4",
   //   title: "집좀가",
   //   description: "야놀자 100원 페이백",
   //   image: "stay",
+  //   isOwned: true,
   // },
 ];
 </script>
@@ -72,13 +76,13 @@ const BADGE_TEST_DATA: Badge[] = [
         :key="index"
         class="flex items-center gap-4"
       >
-        <div class="size-12 flex items-center justify-center relative">
+        <figure class="size-12 flex items-center justify-center relative">
           <NuxtImg
             :src="`assets/images/badges/${item.image}.png`"
             width="48"
             height="48"
           />
-        </div>
+        </figure>
 
         <div>
           <KBUITypography weight="medium" size="b18">{{

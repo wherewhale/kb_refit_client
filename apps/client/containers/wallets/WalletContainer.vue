@@ -2,8 +2,8 @@
 <script setup lang="ts">
 import { useFunnel } from "~/hooks/useFunnel";
 import WalletHome from "~/containers/wallets/WalletHome.vue";
-import WalletBadgeCollection from "~/containers/wallets/WalletBadgeCollection.vue";
 import WalletBrandStoreContainer from "~/containers/wallets/brandStore/WalletBrandStoreContainer.vue";
+import WalletBadgeCollectionContainer from "~/containers/wallets/badgeCollection/WalletBadgeCollectionContainer.vue";
 
 const isBottomSheetOpen = ref(false);
 
@@ -47,7 +47,7 @@ const stepsMap: Record<
     },
   },
   "배지 도감": {
-    component: WalletBadgeCollection,
+    component: WalletBadgeCollectionContainer,
     props: {
       onNext,
       onBack,
