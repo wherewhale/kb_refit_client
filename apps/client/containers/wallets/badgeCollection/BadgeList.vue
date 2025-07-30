@@ -123,7 +123,7 @@ const isModalOpen = computed({
         class="text-gray-3"
       />
       <KBUITypography size="b18" color="gray-2" class-name="mt-4 text-center">
-        보유중인 브랜드가 없어요!
+        보유중인 배지가 없어요!
       </KBUITypography>
     </div>
     <UModal v-model:open="isModalOpen">
@@ -132,19 +132,31 @@ const isModalOpen = computed({
         <aside v-if="selectedBadge" class="p-6">
           <KBUITypography size="b20" weight="bold" class="text-center">
             {{ selectedBadge.title }}
-            <figure></figure>
           </KBUITypography>
-          <div class="grid grid-cols-2 gap-2 mt-10">
-            <KBUIButton
-              type="button"
-              size="medium"
-              variant="secondary"
-              class="w-full"
-              @click="selectedBadge = null"
-            >
-              닫기
-            </KBUIButton>
-          </div>
+          <figure
+            class="size-20 relative flex items-center justify-center mx-auto"
+          >
+            <NuxtImg
+              :src="`assets/images/badges/${selectedBadge.image}.png`"
+              loading="lazy"
+              class="mx-auto mt-4"
+            />
+          </figure>
+          <KBUITypography size="b14" weight="medium" class="text-start mt-2">
+            획득 조건 : {{ selectedBadge.isOwned ? "획득 조건 모시기" : "???" }}
+          </KBUITypography>
+          <KBUITypography size="b14" weight="medium" class="text-start">
+            혜택 : {{ selectedBadge.description }}
+          </KBUITypography>
+          <KBUIButton
+            type="button"
+            size="medium"
+            variant="secondary"
+            class="w-full mt-4"
+            @click="selectedBadge = null"
+          >
+            닫기
+          </KBUIButton>
         </aside>
       </template>
     </UModal>
