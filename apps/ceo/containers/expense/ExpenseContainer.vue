@@ -121,7 +121,7 @@ const getIcon = (label: string): { background: string; emoji: string } => {
             id: item.id,
             label: item.label,
             amount: item.amount,
-            href: `/receipt/${item.id}`,
+            href: `/expense/${item.id}`,
             icon: getIcon(item.label),
             createdAt: item.createdAt,
           }))
@@ -150,7 +150,7 @@ const getIcon = (label: string): { background: string; emoji: string } => {
             id: item.id,
             label: item.label,
             amount: item.amount,
-            href: `/receipt/${item.id}`,
+            href: `/expense/${item.id}`,
             icon: getIcon(item.label),
             createdAt: item.createdAt,
             completed: item.isCompleted === true
