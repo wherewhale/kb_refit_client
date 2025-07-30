@@ -7,8 +7,6 @@ const props = defineProps<{
   badgeList: Badge[];
   theme?: WalletTheme;
 }>();
-
-const badgeImagePrefix = "/assets/images/badges/";
 </script>
 
 <template>
@@ -24,18 +22,18 @@ const badgeImagePrefix = "/assets/images/badges/";
     >
       <div class="grid grid-cols-4 w-full">
         <div
-          v-for="(item, index) in props.badgeList"
-          :key="index"
-          class="w-10 h-10 mx-auto cursor-pointer"
+          v-for="item in props.badgeList"
+          :key="item.badgeId"
+          class="size-12 mx-auto cursor-pointer"
         >
           <NuxtImg
-            :src="badgeImagePrefix + item.image"
-            class="w-10 h-10 object-cover rounded mx-auto cursor-pointer"
+            :src="`assets/images/badges/${item.image}.png`"
+            class="size-12 object-cover rounded mx-auto cursor-pointer"
             loading="lazy"
           />
         </div>
       </div>
-      <div class="w-28 h-28 relative flex items-center justify-center">
+      <div class="size-28 relative flex items-center justify-center">
         <NuxtImg
           :src="`assets/images/brands/${props.theme ? props.theme.toLocaleLowerCase() : 'default'}.png`"
           loading="lazy"

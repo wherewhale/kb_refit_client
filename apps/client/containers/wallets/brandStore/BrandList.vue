@@ -31,7 +31,7 @@ const BRAND_TEST_DATA: {
     file: "Miumiu",
     name: "Miumiu",
     price: 900,
-    isOwned: true,
+    isOwned: false,
   },
   {
     file: "Prada",
@@ -55,7 +55,7 @@ const BRAND_TEST_DATA: {
     file: "Coach",
     name: "Coach",
     price: 800,
-    isOwned: true,
+    isOwned: false,
   },
   {
     file: "Balenciaga",
@@ -174,7 +174,10 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
       class="cursor-pointer mt-4"
     />
 
-    <ul class="grid grid-cols-3 justify-between gap-y-4 mt-4">
+    <ul
+      v-if="filteredBrands.length > 0"
+      class="grid grid-cols-3 justify-between gap-y-4 mt-4"
+    >
       <li
         v-for="brand in filteredBrands"
         :key="brand.file"
@@ -205,6 +208,19 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
         </div>
       </li>
     </ul>
+    <div
+      v-else
+      class="w-full mt-10 flex flex-col items-center justify-center pb-10"
+    >
+      <UIcon
+        name="material-symbols:sd-card-alert-sharp"
+        size="80"
+        class="text-gray-3"
+      />
+      <KBUITypography size="b18" color="gray-2" class-name="mt-4 text-center">
+        보유중인 브랜드가 없어요!
+      </KBUITypography>
+    </div>
     <UModal v-model:open="isModalOpen">
       <template #title>브랜드 상세 정보</template>
       <template #content>
