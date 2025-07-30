@@ -197,7 +197,7 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
             class="size-20 relative flex items-center justify-center z-20"
           >
             <NuxtImg
-              :src="`assets/images/brands/${brand.file}.png`"
+              :src="`assets/images/brands/${brand.file.toLocaleLowerCase()}.png`"
               loading="lazy"
             />
           </figure>
