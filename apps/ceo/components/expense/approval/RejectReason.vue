@@ -17,7 +17,7 @@ const reason = ref("");
 const maxLen = 40;
 
 const isValid = computed(() => {
-  const v = reason.value.trim();
+  const v = reason.value;
   return v.length > 0 && v.length <= maxLen;
 });
 
