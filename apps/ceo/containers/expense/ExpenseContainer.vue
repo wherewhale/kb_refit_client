@@ -14,6 +14,36 @@ const selected = reactive({
   필터: "전체",
 });
 
+const isOpen = ref(false);
+const totalCount = 327;  // 예: 총 건수
+const toast = useToast();
+
+const handleSend = ({ email }: { email: string }) => {
+  // 1) 즉시 모달 닫기 (사용자 체감상 '보내기' 누르는 순간 닫힘)
+  isOpen.value = false
+
+  try {
+    // TODO: 2) 실제 전송 (성공 시 토스트)
+    // await $fetch('/api/expenses/send', { method: 'POST', body: { email } })
+
+    toast.add({
+      title: '경비 처리 항목을 보냈습니다.',
+      description: `${email} 로 처리 결과를 전송했어요.`,
+      color: 'success'
+    })
+  } catch {
+    // 실패 토스트(모달은 이미 닫혀 있음)
+    toast.add({
+      title: '전송 실패',
+      description: '네트워크 상태를 확인 후 다시 시도하세요.',
+      color: 'error'
+    })
+  }
+}
+
+const openModal = () => { isOpen.value = true; };
+// TODO: API 호출
+
 // 처리 완료된 경비 목록
 const paymentList = [
   {
@@ -109,7 +139,7 @@ const getIcon = (label: string): { background: string; emoji: string } => {
     <!-- 처리가 필요한 경비 영역 -->
     <div
       v-if="EXPENSE_PAYMENTS.length > 0"
-      class="w-full rounded-lg bg-white p-6 mt-10 text-black"
+      class="w-full rounded-lg bg-white p-6 mt-10"
     >
       <KBUITypography tag="h3" weight="bold"
         >처리가 필요한 경비 (총
@@ -130,12 +160,12 @@ const getIcon = (label: string): { background: string; emoji: string } => {
     </div>
 
     <!-- 처리 완료된 경비 영역 -->
-    <div class="w-full rounded-lg bg-white p-6 mt-10 text-black">
+    <div class="w-full rounded-lg bg-white p-6 mt-10">
       <div class="flex items-center justify-between mb-4">
         <KBUITypography tag="h3" weight="bold">
           처리 완료된 경비 목록
         </KBUITypography>
-        <KBUIButton variant="primary" size="small">
+        <KBUIButton variant="primary" size="small" @click="openModal">
           결과 보내기
         </KBUIButton>
       </div>
@@ -150,7 +180,7 @@ const getIcon = (label: string): { background: string; emoji: string } => {
             id: item.id,
             label: item.label,
             amount: item.amount,
-            href: `/expense/${item.id}`,
+            href: `/expense/${item.id}/receive`,
             icon: getIcon(item.label),
             createdAt: item.createdAt,
             completed: item.isCompleted === true
@@ -163,4 +193,10 @@ const getIcon = (label: string): { background: string; emoji: string } => {
       />
     </div>
   </main>
+
+  <SendExpenseResult
+    v-model:open="isOpen"
+    :count="totalCount"
+    @send="handleSend"
+  />
 </template>

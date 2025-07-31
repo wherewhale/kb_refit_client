@@ -54,7 +54,7 @@ const onClickItem = (item: PaymentItem) => {
 <template>
   <ul v-if="props.items.length > 0" class="w-full">
     <li v-for="group in groupedItems" :key="group.date">
-      <USeparator class="my-2" />
+      <USeparator class="my-2"/>
       <KBUITypography size="b12" class="mb-1">{{
         dayjs(group.date).format("YY.MM.DD")
       }}</KBUITypography>

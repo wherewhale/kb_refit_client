@@ -33,6 +33,9 @@ export default defineNuxtConfig({
     typeCheck: true,
     strict: true,
   },
+  ui: {
+    colorMode: false,
+  },
 
   // vite alias는 그대로 유지합니다.
   vite: {

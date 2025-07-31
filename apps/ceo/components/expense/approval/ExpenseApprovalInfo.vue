@@ -38,15 +38,17 @@ const props = defineProps<{
       />
     </div>
   </form>
-  <UButton
-    color="primary"
-    class-name="w-full mt-10" 
-    :disabled="false"
-    @click="props.onApprove"
-    >승인하기</UButton>
-  <UButton
-    color="error"
-    class-name="w-full mt-10" 
-    @click="props.onReject"
-   >반려하기</UButton>
+s  <div class="mt-6 grid grid-cols-2 gap-6">
+    <UButton
+      color="primary"
+      class="flex-1 min-h-[56px] rounded-lg px-8 text-white text-lg font-medium items-center justify-center"
+      :disabled="false"
+      @click="props.onApprove"
+      >승인하기</UButton>
+    <UButton
+      color="error"
+      class="flex-1 min-h-[56px] rounded-lg px-8 text-white text-lg font-medium items-center justify-center"
+      @click="props.onReject"
+    >반려하기</UButton>
+  </div>
 </template>
