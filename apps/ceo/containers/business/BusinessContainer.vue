@@ -19,7 +19,7 @@ const card_data: CardProps = {
   content: `${(21234200).toLocaleString()}원`,
   src: "luna-1",
   className: "bg-blue-1",
-  description: "저번 달보다 replace\n덜쓰고 있어요!",
+  description: "저번 달보다 {replace}\n덜쓰고 있어요!",
   boldText: "323,000원",
 };
 
@@ -64,22 +64,6 @@ const paymentList = [
     createdAt: new Date("2025-07-15T10:05:00"),
   },
 ];
-
-// 법인 처리 불가 항목 (거절된 결제 내역)
-const REJECTED_PAYMENTS = [
-  {
-    id: 25,
-    label: "브네",
-    amount: -15000,
-    createdAt: new Date("2025-07-15T11:20:00"),
-  },
-  {
-    id: 26,
-    label: "스타벅스",
-    amount: -4500,
-    createdAt: new Date("2025-07-13T13:45:00"),
-  },
-];
 </script>
 
 <template>
@@ -95,30 +79,7 @@ const REJECTED_PAYMENTS = [
       :bold-text="card_data.boldText"
     />
 
-    <!-- 거절된 항목 영역 -->
-    <div
-      v-if="REJECTED_PAYMENTS.length > 0"
-      class="w-full rounded-lg bg-white p-6 mt-10 text-black"
-    >
-      <KBUITypography tag="h3" weight="bold"
-        >법인 처리 불가 항목 (총
-        {{ REJECTED_PAYMENTS.length }}개)</KBUITypography
-      >
-      <HistoryBlock
-        :items="
-          REJECTED_PAYMENTS.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/receipt/${item.id}`,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
-          }))
-        "
-      />
-    </div>
-
-    <!-- 처리 가능 항목 영역 -->
+    <!-- 사용 금액 영역 -->
     <div class="w-full rounded-lg bg-white p-6 mt-10 text-black">
       <FilterPanel
         :filters="BUSINESS_FILTER_KEYS"
@@ -131,12 +92,9 @@ const REJECTED_PAYMENTS = [
             id: item.id,
             label: item.label,
             amount: item.amount,
-            href: `/receipt/${item.id}`,
+            href: `/business/${item.id}`,
             icon: getIcon(item.label),
             createdAt: item.createdAt,
-            completed: item.isCompleted
-              ? { word: '영수 처리 완료', icon: 'material-symbols:work' }
-              : undefined,
           }))
         "
       />
