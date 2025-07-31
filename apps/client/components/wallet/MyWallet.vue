@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { BRAND_COMPONENTS } from "~/components/wallet/BrandComponentMap";
-import type { Badge } from "@/interfaces/common/badge.interface";
 import type { WalletTheme } from "~/interfaces/wallet/theme";
+import type { SpecificBadgeDetail } from "~/types/wallet";
 
 const props = defineProps<{
-  badgeList: Badge[];
+  badgeList: SpecificBadgeDetail[];
   theme?: WalletTheme;
-  onClickBadge: (badgeIndex: number) => void;
+  onClickBadge: (badgeId: number | null) => void;
 }>();
 </script>
 
@@ -14,7 +14,7 @@ const props = defineProps<{
   <div
     :class="[
       'w-full h-52 rounded-sm relative overflow-hidden shadow-xl border-gray-5',
-      'bg-gray-2',
+      'bg-gray-5',
     ]"
   >
     <component :is="BRAND_COMPONENTS[theme]" v-if="theme" />
@@ -29,16 +29,16 @@ const props = defineProps<{
         >
           <NuxtImg
             v-if="props.badgeList[index]"
-            :src="`assets/images/badges/${props.badgeList[index].image}.png`"
+            :src="`assets/images/badges/${props.badgeList[index].badgeImage}.png`"
             class="size-12 object-cover rounded"
             loading="lazy"
-            @click="props.onClickBadge(index)"
+            @click="props.onClickBadge(props.badgeList[index].badgeId)"
           />
           <KBUIButton
             v-else
             variant="secondary-ghost"
             size="large"
-            @click="props.onClickBadge(index)"
+            @click="props.onClickBadge(null)"
           >
             <UIcon name="mdi:plus" />
           </KBUIButton>

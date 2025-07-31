@@ -7,7 +7,7 @@ import WalletBadgeCollectionContainer from "~/containers/wallets/badgeCollection
 import SelectBadgeContainer from "~/containers/wallets/badgeCollection/SelectBadgeContainer.vue";
 
 const isBottomSheetOpen = ref(false);
-const badgeIndex = ref(0);
+const badgeId = ref<number | null>(null);
 
 const PAGES = ["내 지갑", "브랜드 상점", "배지 도감", "배지 선택하기"];
 const direction = ref("forward");
@@ -27,8 +27,8 @@ const onNext = (page: string) => {
   setStep(page);
 };
 
-const onBadgeSelect = (index: number) => {
-  badgeIndex.value = index;
+const onBadgeSelect = (id: number | null) => {
+  badgeId.value = id;
   onNext("배지 선택하기");
 };
 
@@ -64,7 +64,7 @@ const stepsMap: Record<
   "배지 선택하기": {
     component: SelectBadgeContainer,
     props: {
-      badgeIndex: badgeIndex,
+      badgeId: badgeId,
       onNext,
       onBack,
     },

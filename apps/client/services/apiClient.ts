@@ -1,5 +1,11 @@
 import axios from "axios";
-import type { Token } from "typescript";
+import {
+  getAccessToken,
+  getRefreshToken,
+  removeAccessToken,
+  removeRefreshToken,
+  setAccessToken,
+} from "~/utils/token";
 
 const API_URI = process.env.API_BASE_URL || "https://kb-refit.cloud/api/";
 

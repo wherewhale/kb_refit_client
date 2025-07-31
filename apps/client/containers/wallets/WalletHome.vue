@@ -1,35 +1,29 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import MyWallet from "~/components/wallet/MyWallet.vue";
-import type { Badge } from "~/interfaces/common/badge.interface";
+import type { WalletTheme } from "~/interfaces/wallet/theme";
+import { getMyWalletDesign } from "~/services/wallet";
 
 const props = defineProps<{
-  onClickBadge: (badgeIndex: number) => void;
+  onClickBadge: (badgeId: number | null) => void;
   onNext: (page: string) => void;
   onBack: (page: string) => void;
 }>();
 
-const BADGE_TEST_DATA: Badge[] = [
-  {
-    badgeId: "1",
-    title: "술고래",
-    description: "숙취해소제 10원 페이백",
-    image: "alcohol",
-    isOwned: true, // 배지를 보유하고 있는지 여부
+const { data } = useQuery({
+  queryKey: ["getBadgeCollection"],
+  queryFn: async () => {
+    const res = await getMyWalletDesign();
+    return res?.data;
   },
-  {
-    badgeId: "2",
-    title: "호박",
-    description: "올리브영 100원 페이백",
-    image: "beauty",
-    isOwned: true, // 배지를 보유하고 있는지 여부
-  },
-];
+  refetchOnWindowFocus: false,
+});
 </script>
 <template>
   <div>
     <MyWallet
-      :badge-list="BADGE_TEST_DATA"
-      theme="Hermes"
+      :badge-list="data?.myBadgeList ?? []"
+      :theme="(data?.brandImage as WalletTheme) ?? undefined"
       @click-badge="props.onClickBadge"
     />
     <div class="mt-4 flex justify-center items-start gap-8">
@@ -61,15 +55,18 @@ const BADGE_TEST_DATA: Badge[] = [
       >현재 받고 있는 혜택</KBUITypography
     >
 
-    <div v-if="BADGE_TEST_DATA.length > 0" class="mt-4 flex flex-col gap-4">
+    <div
+      v-if="(data?.myBadgeList?.length ?? 0) > 0"
+      class="mt-4 flex flex-col gap-4"
+    >
       <div
-        v-for="(item, index) in BADGE_TEST_DATA"
+        v-for="(item, index) in data?.myBadgeList"
         :key="index"
         class="flex items-center gap-4"
       >
         <figure class="size-12 flex items-center justify-center relative">
           <NuxtImg
-            :src="`assets/images/badges/${item.image}.png`"
+            :src="`assets/images/badges/${item.badgeImage}.png`"
             width="48"
             height="48"
           />
@@ -77,10 +74,10 @@ const BADGE_TEST_DATA: Badge[] = [
 
         <div>
           <KBUITypography weight="medium" size="b18">{{
-            item.title
+            item.badgeTitle
           }}</KBUITypography>
-          <KBUITypography v-if="item.description" size="b14">{{
-            item.description
+          <KBUITypography v-if="item.badgeBenefit" size="b14">{{
+            item.badgeBenefit
           }}</KBUITypography>
         </div>
       </div>

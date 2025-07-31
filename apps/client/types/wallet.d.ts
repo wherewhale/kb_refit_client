@@ -30,3 +30,13 @@ export interface WalletBrandList {
   starPoint: number;
   walletBrandDtoList: WalletBrandDetail[];
 }
+
+export interface WornBadgeListAndBenefit {
+  myBadgeList: SpecificBadgeDetail[];
+  brandImage: string;
+}
+
+export interface UpdateWornBadgeRequest {
+  previousBadgeId: number | null;
+  updateBadgeId: number;
+}

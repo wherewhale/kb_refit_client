@@ -1,74 +1,82 @@
 <script setup lang="ts">
-import type { Badge } from "~/interfaces/common/badge.interface";
+import { useMutation, useQuery } from "@tanstack/vue-query";
+import dayjs from "dayjs";
+import {
+  getBadgeCollection,
+  getMyWalletDesign,
+  updateMyWalletBadge,
+} from "~/services/wallet";
+import type {
+  SpecificBadgeDetail,
+  UpdateWornBadgeRequest,
+} from "~/types/wallet";
 
 const props = defineProps<{
-  badgeIndex: Ref<number>;
+  badgeId: Ref<number | null>;
   onNext: (page: string) => void;
   onBack: (page: string) => void;
 }>();
 
-// TODO: API 연동 (현재 장착하고 있는 요소들)
-const SELECTED_BADGES_TEST_DATA: Badge[] = [
-  {
-    badgeId: "1",
-    title: "술고래",
-    description: "숙취해소제 10원 페이백",
-    image: "alcohol",
-    isOwned: true,
-  },
-  {
-    badgeId: "2",
-    title: "호박",
-    description: "올리브영 100원 페이백",
-    image: "beauty",
-    isOwned: true,
-  },
-];
+const toast = useToast();
 
-// TODO: 전체 API 목록 가져오기
-const MY_BADGES_TEST_DATA: Badge[] = [
-  {
-    badgeId: "1",
-    title: "술고래",
-    description: "숙취해소제 10원 페이백",
-    image: "alcohol",
-    isOwned: true,
+const { data: myWalletData } = useQuery({
+  queryKey: ["getMyWalletDesign"],
+  queryFn: async () => {
+    const res = await getMyWalletDesign();
+    return res?.data;
   },
-  {
-    badgeId: "2",
-    title: "호박",
-    description: "올리브영 100원 페이백",
-    image: "beauty",
-    isOwned: true,
-  },
-  {
-    badgeId: "3",
-    title: "코끼리",
-    description: "샐러드 주문 시 100원 페이백",
-    image: "salad",
-    isOwned: true,
-  },
-  {
-    badgeId: "4",
-    title: "집좀가",
-    description: "야놀자 100원 페이백",
-    image: "stay",
-    isOwned: true,
-  },
-];
-
-const filteredBadges = computed(() => {
-  return SELECTED_BADGES_TEST_DATA.length > 0
-    ? MY_BADGES_TEST_DATA.filter(
-        (badge) =>
-          !SELECTED_BADGES_TEST_DATA.some(
-            (selected) => selected.badgeId === badge.badgeId
-          )
-      )
-    : MY_BADGES_TEST_DATA;
+  refetchOnWindowFocus: false,
 });
 
-const selectedBadge = ref<Badge | null>(null);
+// TODO: 전체 API 목록 가져오기
+const { data: badgeData } = useQuery({
+  queryKey: ["getBadgeCollection"],
+  queryFn: async () => {
+    const res = await getBadgeCollection();
+    return res?.data ?? [];
+  },
+  refetchOnWindowFocus: false,
+});
+
+const { mutate: patchBadgeEquipment } = useMutation({
+  mutationKey: ["patchBadgeEquipment", props.badgeId, dayjs()],
+  mutationFn: async (data: UpdateWornBadgeRequest) => {
+    const response = await updateMyWalletBadge(data);
+    return response.data;
+  },
+  onSuccess: () => {
+    toast.add({
+      title: "배지 장착 성공",
+      description: "선택한 배지가 장착되었습니다.",
+      color: "success",
+      duration: 3000,
+    });
+    props.onBack("내 지갑");
+  },
+  onError: () => {
+    toast.add({
+      title: "배지 장착 실패",
+      description: "배지 장착에 실패했습니다. 다시 시도해주세요.",
+      color: "error",
+      duration: 3000,
+    });
+  },
+});
+
+const filteredBadges = computed(() => {
+  // 아직 데이터가 로드되지 않았다면 테스트 데이터 반환
+  if (!badgeData.value?.badgeList || !myWalletData.value) {
+    return [];
+  }
+
+  const wornBadgeIds = myWalletData.value.myBadgeList?.map((b) => b.badgeId);
+
+  return badgeData.value.badgeList.filter(
+    (badge) => badge.owned && !wornBadgeIds?.includes(badge.badgeId)
+  );
+});
+
+const selectedBadge = ref<SpecificBadgeDetail | null>(null);
 
 const isModalOpen = computed({
   get: () => selectedBadge.value !== null,
@@ -77,9 +85,12 @@ const isModalOpen = computed({
   },
 });
 
-const onSelectBadge = (badgeId: string) => {
-  // TODO: 배지 선택 API 호출
-  props.onBack("내 지갑");
+const onSelectBadge = (badgeId: number) => {
+  patchBadgeEquipment({
+    previousBadgeId: props.badgeId.value,
+    updateBadgeId: badgeId,
+  });
+  selectedBadge.value = null;
 };
 </script>
 <template>
@@ -108,14 +119,14 @@ const onSelectBadge = (badgeId: string) => {
             class="size-20 relative flex items-center justify-center z-20"
           >
             <NuxtImg
-              :src="`assets/images/badges${badge.isOwned ? '' : '-gray'}/${badge.image}.png`"
+              :src="`assets/images/badges${badge.owned ? '' : '-gray'}/${badge.badgeImage}.png`"
               loading="lazy"
             />
           </figure>
         </div>
         <div class="flex items-center justify-center gap-1 mt-1">
           <KBUITypography size="b12" weight="medium">{{
-            badge.title
+            badge.badgeTitle
           }}</KBUITypography>
         </div>
       </li>
@@ -138,19 +149,19 @@ const onSelectBadge = (badgeId: string) => {
       <template #content>
         <aside v-if="selectedBadge" class="p-6">
           <KBUITypography size="b20" weight="bold" class="text-center">
-            {{ selectedBadge.title }}
+            {{ selectedBadge.badgeTitle }}
           </KBUITypography>
           <figure
             class="size-20 relative flex items-center justify-center mx-auto"
           >
             <NuxtImg
-              :src="`assets/images/badges/${selectedBadge.image}.png`"
+              :src="`assets/images/badges/${selectedBadge.badgeImage}.png`"
               loading="lazy"
               class="mx-auto mt-4"
             />
           </figure>
           <KBUITypography size="b14" weight="medium" class="text-start">
-            혜택 : {{ selectedBadge.description }}
+            혜택 : {{ selectedBadge.badgeBenefit }}
           </KBUITypography>
           <div class="mt-4 grid grid-cols-2 gap-2">
             <KBUIButton
