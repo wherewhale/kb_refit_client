@@ -11,8 +11,8 @@ const receiptMessage = computed(() => t("receipt_detail.complete.message"));
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
 // FIXME: 영수증 정보 API에서 받아온 데이터로 대체
-const isCompanyPayment = true;
-const isRejected = true;
+const isCompanyPayment = false;
+const isRejected = false;
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 

@@ -3,6 +3,7 @@ export interface ReceiptSubmissionForm {
   ceoName: string;
   openDate: Date;
   category: string;
+  filename?: string;
   description: string;
   companyId: string;
 }

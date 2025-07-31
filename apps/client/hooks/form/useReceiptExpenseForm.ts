@@ -17,6 +17,10 @@ export const useReceiptExpenseForm = () => {
     store.onChangeOpenDate(date);
   };
 
+  const onChangeFilename = (filename: string) => {
+    store.onChangeFilename(filename);
+  };
+
   const onChangeDescription = (e: Event) => {
     const value = (e.target as HTMLInputElement).value;
     store.onChangeDescription(value);
@@ -30,6 +34,7 @@ export const useReceiptExpenseForm = () => {
     onChangeBusinessNumber,
     onChangeCeoName,
     onChangeOpenDate,
+    onChangeFilename,
     onChangeDescription,
     onChangeCategory,
   };

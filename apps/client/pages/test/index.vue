@@ -30,7 +30,7 @@ onMounted(() => {
         <UIcon name="ic:outline-attach-file" />
         파일 업로드
       </KBUIButton>
-      <template #title> 날짜 범위 선택 </template>
+      <template #title> 파일 업로드 상태 확인 </template>
       <template #content>
         <aside class="p-6">
           <UProgress v-model="progress" />

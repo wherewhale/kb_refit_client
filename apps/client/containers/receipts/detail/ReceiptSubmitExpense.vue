@@ -41,6 +41,7 @@ const {
   onChangeBusinessNumber,
   onChangeCeoName,
   onChangeOpenDate,
+  onChangeFilename,
   onChangeDescription,
   onChangeCategory,
 } = useReceiptExpenseForm(); // validate는 useForm 안에서 하지 않음
@@ -135,6 +136,7 @@ const stepsMap: Record<
     props: {
       onChangeDescription,
       onChangeCategory,
+      onChangeFilename,
       store,
     },
     validateStep: () =>

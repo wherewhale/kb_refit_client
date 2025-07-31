@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { UTextarea } from "#components";
+import { useImageUpload } from "~/hooks/useImageUpload";
+import { extractFilenameFromUrl } from "~/utils/files";
 
 const { t } = useI18n();
 
@@ -8,6 +10,7 @@ const { t } = useI18n();
 
 interface Props {
   store: ReturnType<typeof useReceiptSubmitStore>;
+  onChangeFilename: (filename: string) => void;
   onChangeDescription: (e: Event) => void;
   onChangeCategory: (category: string) => void;
 }
@@ -24,15 +27,27 @@ const items = computed(() => [
   t("receipt_submit.dropbox.welfare"),
 ]);
 const value = ref(initCategory);
+const { imageUrl, onFileChange, isUploading, progress } = useImageUpload();
+const isModalOpen = computed(() => isUploading.value);
 
 const onUpdateCategory = () => {
   props.onChangeCategory(value.value);
 };
+
+watch(imageUrl, (fileurl) => {
+  if (fileurl) {
+    const filename = extractFilenameFromUrl(fileurl);
+    console.log("Extracted filename:", filename);
+    props.onChangeFilename(filename);
+  }
+});
 </script>
 
 <template>
   <form>
-    <KBUITypography size="b14" color="gray-2"> {{ t("receipt_submit.label.mutual") }} </KBUITypography>
+    <KBUITypography size="b14" color="gray-2">
+      {{ t("receipt_submit.label.mutual") }}
+    </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
       KB국민은행
     </KBUITypography>
@@ -66,7 +81,37 @@ const onUpdateCategory = () => {
       @input="props.onChangeDescription"
     />
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
-      영수증 정보
+      관련 이미지 첨부
+    </KBUITypography>
+    <figure v-if="imageUrl" class="my-2 w-full">
+      <NuxtImg :src="imageUrl" alt="Uploaded image" />
+    </figure>
+    <UModal v-model:open="isModalOpen">
+      <KBUIButton
+        size="large"
+        variant="outlined"
+        class="flex items-center gap-1 relative w-full mt-2"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          class="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+          @change="onFileChange"
+        />
+        <UIcon name="ic:outline-attach-file" />
+        파일 업로드
+      </KBUIButton>
+      <template #title> 파일 업로드 상태 확인 </template>
+      <template #content>
+        <aside class="p-6">
+          <UProgress v-model="progress" />
+          <p class="text-sm text-gray-500 mt-2">{{ progress }}%</p>
+        </aside>
+      </template>
+    </UModal>
+
+    <KBUITypography size="b14" color="gray-2" class-name="mt-4">
+      세부 사용 내용
     </KBUITypography>
     <div class="w-full rounded-lg border border-black shadow-lg mt-2">
       <CommonReceipt

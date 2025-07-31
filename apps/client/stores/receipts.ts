@@ -7,6 +7,7 @@ export const useReceiptSubmitStore = defineStore("submitReceipt", {
     ceoName: "",
     openDate: new Date(),
     category: "업무 추진",
+    filename: "",
     description: "",
     companyId: "",
   }),
@@ -28,6 +29,9 @@ export const useReceiptSubmitStore = defineStore("submitReceipt", {
     onChangeCategory(category: string) {
       this.category = category;
     },
+    onChangeFilename(filename: string) {
+      this.filename = filename;
+    },
     onChangeDescription(description: string) {
       this.description = description;
     },
@@ -36,6 +40,7 @@ export const useReceiptSubmitStore = defineStore("submitReceipt", {
       this.ceoName = "";
       this.openDate = new Date();
       this.category = "업무 추진";
+      this.filename = "";
       this.description = "";
     },
   },
