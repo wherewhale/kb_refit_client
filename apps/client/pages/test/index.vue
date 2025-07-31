@@ -3,7 +3,9 @@ import { useImageUpload } from "~/hooks/useImageUpload";
 // import { useImageDownload } from "~/hooks/useImageDownload";
 
 // const { downloadUrl, loadImage, isLoading } = useImageDownload();
-const { imageUrl, onFileChange } = useImageUpload();
+const { imageUrl, onFileChange, isUploading, progress } = useImageUpload();
+
+const isModalOpen = computed(() => isUploading.value);
 
 onMounted(() => {
   // TODO: 서버에서 받아온 이미지 URL로 적용
@@ -13,9 +15,36 @@ onMounted(() => {
 
 <template>
   <div>
-    <!-- 이미지 업로드 테스트 -->
-    <input type="file" accept="image/*" @change="onFileChange" />
-    <img v-if="imageUrl" :src="imageUrl" alt="uploaded" class="w-32 mt-4" />
+    <UModal v-model:open="isModalOpen">
+      <KBUIButton
+        size="large"
+        variant="outlined"
+        class="flex items-center gap-1 relative"
+      >
+        <input
+          type="file"
+          accept="image/*"
+          class="absolute top-0 left-0 bottom-0 right-0 opacity-0 cursor-pointer"
+          @change="onFileChange"
+        />
+        <UIcon name="ic:outline-attach-file" />
+        파일 업로드
+      </KBUIButton>
+      <template #title> 날짜 범위 선택 </template>
+      <template #content>
+        <aside class="p-6">
+          <UProgress v-model="progress" />
+          <p class="text-sm text-gray-500 mt-2">{{ progress }}%</p>
+        </aside>
+      </template>
+    </UModal>
+
+    <img
+      v-if="imageUrl"
+      :src="imageUrl"
+      alt="Uploaded image"
+      class="w-32 mt-4"
+    />
 
     <!-- 이미지 다운로드 테스트 -->
     <!-- <div>
