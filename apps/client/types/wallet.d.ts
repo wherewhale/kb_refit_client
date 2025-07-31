@@ -1,0 +1,32 @@
+/** 뱃지 도감 조회 */
+export interface BadgeListResponse {
+  badgeList: SpecificBadgeDetail[];
+}
+
+/** 뱃지 상세 조회 */
+export interface SpecificBadgeDetail {
+  badgeBenefit: string;
+  badgeCondition: string;
+  badgeId: number;
+  badgeImage: string;
+  badgeTitle: string;
+  owned: boolean;
+}
+
+/** 브랜드 정보 */
+export interface WalletBrandDetail {
+  walletId: number;
+  totalStarPoint: number;
+  brandName: string;
+  brandImage: string;
+  walletCost: number;
+  owned: boolean;
+  mounted: boolean;
+}
+
+/** 브랜드 목록 */
+export interface WalletBrandList {
+  userId: number;
+  starPoint: number;
+  walletBrandDtoList: WalletBrandDetail[];
+}

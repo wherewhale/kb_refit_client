@@ -1,117 +1,23 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import { BRAND_COMPONENTS } from "~/components/wallet/BrandComponentMap";
-import type { WalletTheme } from "~/interfaces/wallet/theme";
+import { getBrandCollection } from "~/services/wallet";
+import type { WalletBrandDetail } from "~/types/wallet";
 
-// TODO: API 대체
-const BRAND_TEST_DATA: {
-  file: WalletTheme;
-  name: string;
-  price: number;
-  isOwned: boolean;
-}[] = [
-  {
-    file: "SaintLaurant",
-    name: "Saint Laurent",
-    price: 1000,
-    isOwned: false,
+const { data, error, isPending, refetch } = useQuery({
+  queryKey: ["getBrandCollection"],
+  queryFn: async () => {
+    const res = await getBrandCollection();
+    return res?.data ?? [];
   },
-  {
-    file: "Chanel",
-    name: "Chanel",
-    price: 1200,
-    isOwned: false,
-  },
-  {
-    file: "Gucci",
-    name: "Gucci",
-    price: 1100,
-    isOwned: false,
-  },
-  {
-    file: "Miumiu",
-    name: "Miumiu",
-    price: 900,
-    isOwned: false,
-  },
-  {
-    file: "Prada",
-    name: "Prada",
-    price: 1300,
-    isOwned: false,
-  },
-  {
-    file: "Hermes",
-    name: "Hermes",
-    price: 1500,
-    isOwned: false,
-  },
-  {
-    file: "Dior",
-    name: "Dior",
-    price: 1400,
-    isOwned: false,
-  },
-  {
-    file: "Coach",
-    name: "Coach",
-    price: 800,
-    isOwned: false,
-  },
-  {
-    file: "Balenciaga",
-    name: "Balenciaga",
-    price: 1600,
-    isOwned: false,
-  },
-  {
-    file: "Cartier",
-    name: "Cartier",
-    price: 1700,
-    isOwned: false,
-  },
-  {
-    file: "Louisvuitton",
-    name: "Louis Vuitton",
-    price: 1800,
-    isOwned: false,
-  },
-  {
-    file: "Nike",
-    name: "Nike",
-    price: 700,
-    isOwned: false,
-  },
-  {
-    file: "Adidas",
-    name: "Adidas",
-    price: 600,
-    isOwned: false,
-  },
-  {
-    file: "Celine",
-    name: "Celine",
-    price: 1900,
-    isOwned: false,
-  },
-  {
-    file: "Burberry",
-    name: "Burberry",
-    price: 2000,
-    isOwned: false,
-  },
-  {
-    file: "Fendi",
-    name: "Fendi",
-    price: 2100,
-    isOwned: false,
-  },
-] as const;
+  refetchOnWindowFocus: false,
+});
 
 const toast = useToast();
 
-const userPoints = ref(2750); // TODO: API 대체
+const userPoints = ref(0); // TODO: API 대체
 const isChecked = ref(false);
-const selectedBrand = ref<(typeof BRAND_TEST_DATA)[number] | null>(null);
+const selectedBrand = ref<WalletBrandDetail | null>(null);
 
 const isModalOpen = computed({
   get: () => selectedBrand.value !== null,
@@ -122,18 +28,18 @@ const isModalOpen = computed({
 
 const filteredBrands = computed(() =>
   isChecked.value
-    ? BRAND_TEST_DATA.filter((brand) => brand.isOwned)
-    : BRAND_TEST_DATA
+    ? (data.value?.walletBrandDtoList.filter((brand) => brand.owned) ?? [])
+    : (data.value?.walletBrandDtoList ?? [])
 );
 
-const onBrandPurchase = (brand: (typeof BRAND_TEST_DATA)[number]) => {
+const onBrandPurchase = (brand: WalletBrandDetail) => {
   // TODO: 구매 API 호출
-  if (userPoints.value >= brand.price) {
-    userPoints.value -= brand.price;
-    brand.isOwned = true;
+  if (userPoints.value >= brand.walletCost) {
+    userPoints.value -= brand.walletCost;
+    brand.owned = true;
     toast.add({
       title: "구매 완료",
-      description: `${brand.name} 배지를 구매하였습니다.`,
+      description: `${brand.brandName} 배지를 구매하였습니다.`,
       color: "success",
     });
   } else {
@@ -145,15 +51,25 @@ const onBrandPurchase = (brand: (typeof BRAND_TEST_DATA)[number]) => {
   }
 };
 
-const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
+const onBrandSelect = (brand: WalletBrandDetail) => {
   // TODO: 장착 API 호출
   isModalOpen.value = false;
   toast.add({
     title: "배지 장착 완료",
-    description: `${brand.name} 배지를 장착하였습니다.`,
+    description: `${brand.brandName} 배지를 장착하였습니다.`,
     color: "success",
   });
 };
+
+watch(
+  () => data.value,
+  (newData) => {
+    if (newData) {
+      userPoints.value = newData.starPoint;
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
@@ -175,29 +91,36 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
     />
 
     <ul
-      v-if="filteredBrands.length > 0"
+      v-if="!isPending && filteredBrands.length > 0"
       class="grid grid-cols-3 justify-between gap-y-4 mt-4"
     >
       <li
         v-for="brand in filteredBrands"
-        :key="brand.file"
+        :key="brand.walletId"
         @click="selectedBrand = brand"
       >
         <div
           class="relative flex justify-center items-center size-24 cursor-pointer mx-auto"
         >
           <div
-            v-if="brand.isOwned"
+            v-if="brand.owned"
             class="absolute top-0 left-0 right-0 bottom-0 bg-black-60 flex items-center justify-center z-30"
           >
             <KBUITypography weight="bold" color="white">보유중</KBUITypography>
           </div>
-          <component :is="BRAND_COMPONENTS[brand.file]" />
+          <component
+            :is="
+              BRAND_COMPONENTS[
+                brand.brandImage as keyof typeof BRAND_COMPONENTS
+              ]
+            "
+          />
           <figure
+            v-if="brand.brandImage"
             class="size-20 relative flex items-center justify-center z-20"
           >
             <NuxtImg
-              :src="`assets/images/brands/${brand.file.toLocaleLowerCase()}.png`"
+              :src="`assets/images/brands/${brand.brandImage?.toLocaleLowerCase()}.png`"
               loading="lazy"
             />
           </figure>
@@ -205,7 +128,7 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
         <div class="flex items-center justify-center gap-1 mt-1">
           <Coin size="sm" />
           <KBUITypography size="b12" weight="medium"
-            >{{ brand.price.toLocaleString() }}P</KBUITypography
+            >{{ brand.walletCost.toLocaleString() }}P</KBUITypography
           >
         </div>
       </li>
@@ -228,9 +151,9 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
       <template #content>
         <aside v-if="selectedBrand" class="p-6">
           <KBUITypography size="b20" weight="bold" class="text-center">
-            {{ selectedBrand.name }} 배지를 <br />
+            {{ selectedBrand.brandName }} 배지를 <br />
             {{
-              selectedBrand.isOwned ? "장착하시겠습니까?" : "구매하시겠습니까?"
+              selectedBrand.owned ? "장착하시겠습니까?" : "구매하시겠습니까?"
             }}
           </KBUITypography>
           <div class="grid grid-cols-2 gap-2 mt-10">
@@ -245,16 +168,18 @@ const onBrandSelect = (brand: (typeof BRAND_TEST_DATA)[number]) => {
             </KBUIButton>
 
             <KBUIButton
-              v-if="!selectedBrand.isOwned"
+              v-if="!selectedBrand.owned"
               type="button"
               size="medium"
               variant="primary"
               class="w-full"
-              :disabled="selectedBrand.price > userPoints"
+              :disabled="selectedBrand.walletCost > userPoints"
               @click="onBrandPurchase(selectedBrand)"
             >
               {{
-                selectedBrand.price > userPoints ? "포인트 부족" : "구매하기"
+                selectedBrand.walletCost > userPoints
+                  ? "포인트 부족"
+                  : "구매하기"
               }}
             </KBUIButton>
             <KBUIButton

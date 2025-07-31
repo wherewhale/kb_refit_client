@@ -79,8 +79,6 @@ const isModalOpen = computed({
 
 const onSelectBadge = (badgeId: string) => {
   // TODO: 배지 선택 API 호출
-  console.log(`배지 index: ${props.badgeIndex.value}`);
-  console.log(`선택한 배지 ID: ${badgeId}`);
   props.onBack("내 지갑");
 };
 </script>

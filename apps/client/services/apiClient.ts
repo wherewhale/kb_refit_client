@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Token } from "typescript";
 
 const API_URI = process.env.API_BASE_URL || "https://kb-refit.cloud/api/";
 
@@ -50,6 +51,27 @@ apiClient.interceptors.response.use(
           break;
         case 401:
           console.error("인증이 필요합니다. 로그인 후 다시 시도해주세요.");
+          removeAccessToken();
+
+          if (getRefreshToken()) {
+            // 토큰 만료시 refresh token으로 재발급
+            console.log("refresh");
+            apiClient
+              .post("auth/refresh", {
+                refreshToken: getRefreshToken(),
+              })
+              .then((res) => {
+                if (res.data.accessToken) {
+                  setAccessToken(res.data.accessToken);
+                }
+              })
+              .catch((err) => {
+                removeAccessToken();
+                removeRefreshToken();
+                console.error("리프레시 토큰으로 인증 실패:", err.message);
+              });
+          }
+
           break;
         case 403:
           console.error("접근 권한이 없습니다.");

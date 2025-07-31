@@ -28,7 +28,6 @@ const onNext = (page: string) => {
 };
 
 const onBadgeSelect = (index: number) => {
-  console.log(`배지 index: ${index}`);
   badgeIndex.value = index;
   onNext("배지 선택하기");
 };
