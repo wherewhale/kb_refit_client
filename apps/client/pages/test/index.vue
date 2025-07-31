@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { useImageUpload } from "~/hooks/useImageUpload";
+// import { useImageDownload } from "~/hooks/useImageDownload";
 
+// const { downloadUrl, loadImage, isLoading } = useImageDownload();
 const { imageUrl, onFileChange } = useImageUpload();
+
+onMounted(() => {
+  // TODO: 서버에서 받아온 이미지 URL로 적용
+  // loadImage("dd23c761-7d54-424a-ac0c-3437aa2e3bdd.png"); // uploads/example.png
+});
 </script>
 
 <template>
@@ -10,6 +17,11 @@ const { imageUrl, onFileChange } = useImageUpload();
     <input type="file" accept="image/*" @change="onFileChange" />
     <img v-if="imageUrl" :src="imageUrl" alt="uploaded" class="w-32 mt-4" />
 
+    <!-- 이미지 다운로드 테스트 -->
+    <!-- <div>
+      <p v-if="isLoading">이미지 불러오는 중...</p>
+      <img v-else-if="downloadUrl" :src="downloadUrl" alt="다운로드된 이미지" />
+    </div> -->
     <!-- 버튼 그룹 -->
     <div
       style="
