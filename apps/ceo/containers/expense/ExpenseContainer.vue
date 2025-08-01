@@ -9,7 +9,6 @@ import type { CardProps } from "~/interfaces/common/card.interface";
 // 선택된 필터 상태
 const selected = reactive({
   기간: "1개월",
-  종류: "전체",
   정렬: "최신순",
   필터: "전체",
 });
