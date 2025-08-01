@@ -1,8 +1,24 @@
 <script setup lang="ts">
+import { useImageDownload } from "~/hooks/useImageDownload";
+
 const props = defineProps<{
+  receiptId: string;
   onApprove: () => void;
   onReject: () => void;
 }>();
+
+// TODO: props.receiptId로 API 받아옴
+const TEST_DATA = {
+  id: 'test',
+  imageFilename: '0df9bb39-d315-4752-82b6-fe5f7c5fce92.png'
+}
+
+const { downloadUrl, isLoading, loadImage } = useImageDownload();
+
+onMounted(() => {
+  // TODO: API 호출 결과로 이미지 로드
+  loadImage(TEST_DATA.imageFilename);
+});
 </script>
 
 <template>
@@ -20,6 +36,14 @@ const props = defineProps<{
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       관련 이미지
     </KBUITypography>
+    <div class="mt-2">
+      <img
+        v-if="downloadUrl && !isLoading"
+        :src="downloadUrl"
+        alt="관련 이미지"
+        class="w-full max-h-80 object-contain rounded-lg border"
+      />
+    </div>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       세부 사용 내역
     </KBUITypography>
