@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import {
   getBadgeCollection,
   getMyWalletDesign,
-  updateMyWalletBadge,
+  patchMyWalletBadge,
 } from "~/services/wallet";
 import type {
   SpecificBadgeDetail,
@@ -41,7 +41,7 @@ const { data: badgeData } = useQuery({
 const { mutate: patchBadgeEquipment } = useMutation({
   mutationKey: ["patchBadgeEquipment", props.badgeId, dayjs()],
   mutationFn: async (data: UpdateWornBadgeRequest) => {
-    const response = await updateMyWalletBadge(data);
+    const response = await patchMyWalletBadge(data);
     return response.data;
   },
   onSuccess: () => {

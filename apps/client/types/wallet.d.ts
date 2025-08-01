@@ -40,3 +40,10 @@ export interface UpdateWornBadgeRequest {
   previousBadgeId: number | null;
   updateBadgeId: number;
 }
+
+export interface RewardWalletResponse {
+  userId: number;
+  walletId: number;
+  walletCost: number;
+  totalStarPoint: number;
+}

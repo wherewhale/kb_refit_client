@@ -1,5 +1,6 @@
 import type {
   BadgeListResponse,
+  RewardWalletResponse,
   UpdateWornBadgeRequest,
   WalletBrandList,
   WornBadgeListAndBenefit,
@@ -18,6 +19,10 @@ export const getMyWalletDesign = async () => {
   return apiClient.get<WornBadgeListAndBenefit>("/wallet/badge/home");
 };
 
-export const updateMyWalletBadge = async (data: UpdateWornBadgeRequest) => {
+export const patchMyWalletBadge = async (data: UpdateWornBadgeRequest) => {
   return apiClient.patch("/wallet/badge/equip", data);
+};
+
+export const postPurchaseBrand = async (walletId: number) => {
+  return apiClient.post<RewardWalletResponse>("/reward/purchase", { walletId });
 };

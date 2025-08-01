@@ -1,16 +1,40 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery } from "@tanstack/vue-query";
 import { BRAND_COMPONENTS } from "~/components/wallet/BrandComponentMap";
-import { getBrandCollection } from "~/services/wallet";
+import { getBrandCollection, postPurchaseBrand } from "~/services/wallet";
 import type { WalletBrandDetail } from "~/types/wallet";
 
-const { data, error, isPending, refetch } = useQuery({
+const { data, isPending, refetch } = useQuery({
   queryKey: ["getBrandCollection"],
   queryFn: async () => {
     const res = await getBrandCollection();
     return res?.data ?? [];
   },
   refetchOnWindowFocus: false,
+});
+
+const { mutate: purchaseBrandApi } = useMutation({
+  mutationKey: ["purchaseBrand"],
+  mutationFn: (walletId: number) => postPurchaseBrand(walletId),
+  onSuccess: (res) => {
+    refetch();
+    toast.add({
+      title: "배지 구매 성공",
+      description: "선택한 배지가 구매되었습니다.",
+      color: "success",
+      duration: 3000,
+    });
+    userPoints.value = res.data.totalStarPoint;
+    selectedBrand.value = null;
+  },
+  onError: () => {
+    toast.add({
+      title: "배지 구매 실패",
+      description: "배지 구매에 실패했습니다. 다시 시도해주세요.",
+      color: "error",
+      duration: 3000,
+    });
+  },
 });
 
 const toast = useToast();
@@ -33,15 +57,8 @@ const filteredBrands = computed(() =>
 );
 
 const onBrandPurchase = (brand: WalletBrandDetail) => {
-  // TODO: 구매 API 호출
   if (userPoints.value >= brand.walletCost) {
-    userPoints.value -= brand.walletCost;
-    brand.owned = true;
-    toast.add({
-      title: "구매 완료",
-      description: `${brand.brandName} 배지를 구매하였습니다.`,
-      color: "success",
-    });
+    purchaseBrandApi(brand.walletId);
   } else {
     toast.add({
       title: "포인트 부족",
