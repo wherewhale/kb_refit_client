@@ -21,9 +21,6 @@ const receiptId = route.params.receiptId as string;
 const { currentStep, prevStep, setStep } = useFunnel([...STEPS]);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 // TODO: transition 로직 추가
-// const transitionName = computed(() =>
-//   direction.value === "forward" ? "slide-left" : "slide-right"
-// );
 
 // 공용 핸들러
 const goList = () => router.push("/?tab=expense");
@@ -71,7 +68,7 @@ const stepsMap: Record<
     component: StepDone,
     props: {
       receiptId,
-      onGoList: goList,
+      onComplete: goList,
     },
   },
 };

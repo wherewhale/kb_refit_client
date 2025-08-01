@@ -11,12 +11,13 @@
     "test": "vitest --run"
   },
   "dependencies": {
+    "@firebase/app": "^0.14.0",
+    "@firebase/storage": "^0.14.0",
     "@nuxt/eslint": "^1.5.2",
     "@nuxt/image": "^1.10.0",
     "@nuxt/test-utils": "^3.19.2",
     "@nuxt/ui": "^3.2.0",
     "eslint": "^9.31.0",
-    "firebase": "^12.0.0",
     "nuxt": "^3.17.7",
     "typescript": "^5.8.3",
     "vue": "^3.5.17",

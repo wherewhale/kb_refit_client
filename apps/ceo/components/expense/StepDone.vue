@@ -2,7 +2,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   receiptId: string;
-  onGoList: () => void;
+  onComplete: () => void;
 }>();
 </script>
 
@@ -26,7 +26,7 @@ const props = defineProps<{
     size="large"
     variant="primary"
     class-name="w-full mt-6"
-    @click="props.onGoList"
+    @click="props.onComplete"
   >
     완료
   </KBUIButton>

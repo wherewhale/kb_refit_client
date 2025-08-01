@@ -14,7 +14,7 @@ const route = useRoute();
 const router = useRouter();
 const receiptId = route.params.receiptId as string;
 
-const { currentStep, setStep } = useFunnel([...STEPS]);
+const { currentStep, setStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 
 // 목록 이동
@@ -40,7 +40,7 @@ const stepsMap: Record<
     component: RejectDone,
     props: {
       receiptId,
-      onGoList: goList,
+      onComplete: goList,
     },
   },
 };

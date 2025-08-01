@@ -25,17 +25,6 @@ const contents = computed(() => {
   };
 });
 
-// const proceedStep = async () => {
-//   // TODO: API 연동해서 보험 정보 가져오기
-//   const result = true;
-//   await new Promise((resolve) => setTimeout(resolve, 3000));
-//   if (result) {
-//     step.value = 5;
-//     await new Promise((resolve) => setTimeout(resolve, 1500));
-//     props.onDone(); // 마지막 스텝 이후 실행
-//   }
-// };
-
 const proceedStep = async () => {
   await new Promise((r) => setTimeout(r, 3000)); // 송신 중
   step.value = 2;                                 // 완료
