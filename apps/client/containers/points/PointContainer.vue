@@ -2,101 +2,107 @@
 import { reactive } from "vue";
 import PointsCarousel from "~/components/points/Carousel.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
-import { FILTER_LABEL_KEYS, POINT_FILTER_KEYS } from "~/common/constant/filters";
-
-const { t } = useI18n();
+import {
+  FILTER_LABEL_KEYS,
+  POINT_FILTER_KEYS,
+} from "~/common/constant/filters";
+import {
+  getIcon,
+  getPeriodNumber,
+  getSortOrder,
+  getRewardType,
+} from "~/utils/common";
+import { useInfiniteQuery } from "@tanstack/vue-query";
+import { getRewardList } from "~/services/reward";
 
 // 필터 선택 상태
 const selected = reactive({
-  기간: "common.filter.1month",
-  카테고리: "common.filter.entire",
-  정렬: "common.filter.latest",
+  "common.filter.period": "common.filter.1month",
+  "common.filter.type": "common.filter.entire",
+  "common.filter.sort": "common.filter.latest",
 });
 
 const POINT_FILTERS = computed<Record<string, string[]>>(() => {
   return Object.fromEntries(
     Object.entries(POINT_FILTER_KEYS).map(([key, values]) => [
-      t(FILTER_LABEL_KEYS[key]),
-      values.map((v) => t(v)),
+      FILTER_LABEL_KEYS[key],
+      values.map((v) => v),
     ])
   );
 });
 
-const getIcon = (label: string): { background: string; emoji: string } => {
-  if (label.includes("스타포인트")) {
-    return { background: "bg-green-1", emoji: "💰" };
-  } else if (label.includes("배지")) {
-    return { background: "bg-blue-1", emoji: "🏅" };
-  } else if (label.includes("탄소중립")) {
-    return { background: "bg-yellow-1", emoji: "🌱" };
-  } else {
-    return { background: "bg-gray-1", emoji: "⚪️" };
-  }
+const loadMoreRef = ref<HTMLElement | null>(null);
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
+const {
+  data: rewardList,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isFetching,
+} = useInfiniteQuery({
+  queryKey: ["rewardList", selected, startDate, endDate],
+  queryFn: async ({ pageParam = 0 }) => {
+    const response = await getRewardList({
+      period: getPeriodNumber(selected["common.filter.period"]),
+      type: getRewardType(selected["common.filter.type"]),
+      sort: getSortOrder(selected["common.filter.sort"]),
+      startDate: startDate.value ?? undefined,
+      endDate: endDate.value ?? undefined,
+      cursorId: pageParam === 0 ? undefined : pageParam,
+    });
+    return response.data;
+  },
+  getNextPageParam: (lastPage) => {
+    return lastPage.nextCursorId ? lastPage.nextCursorId : undefined;
+  },
+  initialPageParam: 0,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const onChangeDate = (start: string, end: string) => {
+  startDate.value = start;
+  endDate.value = end;
 };
 
-// TODO: API 연동해서 사용
-const rewardList = [
-  {
-    id: 21,
-    label: "탄소 포인트 적립",
-    amount: 150,
-    createdAt: new Date("2025-07-14T12:30:00"),
-  },
-  {
-    id: 22,
-    label: "탄소중립 포인트 적립",
-    amount: 200,
-    createdAt: new Date("2025-07-14T14:35:00"),
-  },
-  {
-    id: 23,
-    label: "배지 리워드",
-    amount: 100,
-    createdAt: new Date("2025-07-14T18:50:00"),
-  },
-  {
-    id: 24,
-    label: "퀴즈 참여 스타포인트 적립",
-    amount: 100,
-    createdAt: new Date("2025-07-15T10:05:00"),
-  },
-  {
-    id: 25,
-    label: "탄소 포인트 적립",
-    amount: 150,
-    createdAt: new Date("2025-07-15T13:15:00"),
-  },
-  {
-    id: 26,
-    label: "탄소중립 포인트 적립",
-    amount: 100,
-    createdAt: new Date("2025-07-15T17:40:00"),
-  },
-  {
-    id: 27,
-    label: "배지 리워드",
-    amount: 200,
-    createdAt: new Date("2025-07-16T09:00:00"),
-  },
-  {
-    id: 28,
-    label: "퀴즈 참여 스타포인트 적립",
-    amount: 120,
-    createdAt: new Date("2025-07-16T11:30:00"),
-  },
-  {
-    id: 29,
-    label: "탄소 포인트 적립",
-    amount: 130,
-    createdAt: new Date("2025-07-16T15:10:00"),
-  },
-  {
-    id: 30,
-    label: "탄소중립 포인트 적립",
-    amount: 110,
-    createdAt: new Date("2025-07-16T17:25:00"),
-  },
-];
+let observer: IntersectionObserver | null = null;
+
+const startObserver = () => {
+  if (observer) observer.disconnect();
+  if (!loadMoreRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 1.0 }
+  );
+
+  observer.observe(loadMoreRef.value);
+};
+
+onMounted(() => {
+  startObserver();
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 요소가 바뀌거나 다시 렌더링 될 경우 재감지
+watch(loadMoreRef, () => {
+  startObserver();
+});
 </script>
 
 <template>
@@ -108,18 +114,25 @@ const rewardList = [
         :filters="POINT_FILTERS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
+        @change-date="onChangeDate"
       />
       <HistoryBlock
         :items="
-          rewardList.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
-          }))
+          rewardList?.pages.flatMap((page) =>
+            page.rewardList.map((reward) => ({
+              id: reward.rewardId,
+              label:
+                reward.reward === 0 ? '배지 할인 적립' : '탄소중립 포인트 적립',
+              amount: reward.reward === 0 ? reward.carbonPoint : reward.reward,
+              icon: getIcon(
+                reward.reward === 0 ? '배지 할인 적립' : '탄소중립 포인트 적립'
+              ),
+              createdAt: reward.createdAt,
+            }))
+          ) ?? []
         "
       />
+      <div ref="loadMoreRef" class="h-6" />
     </div>
   </main>
 </template>

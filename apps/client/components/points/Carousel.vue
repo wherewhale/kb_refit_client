@@ -2,36 +2,50 @@
 import { computed } from "vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
 import Card from "~/components/common/Card.vue";
+import { useQuery } from "@tanstack/vue-query";
+import { getPointSummary } from "~/services/reward";
 
 const { t } = useI18n();
 
-// TODO: 데이터 연동해서 items 배열에 데이터 연결
+const { data } = useQuery({
+  queryKey: ["pointSummary"],
+  queryFn: async () => (await getPointSummary()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
 
-const items = computed<CardProps[]>(() => [
-  {
-    title: t('point.card.title1'),
-    content: `${(1978).toLocaleString()}P`,
-    src: 'bibi',
-    className: 'bg-yellow-1',
-    href: 'https://www.kbstar.com/',
-  },
-  {
-    title: t('point.card.title2'),
-    content: `${(32520).toLocaleString()}원`,
-    src: 'ageo',
-    className: 'bg-purple-1',
-    description: t('point.card.description2'),
-    boldText: '돈까스',
-  },
-  {
-    title: t('point.card.title3'),
-    content: `${(8350).toLocaleString()}P`,
-    src: 'coli',
-    className: 'bg-green-1',
-    description: t('point.card.description'),
-    boldText: '2.5그루',
-  },
-]);
+const items = computed<CardProps[]>(() => {
+  const point = data.value?.totalStarPoint ?? 0;
+  const discountAmount = data.value?.totalCashback ?? 0;
+  const treePoint = data.value?.totalCarbonPoint ?? 0;
+  const category = data.value?.category ?? "";
+
+  return [
+    {
+      title: t("point.card.title1"),
+      content: `${point.toLocaleString()}P`,
+      src: "bibi",
+      className: "bg-yellow-1",
+      href: "https://www.kbstar.com/",
+    },
+    {
+      title: t("point.card.title2"),
+      content: `${discountAmount.toLocaleString()}원`,
+      src: "ageo",
+      className: "bg-purple-1",
+      description: t("point.card.description2"),
+      boldText: category,
+    },
+    {
+      title: t("point.card.title3"),
+      content: `${treePoint.toLocaleString()}P`,
+      src: "coli",
+      className: "bg-green-1",
+      description: t("point.card.description"),
+      boldText: `${(treePoint / 5000).toFixed(1)}그루`,
+    },
+  ];
+});
 
 const carousel = useTemplateRef("carousel");
 const activeIndex = ref(0);

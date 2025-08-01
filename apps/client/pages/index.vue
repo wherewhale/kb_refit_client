@@ -5,9 +5,12 @@ import PointsContainer from "~/containers/points/PointContainer.vue";
 import ReceiptContainer from "~/containers/receipts/ReceiptContainer.vue";
 import MedicalContainer from "~/containers/medicals/MedicalContainer.vue";
 import WalletContainer from "~/containers/wallets/WalletContainer.vue";
+import { useQuery } from "@tanstack/vue-query";
+import { getMyInfo } from "~/services/auth";
 
 const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
 const { t } = useI18n();
 
@@ -19,9 +22,27 @@ const items = computed<TabsItem[]>(() => [
 
 const active = ref(route.query.tab?.toString() || "point");
 
+const { data } = useQuery({
+  queryKey: ["userInfo"],
+  queryFn: async () => await getMyInfo(),
+});
+
 watch(active, (tab) => {
   router.replace({ query: { tab } });
 });
+
+// onMounted(() => {
+//   if (!data.value?.data.role) {
+//     removeTokens();
+//     router.replace("/auth/login");
+//     toast.add({
+//       title: "인증이 만료되었습니다.",
+//       description: "다시 로그인 해주세요.",
+//       color: "error",
+//       duration: 3000,
+//     });
+//   }
+// });
 </script>
 
 <template>

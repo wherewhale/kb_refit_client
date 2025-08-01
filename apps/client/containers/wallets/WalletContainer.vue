@@ -8,6 +8,7 @@ import SelectBadgeContainer from "~/containers/wallets/badgeCollection/SelectBad
 
 const isBottomSheetOpen = ref(false);
 const badgeId = ref<number | null>(null);
+const bounceClass = ref("h-14"); // 기본 높이: 56px (14 * 4px)
 
 const PAGES = ["내 지갑", "브랜드 상점", "배지 도감", "배지 선택하기"];
 const direction = ref("forward");
@@ -72,21 +73,44 @@ const stepsMap: Record<
 } as const;
 
 const currentStepConfig = computed(() => stepsMap[currentStep.value]);
+
+let intervalId: NodeJS.Timeout;
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+onMounted(() => {
+  intervalId = setInterval(async () => {
+    bounceClass.value = "h-16"; // 64px
+    await wait(200);
+    bounceClass.value = "h-14";
+    await wait(200);
+    bounceClass.value = "h-15"; // 60px
+    await wait(200);
+    bounceClass.value = "h-14";
+  }, 5000);
+});
+
+onBeforeUnmount(() => {
+  clearInterval(intervalId);
+});
 </script>
 
 <template>
   <div
-    class="fixed bottom-0 left-0 right-0 p-4 bg-white shadow-lg rounded-t-lg"
+    class="fixed bottom-0 left-0 right-0 bg-gradient-to-br from-[#ffdd00] via-kb-yellow-neg to-kb-yellow-pos shadow-lg rounded-t-lg overflow-hidden transition-all duration-200 ease-in-out"
+    :class="bounceClass"
   >
-    <div class="relative z-40">
-      <UButton
-        icon="i-heroicons-chevron-up"
-        block
-        size="lg"
-        class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute bottom-0 left-1/2 transform -translate-x-1/2"
-        @click="isBottomSheetOpen = !isBottomSheetOpen"
-      />
-    </div>
+    <KBUIButton
+      size="large"
+      variant="ghost"
+      class="w-full hover:text-white!"
+      @click="isBottomSheetOpen = !isBottomSheetOpen"
+    >
+      지갑 꾸미기
+      <UIcon name="line-md:chevron-small-double-up" class="ml-2" :size="20" />
+    </KBUIButton>
   </div>
   <USlideover
     side="bottom"
@@ -95,26 +119,28 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
     @update:open="isBottomSheetOpen = $event"
   >
     <template #content>
-      <div class="relative w-full scrollbar-hide">
-        <UButton
-          icon="i-heroicons-chevron-down"
-          block
-          size="lg"
-          class="rounded-full !bg-gray-200 text-gray-700 hover:!bg-gray-300 w-10 h-10 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
-          @click="isBottomSheetOpen = !isBottomSheetOpen"
-        />
-      </div>
-      <div
-        class="p-4 pt-8 h-[600px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
-      >
-        <transition :name="transitionName" mode="out-in">
-          <component
-            :is="currentStepConfig?.component"
-            :key="currentStep"
-            v-bind="currentStepConfig?.props"
+      <aside class="bg-white">
+        <div class="relative w-full scrollbar-hide">
+          <UButton
+            icon="line-md:chevron-small-double-down"
+            block
+            size="lg"
+            class="rounded-full bg-gradient-to-br from-[#ffdd00] via-kb-yellow-neg to-kb-yellow-pos text-black hover:!bg-kb-yellow-neg size-10 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2"
+            @click="isBottomSheetOpen = !isBottomSheetOpen"
           />
-        </transition>
-      </div>
+        </div>
+        <div
+          class="p-4 pt-8 h-[600px] overflow-y-scroll max-w-sm mx-auto w-full scrollbar-hide"
+        >
+          <transition :name="transitionName" mode="out-in">
+            <component
+              :is="currentStepConfig?.component"
+              :key="currentStep"
+              v-bind="currentStepConfig?.props"
+            />
+          </transition>
+        </div>
+      </aside>
     </template>
   </USlideover>
 </template>
