@@ -1,8 +1,31 @@
 <script setup lang="ts">
 import { useMutation, useQuery } from "@tanstack/vue-query";
 import { BRAND_COMPONENTS } from "~/components/wallet/BrandComponentMap";
-import { getBrandCollection, postPurchaseBrand } from "~/services/wallet";
+import {
+  getBrandCollection,
+  patchMyWalletBrand,
+  postPurchaseBrand,
+} from "~/services/wallet";
 import type { WalletBrandDetail } from "~/types/wallet";
+
+const toast = useToast();
+
+const userPoints = ref(0); // TODO: API 대체
+const isChecked = ref(false);
+const selectedBrand = ref<WalletBrandDetail | null>(null);
+
+const isModalOpen = computed({
+  get: () => selectedBrand.value !== null,
+  set: (val: boolean) => {
+    if (!val) selectedBrand.value = null;
+  },
+});
+
+const filteredBrands = computed(() =>
+  isChecked.value
+    ? (data.value?.walletBrandDtoList.filter((brand) => brand.owned) ?? [])
+    : (data.value?.walletBrandDtoList ?? [])
+);
 
 const { data, isPending, refetch } = useQuery({
   queryKey: ["getBrandCollection"],
@@ -37,24 +60,27 @@ const { mutate: purchaseBrandApi } = useMutation({
   },
 });
 
-const toast = useToast();
-
-const userPoints = ref(0); // TODO: API 대체
-const isChecked = ref(false);
-const selectedBrand = ref<WalletBrandDetail | null>(null);
-
-const isModalOpen = computed({
-  get: () => selectedBrand.value !== null,
-  set: (val: boolean) => {
-    if (!val) selectedBrand.value = null;
+const { mutate: equipBrandApi } = useMutation({
+  mutationKey: ["equipBrand", selectedBrand.value?.walletId],
+  mutationFn: (walletId: number) => patchMyWalletBrand(walletId),
+  onSuccess: () => {
+    toast.add({
+      title: "브랜드 장착 성공",
+      description: "선택한 브랜드가 장착되었습니다.",
+      color: "success",
+      duration: 3000,
+    });
+    selectedBrand.value = null;
+  },
+  onError: () => {
+    toast.add({
+      title: "브랜드 장착 실패",
+      description: "브랜드 장착에 실패했습니다. 다시 시도해주세요.",
+      color: "error",
+      duration: 3000,
+    });
   },
 });
-
-const filteredBrands = computed(() =>
-  isChecked.value
-    ? (data.value?.walletBrandDtoList.filter((brand) => brand.owned) ?? [])
-    : (data.value?.walletBrandDtoList ?? [])
-);
 
 const onBrandPurchase = (brand: WalletBrandDetail) => {
   if (userPoints.value >= brand.walletCost) {
@@ -69,13 +95,15 @@ const onBrandPurchase = (brand: WalletBrandDetail) => {
 };
 
 const onBrandSelect = (brand: WalletBrandDetail) => {
-  // TODO: 장착 API 호출
-  isModalOpen.value = false;
-  toast.add({
-    title: "배지 장착 완료",
-    description: `${brand.brandName} 배지를 장착하였습니다.`,
-    color: "success",
-  });
+  if (brand.owned) {
+    equipBrandApi(brand.walletId);
+  } else {
+    toast.add({
+      title: "배지 구매 필요",
+      description: "배지를 구매한 후 장착할 수 있습니다.",
+      color: "error",
+    });
+  }
 };
 
 watch(

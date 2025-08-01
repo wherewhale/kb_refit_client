@@ -26,3 +26,7 @@ export const patchMyWalletBadge = async (data: UpdateWornBadgeRequest) => {
 export const postPurchaseBrand = async (walletId: number) => {
   return apiClient.post<RewardWalletResponse>("/reward/purchase", { walletId });
 };
+
+export const patchMyWalletBrand = async (walletId: number) => {
+  return apiClient.patch(`/wallet/brand/detail/${walletId}`);
+};
