@@ -17,6 +17,7 @@
     "@nuxt/image": "^1.10.0",
     "@nuxt/test-utils": "^3.19.2",
     "@nuxt/ui": "^3.2.0",
+    "@tanstack/vue-query": "^5.83.1",
     "eslint": "^9.31.0",
     "nuxt": "^3.17.7",
     "typescript": "^5.8.3",

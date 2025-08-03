@@ -44,6 +44,9 @@ export default defineNuxtConfig({
         '@repo/ui': resolve(__dirname, '../../packages/ui'),
       },
     },
+    optimizeDeps: { exclude: ["axios", "form-data"] },
+    ssr: { noExternal: true },
   },
+  plugins: ["~/plugins/vue-query.ts"],
   modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui', '@nuxt/test-utils'],
 });
