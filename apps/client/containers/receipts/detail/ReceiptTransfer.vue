@@ -7,6 +7,8 @@ import AccountInfo from "~/containers/receipts/transfer/AccountInfo.vue";
 import SelectAccount from "~/containers/receipts/transfer/SelectAccount.vue";
 import TransferInfoCheck from "~/containers/receipts/transfer/TransferInfoCheck.vue";
 import TransferComplete from "~/containers/receipts/transfer/TransferComplete.vue";
+import { useMutation, useQuery } from "@tanstack/vue-query";
+import { getReceiptDetail, patchReceiptTransfer } from "~/services/receipt";
 
 const { t } = useI18n();
 
@@ -17,6 +19,7 @@ const STEPS = [
   "가상 계좌 이체 완료",
 ];
 
+const toast = useToast();
 const route = useRoute();
 const router = useRouter();
 const receiptId = route.params.receiptId as string;
@@ -26,9 +29,39 @@ const transitionName = computed(() =>
   direction.value === "forward" ? "slide-left" : "slide-right"
 );
 
+const { data } = useQuery({
+  queryKey: ["receiptDetail", receiptId],
+  queryFn: async () =>
+    (await getReceiptDetail(route.params.receiptId as string)).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
+
+const { mutate: patchReceiptTransferApi } = useMutation({
+  mutationFn: async () => patchReceiptTransfer(receiptId),
+  onSuccess: () => {
+    nextStep();
+  },
+  onError: () => {
+    toast.add({
+      title: "이체 요청 실패",
+      description: "잠시 후 다시 시도해주세요.",
+      color: "error",
+      duration: 3000,
+    });
+  },
+});
+
 const onClickNext = () => {
   const isValid = currentStepConfig.value?.validateStep?.();
   if (isValid === false) return;
+
+  if (currentStep.value === "이체 정보 확인하기") {
+    patchReceiptTransferApi();
+    return;
+  }
 
   nextStep();
 };
@@ -40,6 +73,8 @@ const onClickPrev = () => {
 const onClickComplete = () => {
   router.push(`/receipt/${receiptId}`); // 영수증 목록으로 이동
 };
+
+const receiptData = computed(() => data.value);
 
 // step 구성 객체
 const stepsMap: Record<
@@ -53,7 +88,10 @@ const stepsMap: Record<
   // FIXME: step 이름은 i18n 키로 변경
   "계좌 정보 확인하기": {
     component: AccountInfo,
-    props: { onNext: onClickNext },
+    props: {
+      receiptData: receiptData,
+      onNext: onClickNext,
+    },
     validateStep: () => true,
   },
   "내 계좌 선택하기": {
@@ -62,7 +100,9 @@ const stepsMap: Record<
   },
   "이체 정보 확인하기": {
     component: TransferInfoCheck,
-    props: {},
+    props: {
+      receiptData,
+    },
     validateStep: () => true,
   },
   "가상 계좌 이체 완료": {

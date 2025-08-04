@@ -22,3 +22,7 @@ export const getReceiptList = async (data: ReceiptListRequest) => {
 export const getReceiptDetail = async (receiptId: string) => {
   return apiClient.get<ReceiptDetail>(`/receipt/detail?receiptId=${receiptId}`);
 };
+
+export const patchReceiptTransfer = async (receiptId: string) => {
+  return apiClient.patch(`/receipt/completeDeposit`, { receiptId });
+};

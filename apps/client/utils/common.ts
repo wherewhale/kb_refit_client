@@ -97,12 +97,12 @@ export const getReceiptProgressButtonText = (
   switch (state) {
     case "none":
       return {
-        label: "경비 처리하기",
+        label: "영수 처리하기",
         disabled: false,
       };
     case "inProgress":
       return {
-        label: "경비 처리 중",
+        label: "영수 처리 중",
         disabled: true,
       };
     case "accepted":
@@ -112,7 +112,7 @@ export const getReceiptProgressButtonText = (
       };
     case "rejected":
       return {
-        label: "경비 처리하기",
+        label: "영수 처리하기",
         disabled: false,
       };
     case "deposit":
@@ -122,7 +122,7 @@ export const getReceiptProgressButtonText = (
       };
     default:
       return {
-        label: "경비 처리하기",
+        label: "영수 처리하기",
         disabled: false,
       };
   }
