@@ -20,6 +20,7 @@ export interface RejectedReceipt {
   createdAt: Date;
   updatedAt: Date;
   companyId: number;
+  companyName: string;
   userId: number;
   cardId: number;
   processState: string;
@@ -41,6 +42,7 @@ export interface Receipt {
   updatedAt: Date;
   contentList: ReceiptContent[] | null;
   companyId: number;
+  companyName: string;
   userId: number;
   cardId: number;
   processState: string;
@@ -67,6 +69,7 @@ export interface ReceiptDetail {
   receiptId: number;
   companyId: number;
   companyName: string;
+  ceoName: string;
   address: string;
   receiptContents: ReceiptContent[];
   totalPrice: number;
@@ -77,4 +80,5 @@ export interface ReceiptDetail {
   processState: string;
   cardNumber: string;
   isCorporate: number;
+  rejectedReason: string;
 }

@@ -162,10 +162,10 @@ watch(loadMoreRef, () => {
         :items="
           (rejectedListData?.rejectedList ?? []).map((item) => ({
             id: item.receiptId,
-            label: `${item.companyId}`,
+            label: `${item.companyName}`,
             amount: item.totalPrice,
             href: `/receipt/${item.receiptId}`,
-            icon: getIcon(`${item.companyId}`),
+            icon: getIcon(`${item.companyName}`),
             createdAt: item.createdAt,
           }))
         "
@@ -184,10 +184,10 @@ watch(loadMoreRef, () => {
           receiptList?.pages.flatMap((page) =>
             page.receiptList.map((item) => ({
               id: item.receiptId,
-              label: `${item.companyId}`,
+              label: `${item.companyName}`,
               amount: item.totalPrice,
               href: `/receipt/${item.receiptId}`,
-              icon: getIcon(`${item.companyId}`),
+              icon: getIcon(`${item.companyName}`),
               createdAt: item.createdAt,
               completed:
                 item.processState === 'accepted'

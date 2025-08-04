@@ -50,8 +50,10 @@ const onDownloadImage = async () => {
       <CommonReceipt
         ref="receiptRef"
         :title="data?.companyName ?? ''"
-        business-number="123-45-67890"
-        :ceo="'홍길동'"
+        :business-number="
+          convertNumberBusinessNumberToString(data?.companyId ?? 0)
+        "
+        :ceo="data?.ceoName ?? ''"
         :address="data?.address ?? ''"
         :created-at="data?.createdAt ?? new Date()"
         :goods="
@@ -67,16 +69,15 @@ const onDownloadImage = async () => {
         :supply-price="data?.supplyPrice ?? 0"
         :surtax="data?.surtax ?? 0"
         :complete="
-          !['none', 'inProgress'].includes(data?.processState ?? '')
-            ? {
+          ['none', 'inProgress', null].includes(data?.processState ?? null)
+            ? undefined
+            : {
                 result: data?.processState === 'accepted',
-                // TODO: Description 추가 필요
                 message:
                   data?.processState === 'rejected'
-                    ? '처리 불가 항목으로 인한 경비 처리 불가'
+                    ? data?.rejectedReason
                     : undefined,
               }
-            : undefined
         "
       />
       <div class="flex flex-col items-center mt-10 gap-2">
@@ -98,7 +99,7 @@ const onDownloadImage = async () => {
           </KBUIButton>
         </NuxtLink>
         <NuxtLink
-          v-else-if="data?.processState !== 'accepted'"
+          v-else-if="(data?.totalPrice ?? 0) > 0"
           :href="`/receipt/${receiptId}/submit`"
           class="w-full block"
         >
@@ -106,12 +107,13 @@ const onDownloadImage = async () => {
             size="large"
             variant="primary"
             class="w-full"
-            :disabled="data?.processState === 'inProgress'"
+            :disabled="
+              getReceiptProgressButtonText(data?.processState ?? 'none')
+                .disabled
+            "
           >
             {{
-              data?.processState === "inProgress"
-                ? "영수 처리중"
-                : t("receipt_detail.button.processing_receipt")
+              getReceiptProgressButtonText(data?.processState ?? "none").label
             }}
           </KBUIButton>
         </NuxtLink>
