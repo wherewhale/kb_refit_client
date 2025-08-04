@@ -1,20 +1,25 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import html2canvas from "html2canvas";
 import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
+import { getReceiptDetail } from "~/services/receipt";
 
 const { t } = useI18n();
 
-const receiptMessage = computed(() => t("receipt_detail.complete.message"));
-
-// TODO: 영수증 정보 불러오기 API 연동
-
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
-// FIXME: 영수증 정보 API에서 받아온 데이터로 대체
-const isCompanyPayment = false;
-const isRejected = false;
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
+
+const { data } = useQuery({
+  queryKey: ["receiptDetail", route.params.receiptId],
+  queryFn: async () =>
+    (await getReceiptDetail(route.params.receiptId as string)).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
 
 const onDownloadImage = async () => {
   const el = receiptRef.value?.printRef;
@@ -44,19 +49,35 @@ const onDownloadImage = async () => {
     <ClientOnly>
       <CommonReceipt
         ref="receiptRef"
-        title="가게 이름"
+        :title="data?.companyName ?? ''"
         business-number="123-45-67890"
-        ceo="홍길동"
-        address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date()"
-        :goods="[
-          { name: '상품1', price: 10000, quantity: 2 },
-          { name: '상품2', price: 15000, quantity: 1 },
-        ]"
-        :complete="{
-          result: false,
-          message: receiptMessage,
-        }"
+        :ceo="'홍길동'"
+        :address="data?.address ?? ''"
+        :created-at="data?.createdAt ?? new Date()"
+        :goods="
+          data?.receiptContents.map((item) => {
+            return {
+              name: item.merchandiseName,
+              price: item.merchandisePrice,
+              quantity: item.amount,
+            };
+          })
+        "
+        :total-price="data?.totalPrice ?? 0"
+        :supply-price="data?.supplyPrice ?? 0"
+        :surtax="data?.surtax ?? 0"
+        :complete="
+          !['none', 'inProgress'].includes(data?.processState ?? '')
+            ? {
+                result: data?.processState === 'accepted',
+                // TODO: Description 추가 필요
+                message:
+                  data?.processState === 'rejected'
+                    ? '처리 불가 항목으로 인한 경비 처리 불가'
+                    : undefined,
+              }
+            : undefined
+        "
       />
       <div class="flex flex-col items-center mt-10 gap-2">
         <KBUIButton
@@ -68,21 +89,30 @@ const onDownloadImage = async () => {
           {{ t("receipt_detail.button.save_image") }}
         </KBUIButton>
         <NuxtLink
-          v-if="isCompanyPayment && isRejected"
+          v-if="data?.isCorporate === 1 && data.processState === 'rejected'"
           :href="`/receipt/${receiptId}/transfer`"
           class="w-full block"
         >
-          <KBUIButton size="large" variant="primary" class-name="w-full">
+          <KBUIButton size="large" variant="primary" class="w-full">
             가상 계좌 이체하기
           </KBUIButton>
         </NuxtLink>
         <NuxtLink
-          v-else
+          v-else-if="data?.processState !== 'accepted'"
           :href="`/receipt/${receiptId}/submit`"
           class="w-full block"
         >
-          <KBUIButton size="large" variant="primary" class-name="w-full">
-            {{ t("receipt_detail.button.processing_receipt") }}
+          <KBUIButton
+            size="large"
+            variant="primary"
+            class="w-full"
+            :disabled="data?.processState === 'inProgress'"
+          >
+            {{
+              data?.processState === "inProgress"
+                ? "영수 처리중"
+                : t("receipt_detail.button.processing_receipt")
+            }}
           </KBUIButton>
         </NuxtLink>
       </div>

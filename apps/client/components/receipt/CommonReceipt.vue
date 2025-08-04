@@ -10,6 +10,8 @@ interface Props {
   createdAt: Date;
   goods?: Goods[];
   totalPrice?: number;
+  supplyPrice?: number;
+  surtax?: number;
   complete?: {
     result: boolean;
     message?: string;
@@ -19,11 +21,6 @@ const { t } = useI18n();
 const props = defineProps<Props>();
 const route = useRoute();
 const printRef = ref<HTMLElement | null>(null);
-
-const calculatedTotalPrice =
-  props.goods?.reduce((sum, item) => sum + item.price * item.quantity, 0) ??
-  props.totalPrice;
-const vat = calculatedTotalPrice ? Math.floor(calculatedTotalPrice / 11) : 0;
 
 defineExpose({ printRef });
 </script>
@@ -48,11 +45,15 @@ defineExpose({ printRef });
       <KBUITypography size="b12">{{ props.businessNumber }}</KBUITypography>
     </div>
     <div class="mt-1 flex items-start gap-1">
-      <KBUITypography size="b12">{{ t("receipt_detail.representative") }}:</KBUITypography>
+      <KBUITypography size="b12"
+        >{{ t("receipt_detail.representative") }}:</KBUITypography
+      >
       <KBUITypography size="b12">{{ props.ceo }}</KBUITypography>
     </div>
     <div class="mt-1 flex items-start gap-1">
-      <KBUITypography size="b12">{{ t("receipt_detail.address") }}:</KBUITypography>
+      <KBUITypography size="b12"
+        >{{ t("receipt_detail.address") }}:</KBUITypography
+      >
       <KBUITypography size="b12" :ellipsis="2">{{
         props.address
       }}</KBUITypography>
@@ -62,16 +63,24 @@ defineExpose({ printRef });
       <!-- 영수증 헤더 -->
       <div class="grid grid-cols-12">
         <div class="col-span-5 text-start">
-          <KBUITypography size="b14">{{ t("receipt_detail.designation") }}</KBUITypography>
+          <KBUITypography size="b14">{{
+            t("receipt_detail.designation")
+          }}</KBUITypography>
         </div>
         <div class="col-span-2 text-start">
-          <KBUITypography size="b14">{{ t("receipt_detail.price") }}</KBUITypography>
+          <KBUITypography size="b14">{{
+            t("receipt_detail.price")
+          }}</KBUITypography>
         </div>
         <div class="col-span-2 text-center">
-          <KBUITypography size="b14">{{ t("receipt_detail.quantity") }}</KBUITypography>
+          <KBUITypography size="b14">{{
+            t("receipt_detail.quantity")
+          }}</KBUITypography>
         </div>
         <div class="col-span-3 text-end">
-          <KBUITypography size="b14">{{ t("receipt_detail.amount") }}</KBUITypography>
+          <KBUITypography size="b14">{{
+            t("receipt_detail.amount")
+          }}</KBUITypography>
         </div>
       </div>
       <hr class="my-1 border-b-0.5 border-gray-4" />
@@ -106,45 +115,51 @@ defineExpose({ printRef });
 
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">{{ t("receipt_detail.total") }}</KBUITypography>
+      <KBUITypography size="b14">{{
+        t("receipt_detail.total")
+      }}</KBUITypography>
       <KBUITypography size="b14">
-        {{
-          props.totalPrice
-            ? props.totalPrice.toLocaleString()
-            : calculatedTotalPrice?.toLocaleString()
-        }}
+        {{ props.totalPrice?.toLocaleString() }}
       </KBUITypography>
     </div>
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">{{ t("receipt_detail.supply_price") }}</KBUITypography>
       <KBUITypography size="b14">{{
-        calculatedTotalPrice
-          ? (calculatedTotalPrice - vat).toLocaleString()
-          : "0"
+        t("receipt_detail.supply_price")
+      }}</KBUITypography>
+      <KBUITypography size="b14">{{
+        props.supplyPrice?.toLocaleString()
       }}</KBUITypography>
     </div>
     <div class="flex justify-between items-center">
-      <KBUITypography size="b14">{{ t("receipt_detail.surtax") }}</KBUITypography>
-      <KBUITypography size="b14">{{ vat.toLocaleString() }}</KBUITypography>
+      <KBUITypography size="b14">{{
+        t("receipt_detail.surtax")
+      }}</KBUITypography>
+      <KBUITypography size="b14">{{
+        props.surtax?.toLocaleString()
+      }}</KBUITypography>
     </div>
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center my-4">
-      <KBUITypography weight="bold"> {{ t("receipt_detail.total_amount") }} </KBUITypography>
       <KBUITypography weight="bold">
-        {{
-          props.totalPrice
-            ? props.totalPrice.toLocaleString()
-            : calculatedTotalPrice?.toLocaleString()
-        }}
+        {{ t("receipt_detail.total_amount") }}
+      </KBUITypography>
+      <KBUITypography weight="bold">
+        {{ props.totalPrice?.toLocaleString() }}
       </KBUITypography>
     </div>
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex items-start gap-1">
-      <KBUITypography size="b12">{{ t("receipt_detail.transaction") }}:</KBUITypography>
-      <KBUITypography size="b12">{{ t("receipt_detail.card_transaction") }}</KBUITypography>
+      <KBUITypography size="b12"
+        >{{ t("receipt_detail.transaction") }}:</KBUITypography
+      >
+      <KBUITypography size="b12">{{
+        t("receipt_detail.card_transaction")
+      }}</KBUITypography>
     </div>
     <div class="flex items-start gap-1">
-      <KBUITypography size="b12">{{ t("receipt_detail.approval_date") }}:</KBUITypography>
+      <KBUITypography size="b12"
+        >{{ t("receipt_detail.approval_date") }}:</KBUITypography
+      >
       <KBUITypography size="b12">{{
         dayjs(props.createdAt).format("YYYY.MM.DD HH:mm:ss")
       }}</KBUITypography>
@@ -164,7 +179,9 @@ defineExpose({ printRef });
         color="green-2"
       >
         {{
-          route.path.startsWith("/medical") ? t("common_medical.label.insurance_completed") : t("common_receipt.label.completed_processing")
+          route.path.startsWith("/medical")
+            ? t("common_medical.label.insurance_completed")
+            : t("common_receipt.label.completed_processing")
         }}
       </KBUITypography>
       <div v-else class="flex flex-col gap-2 items-center justify-center">
@@ -181,7 +198,10 @@ defineExpose({ printRef });
           }}
         </KBUITypography>
         <KBUITypography size="b14" class-name="text-center" color="red-2">
-          {{ props.complete.message ?? t("common_receipt.label_description.cannot_processed") }}
+          {{
+            props.complete.message ??
+            t("common_receipt.label_description.cannot_processed")
+          }}
         </KBUITypography>
       </div>
     </div>

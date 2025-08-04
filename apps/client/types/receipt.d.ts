@@ -61,3 +61,20 @@ export interface ReceiptListRequest {
   startDate?: string;
   endDate?: string;
 }
+
+export interface ReceiptDetail {
+  userId: number;
+  receiptId: number;
+  companyId: number;
+  companyName: string;
+  address: string;
+  receiptContents: ReceiptContent[];
+  totalPrice: number;
+  supplyPrice: number;
+  surtax: number;
+  transactionType: string;
+  createdAt: Date;
+  processState: string;
+  cardNumber: string;
+  isCorporate: number;
+}

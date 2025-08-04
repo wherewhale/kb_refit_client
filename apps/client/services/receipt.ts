@@ -1,5 +1,6 @@
 import type {
   MonthlyExpense,
+  ReceiptDetail,
   ReceiptListRequest,
   ReceiptListResponse,
   RejectedReceiptList,
@@ -16,4 +17,8 @@ export const getRejectedReceiptList = async () => {
 
 export const getReceiptList = async (data: ReceiptListRequest) => {
   return apiClient.get<ReceiptListResponse>("/receipt/list", { params: data });
+};
+
+export const getReceiptDetail = async (receiptId: string) => {
+  return apiClient.get<ReceiptDetail>(`/receipt/detail?receiptId=${receiptId}`);
 };
