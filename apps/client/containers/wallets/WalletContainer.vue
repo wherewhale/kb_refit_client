@@ -109,7 +109,7 @@ onBeforeUnmount(() => {
       @click="isBottomSheetOpen = !isBottomSheetOpen"
     >
       지갑 꾸미기
-      <UIcon name="line-md:chevron-small-double-up" class="ml-2" :size="20" />
+      <UIcon name="ic:sharp-wallet" class="ml-2" :size="20" />
     </KBUIButton>
   </div>
   <USlideover

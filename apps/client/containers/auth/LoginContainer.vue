@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useMutation } from "@tanstack/vue-query";
-import { postLogin } from "~/services/auth";
+import { UserRole } from "~/enum/role.enum";
+import { getMyInfo, postLogin } from "~/services/auth";
 import { setTokens } from "~/utils/token";
 
 const router = useRouter();
@@ -19,7 +20,7 @@ const { mutate: postLoginApi } = useMutation({
   onSuccess: (res) => {
     setTokens({ accessToken: res.accessToken, refreshToken: res.refreshToken });
     document.cookie = `kb_refit_access_token=${res.accessToken}; path=/; secure`;
-    router.replace("/"); // 로그인 성공 후 홈으로 리다이렉트
+    getMeApi();
   },
   onError: (error) => {
     console.error("로그인 실패:", error);
@@ -30,6 +31,30 @@ const { mutate: postLoginApi } = useMutation({
       color: "error",
       duration: 3000,
     });
+  },
+});
+
+const { mutate: getMeApi } = useMutation({
+  mutationKey: ["getMe"],
+  mutationFn: async () => {
+    const response = await getMyInfo();
+    return response.data;
+  },
+  onSuccess: (data) => {
+    if ([UserRole.USER, UserRole.ADMIN].includes(data.role as UserRole)) {
+      router.replace("/"); // 일반 사용자일 경우 홈으로 리다이렉트
+    } else {
+      removeTokens();
+      toast.add({
+        title: "로그인 실패",
+        description: "일반 사용자만 접근할 수 있습니다.",
+        color: "error",
+        duration: 3000,
+      });
+    }
+  },
+  onError: (error) => {
+    console.error("사용자 정보 조회 실패:", error);
   },
 });
 
