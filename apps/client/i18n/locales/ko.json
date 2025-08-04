@@ -26,7 +26,7 @@
   "receipt": {
     "card": {
       "title": "최근 한 달 사용 금액",
-      "description": "저번 달보다 덜 쓰고 있어요!"
+      "description": "저번 달보다 {replace} 더 쓰고 있어요!"
     },
     "filter": {
       "approval": "승인",

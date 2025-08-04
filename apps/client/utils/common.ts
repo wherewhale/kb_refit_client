@@ -7,6 +7,10 @@ export const getIcon = (
     return { background: "bg-blue-1", emoji: "🏅" };
   } else if (label.includes("탄소중립")) {
     return { background: "bg-yellow-1", emoji: "🌱" };
+  } else if (label.includes("브네")) {
+    return { background: "bg-yellow-1", emoji: "🍖" };
+  } else if (label.includes("스타벅스")) {
+    return { background: "bg-green-1", emoji: "☕️" };
   } else {
     return { background: "bg-gray-1", emoji: "⚪️" };
   }

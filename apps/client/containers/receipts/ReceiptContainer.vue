@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { reactive, computed } from "vue";
 import { useI18n } from "vue-i18n";
-import Card from "~/components/common/Card.vue";
 import {
   FILTER_LABEL_KEYS,
   RECEIPT_FILTER_KEYS,
 } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
+import { getMonthlyReceiptTotal } from "~/services/receipt";
+import { useQuery } from "@tanstack/vue-query";
+import { getIcon } from "~/utils/common";
+
+import Card from "~/components/common/Card.vue";
 
 const { t } = useI18n();
 
@@ -28,26 +32,23 @@ const RECEIPT_FILTERS = computed<Record<string, string[]>>(() => {
   );
 });
 
+const { data } = useQuery({
+  queryKey: ["receipt", "cardData"],
+  queryFn: async () => (await getMonthlyReceiptTotal()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
 // 카드 데이터
 const card_data = computed<CardProps>(() => ({
   title: t("receipt.card.title"),
-  content: `${(315240).toLocaleString()}원`,
-  src: "luna-1",
+  content: `${(data.value?.total ?? 0).toLocaleString()}원`,
+  src: `${(data.value?.lastMonth ?? 0) < 0 ? "luna-1" : "luna-2"}`,
   className: "bg-blue-1",
+  // FIXME: 더 쓴거랑 덜 쓴거랑 다름
   description: t("receipt.card.description"),
-  boldText: "323,000원",
+  boldText: `${Math.abs(data.value?.lastMonth ?? 0).toLocaleString()}원`,
 }));
-
-// TODO: 공통 Util 함수로 분리
-const getIcon = (label: string): { background: string; emoji: string } => {
-  if (label.includes("브네")) {
-    return { background: "bg-yellow-1", emoji: "🍖" };
-  } else if (label.includes("스타벅스")) {
-    return { background: "bg-green-1", emoji: "☕️" };
-  } else {
-    return { background: "bg-gray-1", emoji: "💲" };
-  }
-};
 
 // TODO: API 연동
 const paymentList = [
