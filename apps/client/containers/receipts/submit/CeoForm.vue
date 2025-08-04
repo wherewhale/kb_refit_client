@@ -70,7 +70,6 @@ const onChangeDate = () => {
               v-model="date"
               color="warning"
               :max-value="today(getLocalTimeZone())"
-              :year-controls="false"
             />
             <KBUIButton
               type="button"

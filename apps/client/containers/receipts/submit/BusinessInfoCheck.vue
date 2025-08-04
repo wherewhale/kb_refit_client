@@ -1,11 +1,15 @@
 <script setup lang="ts">
+import { useMutation } from "@tanstack/vue-query";
+import dayjs from "dayjs";
 import LoadingDots from "~/components/common/LoadingDots.vue";
+import { postCompanyCheck } from "~/services/company";
 
 const { t } = useI18n();
 
 const props = defineProps<{
   onNext: () => void;
   onPrev: () => void;
+  store: ReturnType<typeof useReceiptSubmitStore>;
 }>();
 
 const step = ref(1);
@@ -39,24 +43,31 @@ const contents = computed(() => {
   }
 });
 
-const proceedStep = async () => {
-  // TODO: API 연동해서 진위여부 판별
-  const result = true;
-  await new Promise((resolve) => setTimeout(resolve, 3000));
-  if (result) {
+const { mutate } = useMutation({
+  mutationFn: async () =>
+    await postCompanyCheck({
+      companyId: props.store.businessNumber,
+      ceoName: props.store.ceoName,
+      openedDate: dayjs(props.store.openDate).format("YYYYMMDD"),
+    }),
+  onSuccess: async () => {
     step.value = 2;
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    props.onNext(); // 마지막 스텝 이후 실행
-  } else {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    props.onNext(); // 인증 성공 후 다음 단계로 이동
+  },
+  onError: () => {
     step.value = 3;
-    await new Promise((resolve) => setTimeout(resolve, 1500));
     toast.add({
       title: t("receipt_submit.label.auth_failed"),
       description: t("receipt_submit.label.verification_failed"),
       color: "error",
     });
-    props.onPrev(); // 실패 시 이전 단계로 이동
-  }
+    props.onPrev(); // 인증 실패 시 이전 단계로 이동
+  },
+});
+
+const proceedStep = async () => {
+  mutate();
 };
 
 onMounted(() => {
