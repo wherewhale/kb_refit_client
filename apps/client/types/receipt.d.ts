@@ -1,5 +1,63 @@
-export interface ReceiptTotal {
+export interface MonthlyExpense {
   userId: number;
-  total: number;
-  lastMonth: number;
+  thisMonthExpense: number;
+  lastMonthExpense: number;
+}
+
+export interface ReceiptContent {
+  merchandiseId: number;
+  merchandiseName: string;
+  merchandisePrice: number;
+  amount: number;
+}
+
+export interface RejectedReceipt {
+  receiptId: number;
+  totalPrice: number;
+  supplyPrice: number;
+  surtax: number;
+  transactionType: string;
+  createdAt: Date;
+  updatedAt: Date;
+  companyId: number;
+  userId: number;
+  cardId: number;
+  processState: string;
+  receiptProcessId: 5;
+  contentList: ReceiptContent[];
+}
+
+export interface RejectedReceiptList {
+  rejectedList: RejectedReceipt[];
+}
+
+export interface Receipt {
+  receiptId: number;
+  totalPrice: number;
+  supplyPrice: number;
+  surtax: number;
+  transactionType: string;
+  createdAt: Date;
+  updatedAt: Date;
+  contentList: ReceiptContent[] | null;
+  companyId: number;
+  userId: number;
+  cardId: number;
+  processState: string;
+}
+
+export interface ReceiptListResponse {
+  userId: number;
+  receiptList: Receipt[];
+  nextCursorId: number | null;
+}
+
+export interface ReceiptListRequest {
+  cursorId?: number;
+  type: "ALL" | "APPROVED" | "CANCELED";
+  filter: "ALL" | "PROCESSED" | "UNPROCESSED";
+  sort: "LATEST" | "OLDEST";
+  period?: number;
+  startDate?: string;
+  endDate?: string;
 }

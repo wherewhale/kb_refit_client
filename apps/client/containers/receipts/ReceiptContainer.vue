@@ -6,96 +6,136 @@ import {
   RECEIPT_FILTER_KEYS,
 } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
-import { getMonthlyReceiptTotal } from "~/services/receipt";
-import { useQuery } from "@tanstack/vue-query";
-import { getIcon } from "~/utils/common";
+import {
+  getMonthlyExpense,
+  getReceiptList,
+  getRejectedReceiptList,
+} from "~/services/receipt";
+import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
+import {
+  getIcon,
+  getPeriodNumber,
+  getReceiptPaymentType,
+} from "~/utils/common";
 
 import Card from "~/components/common/Card.vue";
 
 const { t } = useI18n();
 
-// ① selected 상태
 const selected = reactive({
-  기간: "common.filter.1month",
-  종류: "common.filter.entire",
-  정렬: "common.filter.latest",
-  필터: "common.filter.entire",
+  "common.filter.period": "common.filter.1month",
+  "common.filter.type": "common.filter.entire",
+  "common.filter.sort": "common.filter.latest",
+  "common.filter.filter": "common.filter.entire",
 });
 
-// ② RECEIPT_FILTER_KEYS + t()로 번역된 필터 생성
 const RECEIPT_FILTERS = computed<Record<string, string[]>>(() => {
   return Object.fromEntries(
     Object.entries(RECEIPT_FILTER_KEYS).map(([key, values]) => [
-      t(FILTER_LABEL_KEYS[key]),
-      values.map((v) => t(v)),
+      FILTER_LABEL_KEYS[key],
+      values.map((v) => v),
     ])
   );
 });
 
-const { data } = useQuery({
+const loadMoreRef = ref<HTMLElement | null>(null);
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
+const { data: summaryData } = useQuery({
   queryKey: ["receipt", "cardData"],
-  queryFn: async () => (await getMonthlyReceiptTotal()).data,
+  queryFn: async () => (await getMonthlyExpense()).data,
   refetchOnWindowFocus: false,
   retry: false,
 });
 
+const { data: rejectedListData } = useQuery({
+  queryKey: ["receipt", "rejectedList"],
+  queryFn: async () => (await getRejectedReceiptList()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const {
+  data: receiptList,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isFetching,
+} = useInfiniteQuery({
+  queryKey: ["receiptList", selected, startDate, endDate],
+  queryFn: async ({ pageParam = 0 }) => {
+    const response = await getReceiptList({
+      period: getPeriodNumber(selected["common.filter.period"]),
+      type: getReceiptPaymentType(selected["common.filter.type"]),
+      filter: getReceiptFilter(selected["common.filter.filter"]),
+      sort: getSortOrder(selected["common.filter.sort"]),
+      startDate: startDate.value ?? undefined,
+      endDate: endDate.value ?? undefined,
+      cursorId: pageParam === 0 ? undefined : pageParam,
+    });
+    return response.data;
+  },
+  getNextPageParam: (lastPage) => {
+    return lastPage.nextCursorId ? lastPage.nextCursorId : undefined;
+  },
+  initialPageParam: 0,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const onChangeDate = (start: string, end: string) => {
+  startDate.value = start;
+  endDate.value = end;
+};
+
 // 카드 데이터
 const card_data = computed<CardProps>(() => ({
   title: t("receipt.card.title"),
-  content: `${(data.value?.total ?? 0).toLocaleString()}원`,
-  src: `${(data.value?.lastMonth ?? 0) < 0 ? "luna-1" : "luna-2"}`,
+  content: `${(summaryData.value?.thisMonthExpense ?? 0).toLocaleString()}원`,
+  src: `${(summaryData.value?.lastMonthExpense ?? 0) < 0 ? "luna-1" : "luna-2"}`,
   className: "bg-blue-1",
   // FIXME: 더 쓴거랑 덜 쓴거랑 다름
   description: t("receipt.card.description"),
-  boldText: `${Math.abs(data.value?.lastMonth ?? 0).toLocaleString()}원`,
+  boldText: `${Math.abs(summaryData.value?.lastMonthExpense ?? 0).toLocaleString()}원`,
 }));
 
-// TODO: API 연동
-const paymentList = [
-  {
-    id: 21,
-    label: "스타벅스",
-    amount: -5900,
-    createdAt: new Date("2025-07-14T12:30:00"),
-    isCompleted: true,
-  },
-  {
-    id: 22,
-    label: "브네",
-    amount: -32500,
-    createdAt: new Date("2025-07-14T14:35:00"),
-    isCompleted: true,
-  },
-  {
-    id: 23,
-    label: "브네",
-    amount: 52500,
-    createdAt: new Date("2025-07-14T18:50:00"),
-    isCompleted: false,
-  },
-  {
-    id: 24,
-    label: "브네",
-    amount: -52500,
-    createdAt: new Date("2025-07-15T10:05:00"),
-  },
-];
+let observer: IntersectionObserver | null = null;
 
-// TODO: 거절된 법인카드 결제 내역
-const REJECTED_PAYMENTS = [
-  {
-    id: 25,
-    label: "브네",
-    amount: -15000,
-    createdAt: new Date("2025-07-15T11:20:00"),
-  },
-  {
-    id: 26,
-    label: "스타벅스",
-    amount: -4500,
-    createdAt: new Date("2025-07-13T13:45:00"),
-  },
-];
+const startObserver = () => {
+  if (observer) observer.disconnect();
+  if (!loadMoreRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 1.0 }
+  );
+
+  observer.observe(loadMoreRef.value);
+};
+
+onMounted(() => {
+  startObserver();
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 요소가 바뀌거나 다시 렌더링 될 경우 재감지
+watch(loadMoreRef, () => {
+  startObserver();
+});
 </script>
 
 <template>
@@ -111,21 +151,21 @@ const REJECTED_PAYMENTS = [
     />
 
     <div
-      v-if="REJECTED_PAYMENTS.length > 0"
+      v-if="(rejectedListData?.rejectedList ?? []).length > 0"
       class="w-full rounded-lg bg-white p-6 mt-10 text-black"
     >
       <KBUITypography tag="h3" weight="bold"
         >법인 처리 불가 항목 (총
-        {{ REJECTED_PAYMENTS.length }}개)</KBUITypography
+        {{ (rejectedListData?.rejectedList ?? []).length }}개)</KBUITypography
       >
       <HistoryBlock
         :items="
-          REJECTED_PAYMENTS.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/receipt/${item.id}`,
-            icon: getIcon(item.label),
+          (rejectedListData?.rejectedList ?? []).map((item) => ({
+            id: item.receiptId,
+            label: `${item.companyId}`,
+            amount: item.totalPrice,
+            href: `/receipt/${item.receiptId}`,
+            icon: getIcon(`${item.companyId}`),
             createdAt: item.createdAt,
           }))
         "
@@ -137,22 +177,27 @@ const REJECTED_PAYMENTS = [
         :filters="RECEIPT_FILTERS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
+        @change-date="onChangeDate"
       />
       <HistoryBlock
         :items="
-          paymentList.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/receipt/${item.id}`,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
-            completed: item.isCompleted
-              ? { word: '영수 처리 완료', icon: 'material-symbols:work' }
-              : undefined,
-          }))
+          receiptList?.pages.flatMap((page) =>
+            page.receiptList.map((item) => ({
+              id: item.receiptId,
+              label: `${item.companyId}`,
+              amount: item.totalPrice,
+              href: `/receipt/${item.receiptId}`,
+              icon: getIcon(`${item.companyId}`),
+              createdAt: item.createdAt,
+              completed:
+                item.processState === 'accepted'
+                  ? { word: '영수 처리 완료', icon: 'material-symbols:work' }
+                  : undefined,
+            }))
+          ) ?? []
         "
       />
+      <div ref="loadMoreRef" class="h-6" />
     </div>
   </main>
 </template>

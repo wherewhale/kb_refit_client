@@ -29,7 +29,7 @@ export const getPeriodNumber = (period: string): number | undefined => {
   }
 };
 
-export const getSortOrder = (sort: string): string => {
+export const getSortOrder = (sort: string): "LATEST" | "OLDEST" => {
   switch (sort) {
     case "common.filter.newest":
       return "LATEST";
@@ -46,6 +46,32 @@ export const getRewardType = (type: string): string => {
       return "CARBONPOINT";
     case "point.filter.discount_amount":
       return "CASHBACK";
+    default:
+      return "ALL";
+  }
+};
+
+export const getReceiptPaymentType = (
+  type: string
+): "APPROVED" | "CANCELED" | "ALL" => {
+  switch (type) {
+    case "receipt.filter.approval":
+      return "APPROVED";
+    case "receipt.filter.cancel":
+      return "CANCELED";
+    default:
+      return "ALL";
+  }
+};
+
+export const getReceiptFilter = (
+  filter: string
+): "ALL" | "PROCESSED" | "UNPROCESSED" => {
+  switch (filter) {
+    case "receipt.filter.receipt_processing":
+      return "PROCESSED";
+    case "receipt.filter.receipt_unprocessing":
+      return "UNPROCESSED";
     default:
       return "ALL";
   }

@@ -1,6 +1,19 @@
-import type { ReceiptTotal } from "~/types/receipt";
+import type {
+  MonthlyExpense,
+  ReceiptListRequest,
+  ReceiptListResponse,
+  RejectedReceiptList,
+} from "~/types/receipt";
 import { apiClient } from "./apiClient";
 
-export const getMonthlyReceiptTotal = async () => {
-  return apiClient.get<ReceiptTotal>("/receipt/monthlyReport");
+export const getMonthlyExpense = async () => {
+  return apiClient.get<MonthlyExpense>("/receipt/monthlyExpense");
+};
+
+export const getRejectedReceiptList = async () => {
+  return apiClient.get<RejectedReceiptList>("/receipt/rejectedList");
+};
+
+export const getReceiptList = async (data: ReceiptListRequest) => {
+  return apiClient.get<ReceiptListResponse>("/receipt/list", { params: data });
 };
