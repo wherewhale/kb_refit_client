@@ -35,7 +35,7 @@ const { currentStep, direction, nextStep, prevStep, setStep } =
   useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
-  direction.value === "forward" ? "slide-left" : "slide-right"
+  direction.value === "forward" ? "slide-left" : "slide-right",
 );
 
 const store = useReceiptSubmitStore();
@@ -61,7 +61,14 @@ const onClickPrev = () => {
 };
 
 const { mutate: submitReceiptExpense } = useMutation({
-  mutationKey: ["submitReceiptExpense", store],
+  mutationKey: [
+    "submitReceiptExpense",
+    store.businessNumber,
+    receiptId,
+    store.category,
+    store.description,
+    store.filename,
+  ],
   mutationFn: async () =>
     (
       await patchReceiptProcess({
