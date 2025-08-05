@@ -3,6 +3,7 @@ import type {
   ReceiptDetail,
   ReceiptListRequest,
   ReceiptListResponse,
+  ReceiptProcessRequest,
   RejectedReceiptList,
 } from "~/types/receipt";
 import { apiClient } from "./apiClient";
@@ -25,4 +26,8 @@ export const getReceiptDetail = async (receiptId: string) => {
 
 export const patchReceiptTransfer = async (receiptId: string) => {
   return apiClient.patch(`/receipt/completeDeposit`, { receiptId });
+};
+
+export const patchReceiptProcess = async (data: ReceiptProcessRequest) => {
+  return apiClient.patch(`/receipt/process`, data);
 };

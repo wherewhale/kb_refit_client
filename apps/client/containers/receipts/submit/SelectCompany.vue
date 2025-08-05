@@ -5,7 +5,7 @@ import { getMyDataCompany } from "~/services/company";
 
 const props = defineProps<{
   onNext: () => void;
-  onSelectCompany: (company: string) => void;
+  onSelectCompany: (company: number) => void;
 }>();
 
 const { data: companyList } = useQuery({
@@ -17,7 +17,7 @@ const { data: companyList } = useQuery({
   retry: false,
 });
 
-const onClickCompany = (companyId: string) => {
+const onClickCompany = (companyId: number) => {
   props.onSelectCompany(companyId);
   props.onNext();
 };
@@ -25,12 +25,12 @@ const onClickCompany = (companyId: string) => {
 
 <template>
   <ul
-    v-if="(companyList ?? []).length > 3"
+    v-if="(companyList ?? []).length > 0"
     class="flex flex-col gap-2 items-center justify-center"
   >
     <li
       v-for="company in companyList"
-      :key="company.companyName"
+      :key="company.companyId"
       class="p-4 rounded-lg bg-white border border-gray-2 w-full"
     >
       <div class="flex items-center gap-1">
@@ -60,7 +60,7 @@ const onClickCompany = (companyId: string) => {
         size="small"
         variant="primary"
         class="ml-auto"
-        @click="onClickCompany(company.companyName)"
+        @click="onClickCompany(company.companyId)"
       >
         선택하기
       </KBUIButton>

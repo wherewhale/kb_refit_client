@@ -1,4 +1,5 @@
 export interface MyDataCompany {
+  companyId: number;
   companyName: string;
   startDate: Date;
   endDate: Date | null;

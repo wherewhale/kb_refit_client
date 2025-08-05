@@ -9,14 +9,11 @@ export const useReceiptSubmitStore = defineStore("submitReceipt", {
     category: "업무 추진",
     filename: "",
     description: "",
-    companyId: "",
   }),
 
   actions: {
     // 각 스텝에 따라 넘길 state change 함수 설정
-    onChangeCompanyId(companyId: string) {
-      this.companyId = companyId;
-    },
+
     onChangeBusinessNumber(businessNumber: string) {
       this.businessNumber = businessNumber;
     },

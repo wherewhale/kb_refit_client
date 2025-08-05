@@ -82,3 +82,11 @@ export interface ReceiptDetail {
   isCorporate: number;
   rejectedReason: string;
 }
+
+export interface ReceiptProcessRequest {
+  companyId: number;
+  receiptId: number;
+  progressType: string;
+  progressDetail: string;
+  fileName?: string;
+}

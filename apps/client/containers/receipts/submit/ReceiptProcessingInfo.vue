@@ -57,7 +57,6 @@ const onUpdateCategory = () => {
 watch(imageUrl, (fileurl) => {
   if (fileurl) {
     const filename = extractFilenameFromUrl(fileurl);
-    console.log("Extracted filename:", filename);
     props.onChangeFilename(filename);
   }
 });

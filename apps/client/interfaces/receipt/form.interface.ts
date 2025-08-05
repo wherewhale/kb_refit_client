@@ -5,5 +5,4 @@ export interface ReceiptSubmissionForm {
   category: string;
   filename?: string;
   description: string;
-  companyId: string;
 }
