@@ -17,3 +17,8 @@ export interface CompanyCheckResponse {
   openedDate: string;
   valid: boolean;
 }
+
+export interface CompanyInfo {
+  companyName: string;
+  address: string;
+}

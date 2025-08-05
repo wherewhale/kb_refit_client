@@ -89,6 +89,22 @@ const onChangeDate = (start: string, end: string) => {
   endDate.value = end;
 };
 
+const getStateIcon = (state: string) => {
+  switch (state) {
+    case "accepted":
+      return { word: "영수 처리 완료", icon: "material-symbols:work" };
+    case "rejected":
+      return {
+        word: "영수 처리 불가",
+        icon: "material-symbols-light:cancel-rounded",
+      };
+    case "inProgress":
+      return { word: "영수 처리 중", icon: "mdi:message-processing" };
+    default:
+      return undefined;
+  }
+};
+
 // 카드 데이터
 const card_data = computed<CardProps>(() => ({
   title: t("receipt.card.title"),
@@ -189,10 +205,7 @@ watch(loadMoreRef, () => {
               href: `/receipt/${item.receiptId}`,
               icon: getIcon(`${item.companyName}`),
               createdAt: item.createdAt,
-              completed:
-                item.processState === 'accepted'
-                  ? { word: '영수 처리 완료', icon: 'material-symbols:work' }
-                  : undefined,
+              completed: getStateIcon(item.processState),
             }))
           ) ?? []
         "

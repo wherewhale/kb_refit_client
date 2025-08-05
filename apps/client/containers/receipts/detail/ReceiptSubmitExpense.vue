@@ -32,7 +32,7 @@ const { currentStep, direction, nextStep, prevStep, setStep } =
   useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
-  direction.value === "forward" ? "slide-left" : "slide-right",
+  direction.value === "forward" ? "slide-left" : "slide-right"
 );
 
 const store = useReceiptSubmitStore();
@@ -128,7 +128,11 @@ const stepsMap: Record<
   },
   "receipt_submit.step.verifyBusiness": {
     component: BusinessInfoCheck,
-    props: { onNext: onClickNext, onPrev: onClickPrev, store },
+    props: {
+      onNext: onClickNext,
+      onPrev: onClickPrev,
+      store,
+    },
     validateStep: () => true, // 이 단계는 검증이 필요 없으므로 항상 true 반환
   },
   "receipt_submit.step.processingInfo": {
@@ -138,6 +142,7 @@ const stepsMap: Record<
       onChangeCategory,
       onChangeFilename,
       store,
+      receiptId,
     },
     validateStep: () =>
       [

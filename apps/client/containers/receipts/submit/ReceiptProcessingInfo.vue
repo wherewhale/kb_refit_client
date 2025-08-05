@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { UTextarea } from "#components";
+import { useQuery } from "@tanstack/vue-query";
 import { useImageUpload } from "~/hooks/useImageUpload";
+import { getCompanyInfo } from "~/services/company";
+import { getReceiptDetail } from "~/services/receipt";
 import { extractFilenameFromUrl } from "~/utils/files";
 
 const { t } = useI18n();
@@ -13,6 +16,7 @@ interface Props {
   onChangeFilename: (filename: string) => void;
   onChangeDescription: (e: Event) => void;
   onChangeCategory: (category: string) => void;
+  receiptId: string;
 }
 
 const props = defineProps<Props>();
@@ -29,6 +33,22 @@ const items = computed(() => [
 const value = ref(initCategory);
 const { imageUrl, onFileChange, isUploading, progress } = useImageUpload();
 const isModalOpen = computed(() => isUploading.value);
+
+const { data } = useQuery({
+  queryKey: ["receipt", "companyInfo", props.store.businessNumber],
+  queryFn: async () => (await getCompanyInfo(props.store.businessNumber)).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const { data: receiptData } = useQuery({
+  queryKey: ["receiptDetail", props.receiptId],
+  queryFn: async () => (await getReceiptDetail(props.receiptId)).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
 
 const onUpdateCategory = () => {
   props.onChangeCategory(value.value);
@@ -49,14 +69,14 @@ watch(imageUrl, (fileurl) => {
       {{ t("receipt_submit.label.mutual") }}
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
-      KB국민은행
+      {{ data?.companyName }}
     </KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       {{ t("receipt_submit.label.business_address") }}
     </KBUITypography>
-    <KBUITypography weight="medium" class-name="mt-2"
-      >서울특별시 영등포구 국제금융로8길 26(여의도동)</KBUITypography
-    >
+    <KBUITypography weight="medium" class-name="mt-2">{{
+      data?.address
+    }}</KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       {{ t("receipt_submit.label.expense_items") }}
     </KBUITypography>
@@ -116,15 +136,23 @@ watch(imageUrl, (fileurl) => {
     <div class="w-full rounded-lg border border-black shadow-lg mt-2">
       <CommonReceipt
         ref="receiptRef"
-        title="가게 이름"
-        business-number="123-45-67890"
-        ceo="홍길동"
-        address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date()"
-        :goods="[
-          { name: '상품1', price: 10000, quantity: 2 },
-          { name: '상품2', price: 15000, quantity: 1 },
-        ]"
+        :title="receiptData?.companyName ?? ''"
+        :business-number="
+          convertNumberBusinessNumberToString(receiptData?.companyId ?? 0)
+        "
+        :ceo="receiptData?.ceoName ?? ''"
+        :address="receiptData?.address ?? ''"
+        :created-at="receiptData?.createdAt ?? new Date()"
+        :goods="
+          receiptData?.receiptContents.map((item) => ({
+            name: item.merchandiseName,
+            price: item.merchandisePrice,
+            quantity: item.amount,
+          }))
+        "
+        :total-price="receiptData?.totalPrice ?? 0"
+        :supply-price="receiptData?.supplyPrice ?? 0"
+        :surtax="receiptData?.surtax ?? 0"
       />
     </div>
   </form>
