@@ -15,9 +15,6 @@ const { data } = useQuery({
   queryKey: ["receiptDetail", route.params.receiptId],
   queryFn: async () =>
     (await getReceiptDetail(route.params.receiptId as string)).data,
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  refetchOnMount: false,
   retry: false,
 });
 

@@ -8,8 +8,8 @@ export interface RewardSummaryResponse {
 export interface Reward {
   rewardId: number;
   userId: number;
-  carbonPoint: number;
-  reward: number;
+  carbonPoint?: number;
+  reward?: number;
   createdAt: Date;
 }
 

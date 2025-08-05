@@ -121,11 +121,10 @@ watch(loadMoreRef, () => {
           rewardList?.pages.flatMap((page) =>
             page.rewardList.map((reward) => ({
               id: reward.rewardId,
-              label:
-                reward.reward === 0 ? '배지 할인 적립' : '탄소중립 포인트 적립',
-              amount: reward.reward === 0 ? reward.carbonPoint : reward.reward,
+              label: reward.reward ? '배지 할인 적립' : '탄소중립 포인트 적립',
+              amount: (reward.reward ?? reward.carbonPoint ?? 0) * -1,
               icon: getIcon(
-                reward.reward === 0 ? '배지 할인 적립' : '탄소중립 포인트 적립'
+                reward.reward ? '배지 할인 적립' : '탄소중립 포인트 적립'
               ),
               createdAt: reward.createdAt,
             }))

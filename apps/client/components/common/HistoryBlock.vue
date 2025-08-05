@@ -100,15 +100,12 @@ const onClickItem = (item: PaymentItem) => {
               {{ dayjs(item.createdAt).format("HH:mm") }}
             </KBUITypography>
             <KBUITypography
-              :color="item.amount > 0 ? 'red-2' : 'blue-2'"
+              :color="item.amount < 0 ? 'red-2' : 'blue-2'"
               size="b14"
               weight="medium"
             >
-              {{
-                item.amount > 0
-                  ? `${Math.abs(item.amount).toLocaleString()}원`
-                  : `${Math.abs(item.amount).toLocaleString()}원`
-              }}
+              {{ item.amount < 0 ? "+" : "-"
+              }}{{ Math.abs(item.amount).toLocaleString() }}원
             </KBUITypography>
           </div>
         </li>
