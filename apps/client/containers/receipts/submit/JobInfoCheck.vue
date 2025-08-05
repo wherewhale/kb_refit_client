@@ -40,6 +40,7 @@ const proceedStep = async () => {
 };
 
 onMounted(() => {
+  console.log("JobInfoCheck mounted");
   proceedStep();
 });
 </script>
