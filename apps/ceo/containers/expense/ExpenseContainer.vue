@@ -5,12 +5,22 @@ import Card from "~/components/common/Card.vue";
 import HistoryBlock from "@/components/common/HistoryBlock.vue";
 import FilterPanel from "@/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
+import { getPendingReceipt } from "~/services/expense";
+import { useQuery } from "@tanstack/vue-query";
+import type { PendingDetail } from "~/types/expense";
 
 // 선택된 필터 상태
 const selected = reactive({
   기간: "1개월",
   정렬: "최신순",
   필터: "전체",
+});
+
+const { data } = useQuery<PendingDetail>({
+  queryKey: ["getPendingReceipt"],
+  queryFn: async () => (await getPendingReceipt()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
 });
 
 const isOpen = ref(false);
@@ -23,7 +33,6 @@ const handleSend = ({ email }: { email: string }) => {
 
   try {
     // TODO: 2) 실제 전송 (성공 시 토스트)
-    // await $fetch('/api/expenses/send', { method: 'POST', body: { email } })
 
     toast.add({
       title: '경비 처리 항목을 보냈습니다.',
@@ -75,40 +84,19 @@ const paymentList = [
   },
 ];
 
-// 처리가 필요한 경비 목록
-const EXPENSE_PAYMENTS = [
-  {
-    id: 25,
-    label: "브네",
-    amount: -15000,
-    createdAt: new Date("2025-07-15T11:20:00"),
-    isRejected: true,
-  },
-  {
-    id: 26,
-    label: "스타벅스",
-    amount: -4500,
-    createdAt: new Date("2025-07-13T13:45:00"),
-    isRejected: true,
-  },
-];
-
-const PENDING_COUNT = EXPENSE_PAYMENTS.length;
-const HAS_PENDING = PENDING_COUNT > 0;
-
-const PROCESSED_THIS_MONTH = 219;
-
 // 카드 데이터 정의
-const card_data: CardProps = {
+const card_data = computed<CardProps>(() => ({
   title: "처리가 필요한 경비",
-  content: `총 ${PENDING_COUNT.toLocaleString()}건`,
+  content: `총 ${(data.value?.countPendingReceipts || data.value?.pendingReceipts?.length || 0)}건`,
   src: "bibi",
   className: "bg-yellow-1",
-  description: HAS_PENDING
+  description: data.value?.countCompletedReceiptsThisMonth
     ? "이번 달 총 {replace}의\n경비 처리를 리핏과 함께했어요!"
     : "이번 달에는 아직 리핏과\n경비 처리를 진행하지 않았어요!",
-  boldText: HAS_PENDING ? `${PROCESSED_THIS_MONTH}건` : "",
-};
+  boldText: data.value?.countCompletedReceiptsThisMonth
+    ? `${data.value.countCompletedReceiptsThisMonth}건`
+    : "",
+}));
 
 // 아이콘 매핑 함수
 const getIcon = (label: string): { background: string; emoji: string } => {
@@ -137,22 +125,25 @@ const getIcon = (label: string): { background: string; emoji: string } => {
 
     <!-- 처리가 필요한 경비 영역 -->
     <div
-      v-if="EXPENSE_PAYMENTS.length > 0"
+      v-if="(data?.pendingReceipts ?? []).length > 0"
       class="w-full rounded-lg bg-white p-6 mt-10"
     >
       <KBUITypography tag="h3" weight="bold"
-        >처리가 필요한 경비 (총
-        {{ EXPENSE_PAYMENTS.length }}건)</KBUITypography
+        >처리가 필요한 경비 총
+        {{ data?.countPendingReceipts || data?.pendingReceipts?.length || 0 }}건</KBUITypography
       >
       <HistoryBlock
         :items="
-          EXPENSE_PAYMENTS.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/expense/${item.id}`,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
+          (data?.pendingReceipts ?? []).map((item) => ({
+            id: item.receiptId,
+            label: item.companyName,
+            amount: item.totalPrice,
+            href: `/expense/${item.receiptId}`,
+            icon: getIcon(item.companyName),
+            createdAt:
+              item.createdAt && !isNaN(new Date(item.createdAt).getTime())
+                ? new Date(item.createdAt)
+                : new Date(0)
           }))
         "
       />
