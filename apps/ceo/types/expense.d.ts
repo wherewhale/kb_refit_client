@@ -2,8 +2,14 @@ export interface Receipt {
   receiptId: number;
   companyName: string;
   totalPrice: number;
-  createdAt: Date; // 결제 일시
+  createdAt: string; // 결제 일시
   processState: string; // 영수 처리 상태
+}
+
+// 응답 전체 타입
+export interface CompletedReceiptsResponse {
+  nextCursorId: string;
+  list: Receipt[];
 }
 
 export interface PendingDetail {
@@ -14,7 +20,7 @@ export interface PendingDetail {
 }
 
 export interface ReceiptProcessApplicant {
-  userid: number; // 신청자 id
+  userId: number; // 신청자 id
   name: string;   // 신청자
   documentType: string; // 경비 처리 항목
   documentDetail: string; // 세부 내용
@@ -30,7 +36,6 @@ export interface ReceiptDetail {
   companyName: string;
   ceoName: string;
   address: string;
-  receiptContents: ReceiptContentDetail[];
   totalPrice: number;
   supplyPrice: number;
   surtax: number;
@@ -40,6 +45,7 @@ export interface ReceiptDetail {
   cardNumber: string;
   isCorporate: number;
   rejectedReason: string;
+  receiptContents: ReceiptContentDetail[];
 }
 
 export interface ReceiptContentDetail{
@@ -51,5 +57,12 @@ export interface ReceiptContentDetail{
 
 export interface ReceiptProcessDetail {
   receiptDetail: ReceiptDetail;                 // 영수증 상세 정보
-  receiptInfo: ReceiptProcessApplicant;         // 영수처리 신청자 상세 정보
+  receiptProcessApplicant: ReceiptProcessApplicant;        // 영수처리 신청자 상세 정보
+}
+
+// 영수 처리 승인/반려
+export interface ReceiptProcessingRequest {
+  receiptProcessId: number;
+  progressState: string;
+  rejectedReason: string;
 }

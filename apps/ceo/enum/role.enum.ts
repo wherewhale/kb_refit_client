@@ -3,3 +3,8 @@ export enum UserRole {
     BUSINESS = "ROLE_BUSINESS",
     ADMIN = "ROLE_ADMIN",
 }
+
+export enum ProcessState {
+  APPROVED = "accepted",
+  REJECTED = "rejected",
+}

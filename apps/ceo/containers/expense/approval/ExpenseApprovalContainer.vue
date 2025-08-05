@@ -5,6 +5,8 @@ import ExpenseApprovalInfo from "~/components/expense/approval/ExpenseApprovalIn
 import ConfirmLoading from "~/components/expense/ConfirmLoading.vue";
 import RejectReason from "~/components/expense/approval/RejectReason.vue";
 import StepDone from "~/components/expense/StepDone.vue";
+import { useMutation } from "@tanstack/vue-query";
+import { patchReceiptProcess } from "~/services/expense";
 
 // 스텝 정의
 const STEPS = [
@@ -16,18 +18,37 @@ const STEPS = [
 
 const route = useRoute();
 const router = useRouter();
-const receiptId = route.params.receiptId as string;
 
-const { currentStep, prevStep, setStep } = useFunnel([...STEPS]);
+const receiptProcessId = Number(route.params.receiptProcessId);
+const receiptId = Number(route.params.receiptId);
+
+const { mutate: mutateProcess } = useMutation({
+  mutationFn: (status: "accepted" | "rejected") =>
+    patchReceiptProcess(receiptId, status).then(res => res.data),
+});
+
+const patchAccepted = () => {
+  mutateProcess("accepted");
+};
+
+// const patchRejected = () => {
+//   mutateProcess("rejected");
+// };
+
+const onApprove = () => {
+  setStep("세무 처리 진행", "forward");
+};
+
+const onReject = () => {
+  setStep("반려 사유 작성", "forward");
+};
+
+const { currentStep, prevStep, setStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 // TODO: transition 로직 추가
 
 // 공용 핸들러
 const goList = () => router.push("/?tab=expense");
-
-// 승인/반려 버튼 동작
-const onApprove = () => setStep("세무 처리 진행", "forward");
-const onReject  = () => setStep("반려 사유 작성", "forward");
 
 // 세무처리 완료, 반려사유 제출 → 완료 스텝
 const onAccountingDone = () => setStep("경비 처리 완료", "forward");
@@ -51,9 +72,10 @@ const stepsMap: Record<
   "세무 처리 진행": {
     component: ConfirmLoading,
     props: {
-      receiptId,
+      receiptProcessId,
       onPrev: prevStep,
       onDone: onAccountingDone,
+      onApproved: patchAccepted,
     },
   },
   "반려 사유 작성": {
@@ -62,13 +84,14 @@ const stepsMap: Record<
       receiptId,
       onPrev: onRejectPrev,
       onSubmit: onRejectSubmit,
+      onMutate: mutateProcess,
     },
   },
   "경비 처리 완료": {
     component: StepDone,
     props: {
-      receiptId,
-      onComplete: goList,
+      receiptProcessId,
+      onComplete: goList
     },
   },
 };
@@ -78,7 +101,7 @@ const currentStepConfig = computed(() => stepsMap[currentStep.value]);
 
 <template>
   <main class="px-6 pt-10 pb-20">
-    <FormContainer :steps="[...STEPS]" :current-step="stepIndex">
+    <FormContainer :steps="STEPS" :current-step="stepIndex">
         <component
           :is="currentStepConfig?.component"
           v-bind="currentStepConfig?.props"

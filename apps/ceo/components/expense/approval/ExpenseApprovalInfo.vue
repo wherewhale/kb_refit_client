@@ -2,6 +2,7 @@
 import { useQuery } from "@tanstack/vue-query";
 import { useImageDownload } from "~/hooks/useImageDownload";
 import { getReceiptProcessDetail } from "~/services/expense";
+import type { ReceiptProcessDetail } from "~/types/expense";
 
 const props = defineProps<{
   receiptId: string;
@@ -9,7 +10,7 @@ const props = defineProps<{
   onReject: () => void;
 }>();
 
-const { data: ReceiptProcessApplicant } = useQuery({
+const { data: ReceiptProcessApplicant } = useQuery<ReceiptProcessDetail>({
   queryKey: ["getReceiptProcessDetail", props.receiptId],
   queryFn: async () => (await getReceiptProcessDetail(Number(props.receiptId))).data,
   refetchOnWindowFocus: false,
@@ -21,8 +22,8 @@ const { downloadUrl, isLoading, loadImage } = useImageDownload();
 watch(
   ReceiptProcessApplicant,
   (val) => {
-    if (val?.receiptInfo && val.receiptInfo.imageFileName) {
-      loadImage(val.receiptInfo.imageFileName);
+    if (val?.receiptProcessApplicant && val.receiptProcessApplicant.imageFileName) {
+      loadImage(val.receiptProcessApplicant.imageFileName);
     }
   },
   { immediate: false } // 첫 실행 시 호출 안 함
@@ -33,21 +34,21 @@ watch(
   <form>
     <KBUITypography size="b14" color="gray-2"> 신청자 </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
-      {{ ReceiptProcessApplicant?.receiptInfo.name }}
+      {{ ReceiptProcessApplicant?.receiptProcessApplicant.name }}
     </KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       경비 처리 항목
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2"
-      >{{ReceiptProcessApplicant?.receiptInfo.documentType}}</KBUITypography
+      >{{ReceiptProcessApplicant?.receiptProcessApplicant.documentType}}</KBUITypography
     >
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       세부 내용
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2"
-      >{{ReceiptProcessApplicant?.receiptInfo.documentDetail}}</KBUITypography
+      >{{ReceiptProcessApplicant?.receiptProcessApplicant.documentDetail}}</KBUITypography
     >
-    <KBUITypography size="b14" color="gray-2" class-name="mt-4">
+    <KBUITypography v-if="downloadUrl && !isLoading" size="b14" color="gray-2" class-name="mt-4">
       관련 이미지
     </KBUITypography>
     <div class="mt-2">
@@ -78,16 +79,16 @@ watch(
 
     </div>
   </form>
-  <div class="grid grid-cols-2 gap-2">
+  <div class="grid grid-cols-2 gap-2 mt-10">
     <UButton
       color="primary"
-      class="rounded-lg px-8 text-white text-lg font-medium items-center justify-center"
-      :disabled="false"
+      class="rounded-lg px-8 py-[1rem] text-white text-lg font-medium items-center justify-center"
+
       @click="props.onApprove"
       >승인하기</UButton>
     <UButton
       color="error"
-      class="rounded-lg px-8 text-white text-lg font-medium items-center justify-center"
+      class="rounded-lg px-8 py-[1rem] text-white text-lg font-medium items-center justify-center"
       @click="props.onReject"
     >반려하기</UButton>
   </div>

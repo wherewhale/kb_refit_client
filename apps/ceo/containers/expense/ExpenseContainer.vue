@@ -5,9 +5,10 @@ import Card from "~/components/common/Card.vue";
 import HistoryBlock from "@/components/common/HistoryBlock.vue";
 import FilterPanel from "@/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
-import { getPendingReceipt } from "~/services/expense";
+import { getCompletedReceipt, getPendingReceipt } from "~/services/expense";
 import { useQuery } from "@tanstack/vue-query";
-import type { PendingDetail } from "~/types/expense";
+import type { PendingDetail, CompletedReceiptsResponse } from "~/types/expense";
+import { ProcessState } from "~/enum/role.enum";
 
 // 선택된 필터 상태
 const selected = reactive({
@@ -49,40 +50,15 @@ const handleSend = ({ email }: { email: string }) => {
   }
 }
 
-const openModal = () => { isOpen.value = true; };
-// TODO: API 호출
-
 // 처리 완료된 경비 목록
-const paymentList = [
-  {
-    id: 21,
-    label: "스타벅스",
-    amount: -5900,
-    createdAt: new Date("2025-07-14T12:30:00"),
-    isCompleted: true,
-  },
-  {
-    id: 22,
-    label: "브네",
-    amount: -32500,
-    createdAt: new Date("2025-07-14T14:35:00"),
-    isCompleted: true,
-  },
-  {
-    id: 23,
-    label: "브네",
-    amount: -52500,
-    createdAt: new Date("2025-07-14T18:50:00"),
-    isCompleted: false,
-  },
-  {
-    id: 24,
-    label: "브네",
-    amount: -52500,
-    createdAt: new Date("2025-07-15T10:05:00"),
-    isCompleted: false,
-  },
-];
+const { data: completedData } = useQuery<CompletedReceiptsResponse>({
+  queryKey: ["getCompletedReceipt"],
+  queryFn: async () => (await getCompletedReceipt()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const openModal = () => { isOpen.value = true; };
 
 // 카드 데이터 정의
 const card_data = computed<CardProps>(() => ({
@@ -99,7 +75,9 @@ const card_data = computed<CardProps>(() => ({
 }));
 
 // 아이콘 매핑 함수
-const getIcon = (label: string): { background: string; emoji: string } => {
+const getIcon = (label?: string): { background: string; emoji: string } => {
+  if (!label) return { background: "bg-gray-1", emoji: "💲" };
+
   if (label.includes("브네")) {
     return { background: "bg-yellow-1", emoji: "🍖" };
   } else if (label.includes("스타벅스")) {
@@ -166,21 +144,25 @@ const getIcon = (label: string): { background: string; emoji: string } => {
       />
       <HistoryBlock
         :items="
-          paymentList.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/expense/${item.id}/receive`,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
-            completed: item.isCompleted === true
+          completedData?.list.map((item) => ({
+            id: item.receiptId,
+            label: item.companyName,
+            amount: item.totalPrice,
+            href: `/expense/${item.receiptId}/receive`,
+            icon: getIcon(item.companyName),
+            createdAt:              
+              item.createdAt && !isNaN(new Date(item.createdAt).getTime())
+                ? new Date(item.createdAt)
+                : new Date(0),
+            completed: item.processState === ProcessState.APPROVED
               ? { word: '경비 처리 승인', icon: 'ic:baseline-check' }
-              : item.isCompleted === false
+              : item.processState === ProcessState.REJECTED
                 ? { word: '경비 처리 반려', icon: 'ic:baseline-close' }
                 : undefined,
-          }))
+          })) || []
         "
       />
+
     </div>
   </main>
 

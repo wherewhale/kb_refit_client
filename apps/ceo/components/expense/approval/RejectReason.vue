@@ -3,6 +3,7 @@ const props = defineProps<{
   receiptId: string;
   onPrev: () => void;
   onSubmit: () => void;
+  onMutate: (status: "accepted" | "rejected") => void;
 }>();
 
 // 이벤트로 reason을 넘겨주면 부모가 필요시 받을 수 있음
@@ -21,6 +22,7 @@ const isValid = computed(() => {
 const onClickSubmit = () => {
   if (!isValid.value) return;
   emit("submit", reason.value.trim());
+  props.onMutate("rejected");
   props.onSubmit?.();
 };
 </script>

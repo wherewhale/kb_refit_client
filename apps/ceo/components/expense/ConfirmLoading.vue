@@ -3,6 +3,7 @@ import LoadingDots from "~/components/common/LoadingDots.vue";
 
 const props = defineProps<{
   onDone: () => void;
+  onApproved: () => void;
 }>();
 
 const step = ref(1);
@@ -27,7 +28,8 @@ const contents = computed(() => {
 
 const proceedStep = async () => {
   await new Promise((r) => setTimeout(r, 3000)); // 송신 중
-  step.value = 2;                                 // 완료
+  step.value = 2;    
+  props.onApproved();                             // 완료
   await new Promise((r) => setTimeout(r, 1500));  // 잠깐 보여주기
   props.onDone();                                 // 다음 스텝
 };

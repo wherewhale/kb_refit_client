@@ -3,6 +3,7 @@
 const props = defineProps<{
   receiptId: string;
   onComplete: () => void;
+  onSubmit: () => void;
 }>();
 </script>
 
