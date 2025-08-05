@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import { useImageDownload } from "~/hooks/useImageDownload";
+import { getReceiptProcessDetail } from "~/services/expense";
 
 const props = defineProps<{
   receiptId: string;
@@ -7,31 +9,43 @@ const props = defineProps<{
   onReject: () => void;
 }>();
 
-// TODO: props.receiptId로 API 받아옴
-const TEST_DATA = {
-  id: 'test',
-  imageFilename: '0df9bb39-d315-4752-82b6-fe5f7c5fce92.png'
-}
+const { data: ReceiptProcessApplicant } = useQuery({
+  queryKey: ["getReceiptProcessDetail", props.receiptId],
+  queryFn: async () => (await getReceiptProcessDetail(Number(props.receiptId))).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
 
 const { downloadUrl, isLoading, loadImage } = useImageDownload();
 
-onMounted(() => {
-  // TODO: API 호출 결과로 이미지 로드
-  loadImage(TEST_DATA.imageFilename);
-});
+watch(
+  ReceiptProcessApplicant,
+  (val) => {
+    if (val?.receiptInfo && val.receiptInfo.imageFileName) {
+      loadImage(val.receiptInfo.imageFileName);
+    }
+  },
+  { immediate: false } // 첫 실행 시 호출 안 함
+);
 </script>
 
 <template>
   <form>
     <KBUITypography size="b14" color="gray-2"> 신청자 </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
-      김리핏
+      {{ ReceiptProcessApplicant?.receiptInfo.name }}
     </KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       경비 처리 항목
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2"
-      >업무추진</KBUITypography
+      >{{ReceiptProcessApplicant?.receiptInfo.documentType}}</KBUITypography
+    >
+    <KBUITypography size="b14" color="gray-2" class-name="mt-4">
+      세부 내용
+    </KBUITypography>
+    <KBUITypography weight="medium" class-name="mt-2"
+      >{{ReceiptProcessApplicant?.receiptInfo.documentDetail}}</KBUITypography
     >
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       관련 이미지
@@ -48,21 +62,23 @@ onMounted(() => {
       세부 사용 내역
     </KBUITypography>
     <div class="w-full rounded-lg border border-black shadow-lg mt-2">
-      <CommonReceipt
-        ref="receiptRef"
-        title="가게 이름"
-        business-number="123-45-67890"
-        ceo="홍길동"
-        address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date()"
-        :goods="[
-          { name: '상품1', price: 10000, quantity: 2 },
-          { name: '상품2', price: 15000, quantity: 1 },
-        ]"
-      />
+    <CommonReceipt
+      ref="receiptRef"
+      :title="ReceiptProcessApplicant?.receiptDetail.companyName ?? ''"
+      business-number="123-45-67890"
+      :ceo="ReceiptProcessApplicant?.receiptDetail.ceoName ?? ''"
+      :address="ReceiptProcessApplicant?.receiptDetail.address ?? ''"
+      :created-at="ReceiptProcessApplicant ? new Date(ReceiptProcessApplicant.receiptDetail.createdAt) : new Date()"
+      :goods="ReceiptProcessApplicant?.receiptDetail.receiptContents.map(item => ({
+        name: item.merchandiseName,
+        price: item.merchandisePrice,
+        quantity: item.amount
+      })) || []"
+    />
+
     </div>
   </form>
-s  <div class="grid grid-cols-2 gap-2">
+  <div class="grid grid-cols-2 gap-2">
     <UButton
       color="primary"
       class="rounded-lg px-8 text-white text-lg font-medium items-center justify-center"

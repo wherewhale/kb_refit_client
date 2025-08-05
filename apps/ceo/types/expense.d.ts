@@ -12,3 +12,44 @@ export interface PendingDetail {
   countCompletedReceiptsThisMonth: number; // 이번 달 완료 항목 개수
   pendingReceipts: Receipt[]; // 영수증 내역?
 }
+
+export interface ReceiptProcessApplicant {
+  userid: number; // 신청자 id
+  name: string;   // 신청자
+  documentType: string; // 경비 처리 항목
+  documentDetail: string; // 세부 내용
+  imageFileName: string; // 증빙 이미지 파일명
+  receiptId: number;
+  processState: string; // 영수 처리 상태
+}
+
+export interface ReceiptDetail {
+  userId: number;
+  receiptId: number;
+  companyId: number;
+  companyName: string;
+  ceoName: string;
+  address: string;
+  receiptContents: ReceiptContentDetail[];
+  totalPrice: number;
+  supplyPrice: number;
+  surtax: number;
+  transactionType: string;
+  createdAt: string;
+  processState: string;
+  cardNumber: string;
+  isCorporate: number;
+  rejectedReason: string;
+}
+
+export interface ReceiptContentDetail{
+  merchandiseId: number;
+  merchandiseName: string;
+  merchandisePrice: number;
+  amount: number;
+}
+
+export interface ReceiptProcessDetail {
+  receiptDetail: ReceiptDetail;                 // 영수증 상세 정보
+  receiptInfo: ReceiptProcessApplicant;         // 영수처리 신청자 상세 정보
+}
