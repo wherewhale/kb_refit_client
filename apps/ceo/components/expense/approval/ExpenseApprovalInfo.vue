@@ -66,7 +66,7 @@ watch(
     <CommonReceipt
       ref="receiptRef"
       :title="ReceiptProcessApplicant?.receiptDetail.companyName ?? ''"
-      business-number="123-45-67890"
+      :business-number="ReceiptProcessApplicant?.receiptDetail.companyId?.toString() ?? ''"
       :ceo="ReceiptProcessApplicant?.receiptDetail.ceoName ?? ''"
       :address="ReceiptProcessApplicant?.receiptDetail.address ?? ''"
       :created-at="ReceiptProcessApplicant ? new Date(ReceiptProcessApplicant.receiptDetail.createdAt) : new Date()"
@@ -75,7 +75,12 @@ watch(
         price: item.merchandisePrice,
         quantity: item.amount
       })) || []"
+      :total="ReceiptProcessApplicant?.receiptDetail.totalPrice ?? 0"
+      :supply="ReceiptProcessApplicant?.receiptDetail.supplyPrice ?? 0"
+      :tax="ReceiptProcessApplicant?.receiptDetail.surtax ?? 0"
+      :transaction-type="ReceiptProcessApplicant?.receiptDetail.transactionType ?? ''"
     />
+
 
     </div>
   </form>

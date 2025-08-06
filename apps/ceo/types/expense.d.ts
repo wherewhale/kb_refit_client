@@ -62,7 +62,7 @@ export interface ReceiptProcessDetail {
 
 // 영수 처리 승인/반려
 export interface ReceiptProcessingRequest {
-  receiptProcessId: number;
+  receiptId: number;
   progressState: string;
   rejectedReason: string;
 }

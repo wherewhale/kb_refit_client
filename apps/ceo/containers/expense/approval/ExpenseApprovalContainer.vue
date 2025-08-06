@@ -19,7 +19,7 @@ const STEPS = [
 const route = useRoute();
 const router = useRouter();
 
-const receiptProcessId = Number(route.params.receiptProcessId);
+// const receiptProcessId = Number(route.params.receiptProcessId);
 const receiptId = Number(route.params.receiptId);
 
 const { mutate: mutateProcess } = useMutation({
@@ -72,7 +72,7 @@ const stepsMap: Record<
   "세무 처리 진행": {
     component: ConfirmLoading,
     props: {
-      receiptProcessId,
+      receiptId,
       onPrev: prevStep,
       onDone: onAccountingDone,
       onApproved: patchAccepted,
@@ -90,7 +90,7 @@ const stepsMap: Record<
   "경비 처리 완료": {
     component: StepDone,
     props: {
-      receiptProcessId,
+      receiptId,
       onComplete: goList
     },
   },

@@ -16,8 +16,8 @@ export const getReceiptProcessDetail = async (receiptId: number) => {
     })
 }
 
-export const patchReceiptProcess = async ( receiptProcessId: number, status: "accepted" | "rejected", rejectedReason?: string) => {
-  return apiClient.patch<ReceiptProcessingRequest>("/ceo/receiptProcessing", { receiptProcessId, progressState: status, rejectedReason });
+export const patchReceiptProcess = async ( receiptId: number, status: "accepted" | "rejected", rejectedReason?: string) => {
+  return apiClient.patch<ReceiptProcessingRequest>("/ceo/receiptProcessing", { receiptId, progressState: status, rejectedReason });
 };
 
 export const getCompletedReceipt = async() => {
