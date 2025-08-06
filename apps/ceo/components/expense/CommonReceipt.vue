@@ -10,6 +10,9 @@ interface Props {
   createdAt: Date;
   goods?: Goods[];
   totalPrice?: number;
+  total?: number;
+  supply?: number;
+  tax?: number;
   complete?: {
     result: boolean;
     message?: string;
@@ -86,25 +89,25 @@ defineExpose({ printRef });
     <div class="flex justify-between items-center">
       <KBUITypography size="b14">합계</KBUITypography>
       <KBUITypography size="b14">
-        {{ props.totalPrice ? props.totalPrice.toLocaleString() : calculatedTotalPrice?.toLocaleString() }}
+        {{ props.total?.toLocaleString() ?? props.totalPrice?.toLocaleString() ?? calculatedTotalPrice?.toLocaleString() ?? '0' }}
       </KBUITypography>
     </div>
     <div class="flex justify-between items-center">
       <KBUITypography size="b14">공급가액</KBUITypography>
       <KBUITypography size="b14">
-        {{ calculatedTotalPrice ? (calculatedTotalPrice - vat).toLocaleString() : "0" }}
+        {{ props.supply?.toLocaleString() ?? (calculatedTotalPrice ? (calculatedTotalPrice - vat).toLocaleString() : "0") }}
       </KBUITypography>
     </div>
     <div class="flex justify-between items-center">
       <KBUITypography size="b14">부가세</KBUITypography>
-      <KBUITypography size="b14">{{ vat.toLocaleString() }}</KBUITypography>
+      <KBUITypography size="b14">{{ props.tax?.toLocaleString() ?? vat.toLocaleString() }}</KBUITypography>
     </div>
 
     <hr class="my-1 border-b-0.5 border-gray-4" />
     <div class="flex justify-between items-center my-4">
       <KBUITypography weight="bold">총액</KBUITypography>
       <KBUITypography weight="bold">
-        {{ props.totalPrice ? props.totalPrice.toLocaleString() : calculatedTotalPrice?.toLocaleString() }}
+        {{ props.total?.toLocaleString() ?? props.totalPrice?.toLocaleString() ?? calculatedTotalPrice?.toLocaleString() ?? '0' }}
       </KBUITypography>
     </div>
 

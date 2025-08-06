@@ -26,29 +26,6 @@ const { data } = useQuery<PendingDetail>({
 
 const isOpen = ref(false);
 const totalCount = 327;  // 예: 총 건수
-const toast = useToast();
-
-const handleSend = ({ email }: { email: string }) => {
-  // 1) 즉시 모달 닫기 (사용자 체감상 '보내기' 누르는 순간 닫힘)
-  isOpen.value = false
-
-  try {
-    // TODO: 2) 실제 전송 (성공 시 토스트)
-
-    toast.add({
-      title: '경비 처리 항목을 보냈습니다.',
-      description: `${email} 로 처리 결과를 전송했어요.`,
-      color: 'success'
-    })
-  } catch {
-    // 실패 토스트(모달은 이미 닫혀 있음)
-    toast.add({
-      title: '전송 실패',
-      description: '네트워크 상태를 확인 후 다시 시도하세요.',
-      color: 'error'
-    })
-  }
-}
 
 // 처리 완료된 경비 목록
 const { data: completedData } = useQuery<CompletedReceiptsResponse>({
@@ -169,6 +146,5 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
   <SendExpenseResult
     v-model:open="isOpen"
     :count="totalCount"
-    @send="handleSend"
   />
 </template>

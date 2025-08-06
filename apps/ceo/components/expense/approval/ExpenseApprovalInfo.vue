@@ -75,9 +75,9 @@ watch(
         price: item.merchandisePrice,
         quantity: item.amount
       })) || []"
-      :total="ReceiptProcessApplicant?.receiptDetail.totalPrice ?? 0"
-      :supply="ReceiptProcessApplicant?.receiptDetail.supplyPrice ?? 0"
-      :tax="ReceiptProcessApplicant?.receiptDetail.surtax ?? 0"
+      :total="ReceiptProcessApplicant?.receiptDetail.totalPrice"
+      :supply="ReceiptProcessApplicant?.receiptDetail.supplyPrice"
+      :tax="ReceiptProcessApplicant?.receiptDetail.surtax"
       :transaction-type="ReceiptProcessApplicant?.receiptDetail.transactionType ?? ''"
     />
 

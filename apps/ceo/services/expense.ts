@@ -2,7 +2,8 @@ import type {
     PendingDetail,
     ReceiptProcessDetail,
     ReceiptProcessingRequest,
-    CompletedReceiptsResponse
+    CompletedReceiptsResponse,
+    EmailSend,
 } from "@/types/expense";
 import { apiClient } from "./apiClient";
 
@@ -23,3 +24,13 @@ export const patchReceiptProcess = async ( receiptId: number, status: "accepted"
 export const getCompletedReceipt = async() => {
     return apiClient.get<CompletedReceiptsResponse>("/ceo/completed")
 };
+
+export const postEmailSend = async( payload: EmailSend ) => {
+    return apiClient.post<EmailSend>("/ceo/sendEmail" ,payload)
+};
+
+export const getMonthlySummary = async (): Promise<number> => {
+  const res = await apiClient.get<number>("/ceo/monthlySummary");
+  return res.data;
+};
+

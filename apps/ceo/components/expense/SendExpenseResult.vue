@@ -1,10 +1,20 @@
 <script setup lang="ts">
+import { useMutation, useQuery } from "@tanstack/vue-query";
+import { getMonthlySummary, postEmailSend } from "~/services/expense";
 import { isValidEmail } from '~/utils/regex'
 
 const props = defineProps<{
   open: boolean         // v-model:open
   count: number         // 총 경비 건수
-}>()
+}>();
+
+const isBottomSheetOpen = ref(props.open);
+
+const { data } = useQuery<number>({
+  queryKey: ["getMonthlySummary"],
+  queryFn: getMonthlySummary,
+  retry: false,
+});
 
 const emit = defineEmits<{
   (e: 'update:open', v: boolean): void
@@ -13,6 +23,27 @@ const emit = defineEmits<{
 
 const email = ref('')
 const error = ref('')
+const toast = useToast();
+
+const { mutate: sendEmail } = useMutation({
+  mutationFn: postEmailSend,
+  onSuccess: () => {
+    toast.remove('sending')
+    toast.add({
+      title: '경비 처리 항목을 보냈습니다.',
+      description: `${email.value} 로 처리 결과를 전송했어요.`,
+      color: 'success'
+    })
+  },
+  onError: () => {
+    toast.remove('sending')
+    toast.add({
+      title: '전송 실패',
+      description: '네트워크 상태를 확인 후 다시 시도하세요.',
+      color: 'error'
+    })
+  }
+})
 
 const onSubmit = () => {
   error.value = ''
@@ -20,10 +51,14 @@ const onSubmit = () => {
     error.value = '올바른 이메일을 입력하세요.'
     return
   }
-  emit('send', { email: email.value })
+  isBottomSheetOpen.value = false
+    toast.add({
+    id: 'sending',
+    title: '보내는 중...',
+    description: '이메일 전송중...',
+  })
+  sendEmail({ email: email.value })
 }
-
-const isBottomSheetOpen = ref(props.open)
 watch(() => props.open, v => isBottomSheetOpen.value = v)
 watch(isBottomSheetOpen, v => emit('update:open', v))
 </script>
@@ -38,7 +73,7 @@ watch(isBottomSheetOpen, v => emit('update:open', v))
 
         <KBUITypography size="b14" color="gray-2">경비 처리 수</KBUITypography>
         <KBUITypography size="b16" weight="medium" class-name="mt-1">
-          총 {{ props.count.toLocaleString() }}건
+          총 {{ data ?? 0 }}건
         </KBUITypography>
 
         <KBUITypography size="b14" color="gray-2" class-name="mt-6">

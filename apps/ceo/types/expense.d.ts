@@ -1,15 +1,10 @@
+// 경비 처리가 필요한 내용
 export interface Receipt {
   receiptId: number;
   companyName: string;
   totalPrice: number;
   createdAt: string; // 결제 일시
   processState: string; // 영수 처리 상태
-}
-
-// 응답 전체 타입
-export interface CompletedReceiptsResponse {
-  nextCursorId: string;
-  list: Receipt[];
 }
 
 export interface PendingDetail {
@@ -25,10 +20,9 @@ export interface ReceiptProcessApplicant {
   documentType: string; // 경비 처리 항목
   documentDetail: string; // 세부 내용
   imageFileName: string; // 증빙 이미지 파일명
-  receiptId: number;
-  processState: string; // 영수 처리 상태
 }
 
+// 영수증 내역
 export interface ReceiptDetail {
   userId: number;
   receiptId: number;
@@ -48,6 +42,7 @@ export interface ReceiptDetail {
   receiptContents: ReceiptContentDetail[];
 }
 
+// 상품 상세 내역
 export interface ReceiptContentDetail{
   merchandiseId: number;
   merchandiseName: string;
@@ -65,4 +60,15 @@ export interface ReceiptProcessingRequest {
   receiptId: number;
   progressState: string;
   rejectedReason: string;
+}
+
+// 이메일 전송
+export interface EmailSend {
+  email: string;
+}
+
+// 응답 전체 타입
+export interface CompletedReceiptsResponse {
+  CursorId: string;
+  list: Receipt[];
 }
