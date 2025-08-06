@@ -12,7 +12,7 @@ export const getPendingReceipt = async() => {
 };
 
 export const getReceiptProcessDetail = async (receiptId: number) => {
-    return apiClient.get<ReceiptProcessDetail>("/ceo/receiptProcessDetail", {
+    return apiClient.get<ReceiptProcessDetail>("/ceo/receipt/detail", {
         params: { receiptId },
     })
 }

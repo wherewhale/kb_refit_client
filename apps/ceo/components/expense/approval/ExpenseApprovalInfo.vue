@@ -25,8 +25,7 @@ watch(
     if (val?.receiptProcessApplicant && val.receiptProcessApplicant.imageFileName) {
       loadImage(val.receiptProcessApplicant.imageFileName);
     }
-  },
-  { immediate: false } // 첫 실행 시 호출 안 함
+  }
 );
 </script>
 

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useMutation } from "@tanstack/vue-query";
+import { patchReceiptProcess } from "~/services/expense";
+
 const props = defineProps<{
   receiptId: string;
   onPrev: () => void;
@@ -6,7 +9,6 @@ const props = defineProps<{
   onMutate: (status: "accepted" | "rejected") => void;
 }>();
 
-// 이벤트로 reason을 넘겨주면 부모가 필요시 받을 수 있음
 const emit = defineEmits<{
   (e: "submit", reason: string): void;
 }>();
@@ -19,11 +21,20 @@ const isValid = computed(() => {
   return v.length > 0 && v.length <= maxLen;
 });
 
+const { mutate: rejectExpense } = useMutation({
+  mutationFn: (reason: string) =>
+    patchReceiptProcess(Number(props.receiptId), "rejected", reason),
+  onSuccess: () => {
+    emit("submit", reason.value.trim());
+    props.onSubmit?.();
+  },
+});
+
 const onClickSubmit = () => {
-  if (!isValid.value) return;
-  emit("submit", reason.value.trim());
-  props.onMutate("rejected");
-  props.onSubmit?.();
+  if (!isValid.value) {
+    return;
+  }
+  rejectExpense(reason.value.trim());
 };
 </script>
 
@@ -55,7 +66,7 @@ const onClickSubmit = () => {
       variant="primary"
       size="large"
       class-name="w-full"
-      :disabled="!isValid"
+      :disabled="false"
       @click="onClickSubmit"
     >
       반려하기

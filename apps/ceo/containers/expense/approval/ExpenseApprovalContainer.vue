@@ -18,8 +18,6 @@ const STEPS = [
 
 const route = useRoute();
 const router = useRouter();
-
-// const receiptProcessId = Number(route.params.receiptProcessId);
 const receiptId = Number(route.params.receiptId);
 
 const { mutate: mutateProcess } = useMutation({
@@ -27,35 +25,18 @@ const { mutate: mutateProcess } = useMutation({
     patchReceiptProcess(receiptId, status).then(res => res.data),
 });
 
-const patchAccepted = () => {
-  mutateProcess("accepted");
-};
-
-// const patchRejected = () => {
-//   mutateProcess("rejected");
-// };
-
-const onApprove = () => {
-  setStep("세무 처리 진행", "forward");
-};
-
-const onReject = () => {
-  setStep("반려 사유 작성", "forward");
-};
-
 const { currentStep, prevStep, setStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
-// TODO: transition 로직 추가
 
-// 공용 핸들러
 const goList = () => router.push("/?tab=expense");
 
 // 세무처리 완료, 반려사유 제출 → 완료 스텝
 const onAccountingDone = () => setStep("경비 처리 완료", "forward");
 const onRejectSubmit   = () => setStep("경비 처리 완료", "forward");
 const onRejectPrev = () => setStep("경비 처리 신청 정보", "backward");
+const onApprove = () => setStep("세무 처리 진행", "forward");
+const onReject = () => setStep("반려 사유 작성", "forward");
 
-// 스텝 맵 (동적 컴포넌트 + props)
 type StepKey = (typeof STEPS)[number];
 const stepsMap: Record<
   StepKey,
@@ -65,8 +46,8 @@ const stepsMap: Record<
     component: ExpenseApprovalInfo,
     props: {
       receiptId,
-      onApprove,   // 내부에서 승인 버튼 클릭 시 호출
-      onReject,    // 내부에서 반려 버튼 클릭 시 호출
+      onApprove,
+      onReject,
     },
   },
   "세무 처리 진행": {
@@ -75,7 +56,7 @@ const stepsMap: Record<
       receiptId,
       onPrev: prevStep,
       onDone: onAccountingDone,
-      onApproved: patchAccepted,
+      onApproved: () => mutateProcess("accepted"),
     },
   },
   "반려 사유 작성": {

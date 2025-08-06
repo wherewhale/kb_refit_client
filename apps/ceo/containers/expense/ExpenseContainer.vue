@@ -25,7 +25,6 @@ const { data } = useQuery<PendingDetail>({
 });
 
 const isOpen = ref(false);
-const totalCount = 327;  // 예: 총 건수
 
 // 처리 완료된 경비 목록
 const { data: completedData } = useQuery<CompletedReceiptsResponse>({
@@ -85,7 +84,7 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
     >
       <KBUITypography tag="h3" weight="bold"
         >처리가 필요한 경비 총
-        {{ data?.countPendingReceipts || data?.pendingReceipts }}건</KBUITypography
+        {{ data?.countPendingReceipts ?? 0 }}건</KBUITypography
       >
       <HistoryBlock
         :items="
@@ -145,6 +144,5 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
 
   <SendExpenseResult
     v-model:open="isOpen"
-    :count="totalCount"
   />
 </template>

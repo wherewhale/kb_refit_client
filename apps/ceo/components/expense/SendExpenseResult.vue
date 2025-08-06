@@ -5,7 +5,6 @@ import { isValidEmail } from '~/utils/regex'
 
 const props = defineProps<{
   open: boolean         // v-model:open
-  count: number         // 총 경비 건수
 }>();
 
 const isBottomSheetOpen = ref(props.open);

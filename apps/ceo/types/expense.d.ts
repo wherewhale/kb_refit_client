@@ -59,7 +59,7 @@ export interface ReceiptProcessDetail {
 export interface ReceiptProcessingRequest {
   receiptId: number;
   progressState: string;
-  rejectedReason: string;
+  rejectedReason?: string;
 }
 
 // 이메일 전송

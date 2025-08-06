@@ -30,7 +30,7 @@ const groupedItems = computed(() => {
   const groups: Record<string, Props["items"]> = {};
 
   for (const item of props.items) {
-    const date = item.createdAt.toISOString().split("T")[0]; // "YYYY-MM-DD" 형식
+    const date = dayjs(item.createdAt).format("YYYY-MM-DD"); // "YYYY-MM-DD" 형식
     if (!groups[date]) groups[date] = [];
     groups[date].push(item);
   }

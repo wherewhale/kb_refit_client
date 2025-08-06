@@ -144,7 +144,7 @@ defineExpose({ printRef });
           경비처리 반려
         </KBUITypography>
         <KBUITypography size="b14" class-name="text-center" color="red-2">
-          {{ props.complete.message ?? "증빙자료 부족" }}
+          {{ props.complete.message }}
         </KBUITypography>
       </div>
     </div>
