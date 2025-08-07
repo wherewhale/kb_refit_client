@@ -9,10 +9,6 @@ const props = defineProps<{
   onMutate: (status: "accepted" | "rejected") => void;
 }>();
 
-const emit = defineEmits<{
-  (e: "submit", reason: string): void;
-}>();
-
 const reason = ref("");
 const maxLen = 40;
 
@@ -25,7 +21,6 @@ const { mutate: rejectExpense } = useMutation({
   mutationFn: (reason: string) =>
     patchReceiptProcess(Number(props.receiptId), "rejected", reason),
   onSuccess: () => {
-    emit("submit", reason.value.trim());
     props.onSubmit?.();
   },
 });
@@ -66,7 +61,7 @@ const onClickSubmit = () => {
       variant="primary"
       size="large"
       class-name="w-full"
-      :disabled="false"
+      :disabled="!isValid"
       @click="onClickSubmit"
     >
       반려하기

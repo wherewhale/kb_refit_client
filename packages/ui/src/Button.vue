@@ -57,6 +57,11 @@ interface ButtonProps {
    */
   className?: string;
   /**
+   * @type {ButtonHTMLAttributes["type"]}
+   * @description 버튼 타입.
+   */
+  type?: "button" | "submit" | "reset";
+  /**
    * @type {(event: MouseEvent) => void}
    * @description 클릭 이벤트 핸들러.
    */
@@ -93,6 +98,7 @@ withDefaults(defineProps<ButtonProps>(), {
       },
       className, // 사용자가 전달한 className
     ]"
+    :type="type"
     :disabled="disabled || loading"
     @click="
       typeof $attrs['onClick'] === 'function' && !disabled && !loading

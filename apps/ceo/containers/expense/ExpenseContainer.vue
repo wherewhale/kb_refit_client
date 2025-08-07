@@ -7,7 +7,6 @@ import FilterPanel from "@/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
 import { getCompletedReceipt, getPendingReceipt } from "~/services/expense";
 import { useQuery } from "@tanstack/vue-query";
-import type { PendingDetail, CompletedReceiptsResponse } from "~/types/expense";
 import { ProcessState } from "~/enum/role.enum";
 
 // 선택된 필터 상태
@@ -17,7 +16,7 @@ const selected = reactive({
   필터: "전체",
 });
 
-const { data } = useQuery<PendingDetail>({
+const { data } = useQuery({
   queryKey: ["getPendingReceipt"],
   queryFn: async () => (await getPendingReceipt()).data,
   refetchOnWindowFocus: false,
@@ -27,7 +26,7 @@ const { data } = useQuery<PendingDetail>({
 const isOpen = ref(false);
 
 // 처리 완료된 경비 목록
-const { data: completedData } = useQuery<CompletedReceiptsResponse>({
+const { data: completedData } = useQuery({
   queryKey: ["getCompletedReceipt"],
   queryFn: async () => (await getCompletedReceipt()).data,
   refetchOnWindowFocus: false,

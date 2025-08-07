@@ -11,14 +11,14 @@ const isBottomSheetOpen = ref(props.open);
 
 const { data } = useQuery<number>({
   queryKey: ["getMonthlySummary"],
-  queryFn: getMonthlySummary,
+  queryFn: async () => (await getMonthlySummary()).data,
   retry: false,
 });
 
 const emit = defineEmits<{
-  (e: 'update:open', v: boolean): void
-  (e: 'send', payload: { email: string }): void
-}>()
+  (eventName: 'update:open', newOpenValue: boolean): void;
+  (eventName: 'send', payload: { email: string }): void;
+}>();
 
 const email = ref('')
 const error = ref('')
@@ -58,15 +58,28 @@ const onSubmit = () => {
   })
   sendEmail({ email: email.value })
 }
-watch(() => props.open, v => isBottomSheetOpen.value = v)
-watch(isBottomSheetOpen, v => emit('update:open', v))
+
+watch(
+  () => props.open,
+  (newOpenValue) => {
+    isBottomSheetOpen.value = newOpenValue;
+  }
+);
+
+watch(
+  isBottomSheetOpen,
+  (newOpenValue) => {
+    emit('update:open', newOpenValue);
+  }
+);
 </script>
 
 <template>
   <USlideover side="bottom" :open="isBottomSheetOpen" @update:open="isBottomSheetOpen = $event">
     <template #content>
-      <div class="p-4 pt-8 h-[600px] overflow-y-scroll max-w-sm mx-auto w-full">
-        <KBUITypography size="b16" weight="bold">
+      <form class="p-4 pt-8 h-[600px] flex flex-col justify-between overflow-y-scroll max-w-sm mx-auto w-full">
+        <div>
+          <KBUITypography size="b16" weight="bold">
           경비 처리 항목 보내기
         </KBUITypography>
 
@@ -84,19 +97,21 @@ watch(isBottomSheetOpen, v => emit('update:open', v))
           placeholder="이메일을 입력해주세요."
           class="mt-2 w-full bg-transparent outline-none border-b
                   border-gray-3 focus:border-green-1 pb-2"
-          @keyup.enter="onSubmit"
         />
         <KBUITypography v-if="error" size="b14" class="mt-2 text-sm text-red-2">{{ error }}</KBUITypography>
-      </div>
-
-      <KBUIButton
+        </div>
+        
+        <KBUIButton
         variant="primary"
         size="large"
+        class="w-full block"
         :disabled="!isValidEmail(email)"
-        @click="onSubmit"
+        type="submit"
+        @click.prevent="onSubmit"
       >
         보내기
       </KBUIButton>
+      </form> 
     </template>
   </USlideover>
 </template>

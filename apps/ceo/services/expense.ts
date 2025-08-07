@@ -29,8 +29,7 @@ export const postEmailSend = async( payload: EmailSend ) => {
     return apiClient.post<EmailSend>("/ceo/sendEmail" ,payload)
 };
 
-export const getMonthlySummary = async (): Promise<number> => {
-  const res = await apiClient.get<number>("/ceo/monthlySummary");
-  return res.data;
+export const getMonthlySummary = async () => {
+  return await apiClient.get<number>("/ceo/monthlySummary");
 };
 

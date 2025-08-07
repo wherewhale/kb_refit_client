@@ -21,14 +21,16 @@ const router = useRouter();
 const receiptId = Number(route.params.receiptId);
 
 const { mutate: mutateProcess } = useMutation({
-  mutationFn: (status: "accepted" | "rejected") =>
-    patchReceiptProcess(receiptId, status).then(res => res.data),
+  mutationFn: async (status: "accepted" | "rejected") => {
+    return (await patchReceiptProcess(receiptId, status)).data;
+  },
 });
 
 const { currentStep, prevStep, setStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 
 const goList = () => router.push("/?tab=expense");
+const approveReceipt = () => mutateProcess("accepted");
 
 // 세무처리 완료, 반려사유 제출 → 완료 스텝
 const onAccountingDone = () => setStep("경비 처리 완료", "forward");
@@ -56,7 +58,7 @@ const stepsMap: Record<
       receiptId,
       onPrev: prevStep,
       onDone: onAccountingDone,
-      onApproved: () => mutateProcess("accepted"),
+      onApproved: approveReceipt,
     },
   },
   "반려 사유 작성": {

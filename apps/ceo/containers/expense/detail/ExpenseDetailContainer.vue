@@ -2,12 +2,11 @@
 import { useQuery } from "@tanstack/vue-query";
 import { useImageDownload } from "~/hooks/useImageDownload";
 import { getReceiptProcessDetail } from "~/services/expense";
-import type { ReceiptProcessDetail } from "~/types/expense";
 
 const route = useRoute();
 const receiptId = Number(route.params.receiptId);
 
-const { data } = useQuery<ReceiptProcessDetail>({
+const { data } = useQuery({
   queryKey: ["getReceiptProcessDetail", receiptId],
   queryFn: async () => (await getReceiptProcessDetail(receiptId)).data,
   refetchOnWindowFocus: false,
@@ -32,8 +31,10 @@ watch(
 <template>
   <main class="px-6 py-20">
     <ClientOnly>
-      <FormContainer :steps="['경비 처리 신청 정보']" :current-step="0">
-        <form>
+        <section class="w-full rounded-lg bg-white shadow-md p-6 pb-20">
+          <KBUITypography weight="bold" class-name="my-4">
+            경비 처리 신청 정보
+          </KBUITypography>
           <KBUITypography size="b14" color="gray-2"> 신청자 </KBUITypography>
           <KBUITypography weight="medium" class-name="mt-2">
             {{ applicant?.name }}
@@ -86,7 +87,7 @@ watch(
                 price: item.merchandisePrice,
                 quantity: item.amount
               }))"
-              :total="receipt.totalPrice"
+              :total-price="receipt.totalPrice"
               :supply="receipt.supplyPrice"
               :tax="receipt.surtax"
               :transaction-type="receipt.transactionType"
@@ -96,8 +97,7 @@ watch(
               }"
             />
           </div>
-        </form>
-      </FormContainer>
+        </section>
     </ClientOnly>
   </main>
 </template>
