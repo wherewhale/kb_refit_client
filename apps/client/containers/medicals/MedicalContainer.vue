@@ -1,66 +1,56 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import Card from "~/components/common/Card.vue";
-import { FILTER_LABEL_KEYS, MEDICAL_FILTER_KEYS } from "~/common/constant/filters";
+import {
+  FILTER_LABEL_KEYS,
+  MEDICAL_FILTER_KEYS,
+} from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
+import { useQuery } from "@tanstack/vue-query";
+import { getMedicalSummary } from "~/services/medical";
 
 const { t } = useI18n();
 
 // 필터 선택 상태
 const selected = reactive({
-  기간: "common.filter.1month",
-  종류: "common.filter.entire",
-  정렬: "common.filter.latest",
-  필터: "common.filter.entire",
+  "common.filter.period": "common.filter.1month",
+  "common.filter.type": "common.filter.entire",
+  "common.filter.sort": "common.filter.latest",
+  "common.filter.filter": "common.filter.entire",
 });
 
 const MEDICAL_FILTERS = computed<Record<string, string[]>>(() => {
   return Object.fromEntries(
     Object.entries(MEDICAL_FILTER_KEYS).map(([key, values]) => [
-      t(FILTER_LABEL_KEYS[key]),
-      values.map((v) => t(v)),
+      FILTER_LABEL_KEYS[key],
+      values.map((v) => v),
     ])
   );
 });
 
+const { data: medicalSummaryData } = useQuery({
+  queryKey: ["medicalSummary"],
+  queryFn: async () => (await getMedicalSummary()).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
+
 const card_data = computed<CardProps>(() => ({
   title: t("medical.card.title"),
-  content: `${(21234200).toLocaleString()}원`,
+  content: `${(medicalSummaryData.value?.recentTotalPrice ?? 0).toLocaleString()}원`,
   src: "ramu",
   className: "bg-red-1",
-  description: t("medical.card.description"),
-  boldText: "7건",
+  description:
+    (medicalSummaryData.value?.insuranceBillable ?? 0) > 0
+      ? t("medical.card.description")
+      : "현재 청구 가능한 영수증이 없어요!",
+  boldText:
+    (medicalSummaryData.value?.insuranceBillable ?? 0) > 0
+      ? `${(medicalSummaryData.value?.insuranceBillable ?? 0).toLocaleString()}건`
+      : undefined,
 }));
-
-// api 호출 결과 테스트 데이터
-const paymentList = [
-  {
-    id: 21,
-    label: "손박사 이비인후과",
-    amount: -72500,
-    createdAt: new Date("2025-07-14T12:30:00"),
-    isCompleted: true,
-  },
-  {
-    id: 22,
-    label: "아따잘붙네 정형외과",
-    amount: -32500,
-    createdAt: new Date("2025-07-14T14:35:00"),
-    isCompleted: true,
-  },
-  {
-    id: 23,
-    label: "아따잘붙네 정형외과",
-    amount: 52500,
-    createdAt: new Date("2025-07-14T18:50:00"),
-  },
-  {
-    id: 24,
-    label: "아따잘붙네 정형외과",
-    amount: -32500,
-    createdAt: new Date("2025-07-15T10:05:00"),
-  },
-];
 </script>
 
 <template>

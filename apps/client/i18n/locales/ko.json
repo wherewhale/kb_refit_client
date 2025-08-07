@@ -41,7 +41,7 @@
   "medical": {
     "card": {
       "title": "최근 3년 간 병원비",
-      "description": "보험 청구 가능한 병원비가\\n현재 replace 남아 있어요!"
+      "description": "보험 청구 가능한 병원비가 현재 {replace} 남아 있어요!"
     },
     "filter": {
       "insurance_claim": "보험 청구",
