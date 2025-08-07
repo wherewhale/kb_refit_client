@@ -32,6 +32,16 @@ const loadMoreRef = ref<HTMLElement | null>(null);
 const startDate = ref<string | null>(null);
 const endDate = ref<string | null>(null);
 
+const queryKey = computed(() => [
+  "medicalList",
+  selected["common.filter.period"],
+  selected["common.filter.type"],
+  selected["common.filter.sort"],
+  selected["common.filter.filter"],
+  startDate.value,
+  endDate.value,
+]);
+
 const { data: medicalSummaryData } = useQuery({
   queryKey: ["medicalSummary"],
   queryFn: async () => (await getMedicalSummary()).data,
@@ -48,7 +58,7 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: ["rewardList", selected, startDate, endDate],
+  queryKey: queryKey,
   queryFn: async ({ pageParam = 0 }) => {
     const response = await getMedicalReceiptList({
       period: getPeriodNumber(selected["common.filter.period"]),
@@ -155,13 +165,12 @@ watch(loadMoreRef, () => {
               label: item.storeName,
               amount: item.totalPrice,
               createdAt: item.createdAt,
-              completed:
-                item.processState === 'completed'
-                  ? {
-                      word: '보험 청구 완료',
-                      icon: 'material-symbols:local-hospital',
-                    }
-                  : undefined,
+              completed: ['completed', 'rejected'].includes(item.processState)
+                ? {
+                    word: '보험 청구 완료',
+                    icon: 'material-symbols:local-hospital',
+                  }
+                : undefined,
               icon: {
                 background: 'bg-blue-1',
                 emoji: '🏥',
