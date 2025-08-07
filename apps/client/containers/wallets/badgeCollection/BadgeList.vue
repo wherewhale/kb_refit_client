@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/vue-query";
 import { getBadgeCollection } from "~/services/wallet";
 import type { SpecificBadgeDetail } from "~/types/wallet";
 
-const { data, error, isPending } = useQuery({
+const { data, isPending } = useQuery({
   queryKey: ["getBadgeCollection"],
   queryFn: async () => {
     const res = await getBadgeCollection();

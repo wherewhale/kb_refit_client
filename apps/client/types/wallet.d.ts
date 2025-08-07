@@ -47,3 +47,17 @@ export interface RewardWalletResponse {
   walletCost: number;
   totalStarPoint: number;
 }
+
+export interface BadgePresetDetail {
+  personalBadgeId: number;
+  badgeId: number;
+  badgeImage: string;
+  badgeTitle: string;
+}
+
+export interface BadgePreset {
+  presetId: number;
+  presetName: string;
+  isApplied: boolean;
+  badgePresetList: BadgePresetDetail[];
+}

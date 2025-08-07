@@ -5,12 +5,19 @@ import WalletHome from "~/containers/wallets/WalletHome.vue";
 import WalletBrandStoreContainer from "~/containers/wallets/brandStore/WalletBrandStoreContainer.vue";
 import WalletBadgeCollectionContainer from "~/containers/wallets/badgeCollection/WalletBadgeCollectionContainer.vue";
 import SelectBadgeContainer from "~/containers/wallets/badgeCollection/SelectBadgeContainer.vue";
+import PresetContainer from "./preset/PresetContainer.vue";
 
 const isBottomSheetOpen = ref(false);
 const badgeId = ref<number | null>(null);
 const bounceClass = ref("h-14"); // 기본 높이: 56px (14 * 4px)
 
-const PAGES = ["내 지갑", "브랜드 상점", "배지 도감", "배지 선택하기"];
+const PAGES = [
+  "내 지갑",
+  "브랜드 상점",
+  "배지 도감",
+  "배지 선택하기",
+  "프리셋 설정",
+];
 const direction = ref("forward");
 
 const { currentStep, setStep } = useFunnel(PAGES);
@@ -66,6 +73,13 @@ const stepsMap: Record<
     component: SelectBadgeContainer,
     props: {
       badgeId: badgeId,
+      onNext,
+      onBack,
+    },
+  },
+  "프리셋 설정": {
+    component: PresetContainer,
+    props: {
       onNext,
       onBack,
     },

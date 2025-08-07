@@ -1,5 +1,6 @@
 import type {
   BadgeListResponse,
+  BadgePreset,
   RewardWalletResponse,
   UpdateWornBadgeRequest,
   WalletBrandList,
@@ -29,4 +30,20 @@ export const postPurchaseBrand = async (walletId: number) => {
 
 export const patchMyWalletBrand = async (walletId: number) => {
   return apiClient.patch(`/wallet/brand/detail/${walletId}`);
+};
+
+export const getBadgePresetList = async () => {
+  return apiClient.get<BadgePreset[]>("/wallet/badge/preset");
+};
+
+export const postWalletPreset = async (name: string) => {
+  return apiClient.post("/wallet/badge/preset", { presetName: name });
+};
+
+export const deleteWalletPreset = async (presetId: number) => {
+  return apiClient.delete(`/wallet/badge/preset/${presetId}`);
+};
+
+export const patchWalletPreset = async (presetId: number) => {
+  return apiClient.patch(`/wallet/badge/preset/apply/${presetId}`);
 };

@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery } from "@tanstack/vue-query";
 import MyWallet from "~/components/wallet/MyWallet.vue";
 import type { WalletTheme } from "~/interfaces/wallet/theme";
-import { getMyWalletDesign } from "~/services/wallet";
+import { getMyWalletDesign, postWalletPreset } from "~/services/wallet";
 
 const props = defineProps<{
   onClickBadge: (badgeId: number | null) => void;
   onNext: (page: string) => void;
   onBack: (page: string) => void;
 }>();
+
+const toast = useToast();
+const isModalOpen = ref(false);
+const presetName = ref("");
 
 const { data } = useQuery({
   queryKey: ["getBadgeCollection"],
@@ -18,6 +22,28 @@ const { data } = useQuery({
   },
   refetchOnWindowFocus: false,
 });
+
+const { mutate: savePreset } = useMutation({
+  mutationKey: ["postWalletPreset", presetName],
+  mutationFn: async (name: string) => await postWalletPreset(name),
+  onSuccess: () => {
+    toast.add({
+      title: "프리셋이 저장되었습니다.",
+      color: "success",
+      duration: 2000,
+    });
+    isModalOpen.value = false;
+    presetName.value = "";
+  },
+});
+
+const isValidated = computed(() => {
+  return presetName.value.trim().length > 0 && presetName.value.length <= 8;
+});
+
+const onSavePreset = () => {
+  savePreset(presetName.value);
+};
 </script>
 <template>
   <div>
@@ -50,7 +76,57 @@ const { data } = useQuery({
         </KBUIButton>
         <KBUITypography size="b12">배지 도감</KBUITypography>
       </div>
+
+      <UModal v-model:open="isModalOpen">
+        <div class="flex flex-col items-center">
+          <KBUIButton variant="outlined" size="small">
+            <UIcon name="ic:baseline-save-alt" class="w-4 h-4" />
+          </KBUIButton>
+          <KBUITypography weight="regular" tag="p" size="b12"
+            >프리셋 저장</KBUITypography
+          >
+        </div>
+
+        <template #title> 프리셋 저장 </template>
+        <template #content>
+          <aside class="p-6">
+            <KBUITypography size="b14" color="gray-2">
+              프리셋 이름을 입력해주세요.
+            </KBUITypography>
+            <KBUITextField
+              v-model="presetName"
+              :max-length="8"
+              class-name="mt-2"
+              placeholder="최대 8자의 프리셋 이름을 입력해주세요."
+            />
+            <KBUIButton
+              type="button"
+              size="medium"
+              variant="primary"
+              class-name="mt-4 w-full"
+              :disabled="!isValidated"
+              @click="onSavePreset"
+            >
+              저장하기
+            </KBUIButton>
+          </aside>
+        </template>
+      </UModal>
+
+      <div class="flex flex-col items-center">
+        <KBUIButton
+          variant="outlined"
+          size="small"
+          @click="props.onNext('프리셋 설정')"
+        >
+          <UIcon name="ic:round-wifi-protected-setup" class="w-4 h-4" />
+        </KBUIButton>
+        <KBUITypography weight="regular" tag="p" size="b12"
+          >프리셋 변경</KBUITypography
+        >
+      </div>
     </div>
+
     <KBUITypography weight="bold" size="h24" class="mt-4"
       >현재 받고 있는 혜택</KBUITypography
     >

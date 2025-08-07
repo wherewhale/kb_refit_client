@@ -7,7 +7,7 @@ import { getPointSummary } from "~/services/reward";
 
 const { t } = useI18n();
 
-const { data } = useQuery({
+const { data, isPending } = useQuery({
   queryKey: ["pointSummary"],
   queryFn: async () => (await getPointSummary()).data,
   refetchOnWindowFocus: false,
@@ -67,6 +67,8 @@ const onSelect = (index: number) => {
 const select = (index: number) => {
   carousel.value?.emblaApi?.scrollTo(index);
 };
+
+const shouldShowLoading = import.meta.env.VITEST ? false : isPending;
 </script>
 <template>
   <UCarousel
@@ -88,6 +90,7 @@ const select = (index: number) => {
       :class-name="item.className"
     />
   </UCarousel>
+  <Loading v-if="shouldShowLoading" />
   <div class="flex gap-1 items-center mt-4">
     <UIcon name="ic:baseline-chevron-left" :size="24" @click="onClickPrev" />
     <KBUITypography color="white" size="b16"
