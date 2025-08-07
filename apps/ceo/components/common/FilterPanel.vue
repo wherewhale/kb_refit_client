@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, shallowRef } from "vue";
 import { today, getLocalTimeZone } from "@internationalized/date";
+import dayjs from "dayjs";
 
 // props: 필터 목록과 선택된 값
 const props = defineProps<{
   filters: Record<string, string[]>;
   selected: Record<string, string>;
+  onChangeDate?: (start: string, end: string) => void;
 }>();
 const emit = defineEmits<{
   (e: "update:selected", value: Record<string, string>): void;
@@ -25,6 +27,20 @@ const toggleFilter = () => (isOpen.value = !isOpen.value);
 function updateFilter(label: string, value: string) {
   emit("update:selected", { ...props.selected, [label]: value });
 }
+
+const onSelectDate = () => {
+  if (props.onChangeDate) {
+    props.onChangeDate(
+      dayjs(rangeValue.value.start.toDate(getLocalTimeZone())).format(
+        "YYYY-MM-DD"
+      ),
+      dayjs(rangeValue.value.end.toDate(getLocalTimeZone())).format(
+        "YYYY-MM-DD"
+      )
+    );
+  }
+  isOpen.value = false;
+};
 </script>
 
 <!-- TODO: 키 전체 다 보여지게 selected 설정 -->
@@ -81,7 +97,10 @@ function updateFilter(label: string, value: string) {
 
           <!-- 직접 입력 날짜 입력 -->
           <div
-            v-if="label === 'common.filter.input' && selected[label] === 'common.filter.input'"
+            v-if="
+              label === '기간' &&
+              selected[label] === '직접입력'
+            "
             class="px-4 py-2 border border-black rounded-sm bg-white flex items-center justify-between text-black"
           >
             <UModal>
@@ -104,6 +123,14 @@ function updateFilter(label: string, value: string) {
                     :maximum-days="365"
                     :max-value="today(getLocalTimeZone())"
                   />
+                  <KBUIButton
+                    class="mt-4 w-full"
+                    variant="primary"
+                    size="large"
+                    @click="onSelectDate"
+                  >
+                    선택하기
+                  </KBUIButton>
                 </aside>
               </template>
             </UModal>

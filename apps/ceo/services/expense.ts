@@ -4,6 +4,7 @@ import type {
     ReceiptProcessingRequest,
     CompletedReceiptsResponse,
     EmailSend,
+    CompletedReceiptListRequest,
 } from "@/types/expense";
 import { apiClient } from "./apiClient";
 
@@ -21,8 +22,10 @@ export const patchReceiptProcess = async ( receiptId: number, status: "accepted"
   return apiClient.patch<ReceiptProcessingRequest>("/ceo/receiptProcessing", { receiptId, progressState: status, rejectedReason });
 };
 
-export const getCompletedReceipt = async() => {
-    return apiClient.get<CompletedReceiptsResponse>("/ceo/completed")
+export const getCompletedReceiptList = async(params: CompletedReceiptListRequest) => {
+    return apiClient.get<CompletedReceiptsResponse>("/ceo/completed", {
+        params: params,
+    })
 };
 
 export const postEmailSend = async( payload: EmailSend ) => {

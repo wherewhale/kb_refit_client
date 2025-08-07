@@ -37,7 +37,6 @@ const groupedItems = computed(() => {
 
   // 최신 날짜부터 정렬 (선택사항)
   return Object.entries(groups)
-    .sort((a, b) => b[0].localeCompare(a[0])) // 최신 날짜가 위에
     .map(([date, items]) => ({
       date,
       items,

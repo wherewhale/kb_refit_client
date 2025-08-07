@@ -5,7 +5,7 @@ import Card from "~/components/common/Card.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
 import FilterPanel from "~/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
-import { useQuery } from "@tanstack/vue-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
 import {  getCorporateCardListCursor, getCorporateCardTotalPrice } from "~/services/business";
 
 // 선택된 필터 상태
@@ -18,13 +18,6 @@ const selected = reactive({
 const { data } = useQuery({
   queryKey: ["getCorporateCardTotalPrice"],
   queryFn: async () => (await getCorporateCardTotalPrice()).data,
-  refetchOnWindowFocus: false,
-  retry: false,
-});
-
-const { data: cardList } = useQuery({
-  queryKey: ["getCorporateCardListCursor"],
-  queryFn: async () => (await getCorporateCardListCursor()).data,
   refetchOnWindowFocus: false,
   retry: false,
 });
@@ -57,36 +50,79 @@ const getIcon = (label: string): { background: string; emoji: string } => {
   }
 };
 
-// 영수 처리 완료 or 진행 중 리스트 (가공 후 전달됨)
-// const paymentList = [
-//   {
-//     id: 21,
-//     label: "스타벅스",
-//     amount: -5900,
-//     createdAt: new Date("2025-07-14T12:30:00"),
-//     isCompleted: true,
-//   },
-//   {
-//     id: 22,
-//     label: "브네",
-//     amount: -32500,
-//     createdAt: new Date("2025-07-14T14:35:00"),
-//     isCompleted: true,
-//   },
-//   {
-//     id: 23,
-//     label: "브네",
-//     amount: 52500,
-//     createdAt: new Date("2025-07-14T18:50:00"),
-//     isCompleted: false,
-//   },
-//   {
-//     id: 24,
-//     label: "브네",
-//     amount: -52500,
-//     createdAt: new Date("2025-07-15T10:05:00"),
-//   },
-// ];
+const loadMoreRef = ref<HTMLElement | null>(null);
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
+const {
+  data: corporateCardList,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isFetching,
+} = useInfiniteQuery({
+  queryKey: ["corporateCardList", selected, startDate, endDate],
+  queryFn: async ({ pageParam = 0 }) => {
+    const response = await getCorporateCardListCursor({
+      period: getPeriodNumber(selected["기간"]),
+      sort: getSortOrder(selected["정렬"]),
+      state: getCompletedReceiptFilter(selected["종류"]),
+      startDate: startDate.value ?? undefined,
+      endDate: endDate.value ?? undefined,
+      cursorId: pageParam === 0 ? undefined : pageParam,
+      size: 20
+    });
+    return response.data;
+  },
+  getNextPageParam: (lastPage) => {
+    return lastPage.cursorId ? lastPage.cursorId : undefined;
+  },
+  initialPageParam: 0,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const onChangeDate = (start: string, end: string) => {
+  startDate.value = start;
+  endDate.value = end;
+};
+
+let observer: IntersectionObserver | null = null;
+
+const startObserver = () => {
+  if (observer) observer.disconnect();
+  if (!loadMoreRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 1.0 }
+  );
+
+  observer.observe(loadMoreRef.value);
+};
+
+onMounted(() => {
+  startObserver();
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 요소가 바뀌거나 다시 렌더링 될 경우 재감지
+watch(loadMoreRef, () => {
+  startObserver();
+});
 </script>
 
 <template>
@@ -108,17 +144,23 @@ const getIcon = (label: string): { background: string; emoji: string } => {
         :filters="BUSINESS_FILTER_KEYS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
+        @change-date="onChangeDate"
       />
       <HistoryBlock
-        :items="(cardList?.corporateCardList ?? []).map((item) => ({
-          id: item.receiptId,
-          label: item.companyName,
-          amount: item.totalPrice,
-          href: `/business/${item.receiptId}`,
-          icon: getIcon(item.companyName),
-          createdAt: item.createdAt,
-        }))"
+        :items="
+          corporateCardList?.pages.flatMap((page) =>
+            (page.corporateCardList ?? []).map((receipt) => ({
+              id: receipt.receiptId,
+              label: receipt.companyName,
+              amount: receipt.totalPrice,
+              href: `/business/${receipt.receiptId}/detail`,
+              icon: getIcon(receipt.companyName),
+              createdAt: receipt.createdAt,
+            }))
+          ) ?? []
+        "
       />
+      <div ref="loadMoreRef" class="h-6" />
     </div>
   </main>
 </template>

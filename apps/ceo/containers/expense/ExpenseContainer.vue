@@ -5,10 +5,10 @@ import Card from "~/components/common/Card.vue";
 import HistoryBlock from "@/components/common/HistoryBlock.vue";
 import FilterPanel from "@/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
-import { getCompletedReceipt, getPendingReceipt } from "~/services/expense";
-import { useQuery } from "@tanstack/vue-query";
-import { ProcessState } from "~/enum/role.enum";
+import { getCompletedReceiptList, getPendingReceipt } from "~/services/expense";
+import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
 import SendExpenseResult from "~/components/expense/SendExpenseResult.vue";
+import { ProcessState } from "~/enum/role.enum";
 
 // 선택된 필터 상태
 const selected = reactive({
@@ -25,14 +25,6 @@ const { data } = useQuery({
 });
 
 const isOpen = ref(false);
-
-// 처리 완료된 경비 목록
-const { data: completedData } = useQuery({
-  queryKey: ["getCompletedReceipt"],
-  queryFn: async () => (await getCompletedReceipt()).data,
-  refetchOnWindowFocus: false,
-  retry: false,
-});
 
 const openModal = () => { isOpen.value = true; };
 
@@ -62,6 +54,80 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
     return { background: "bg-gray-1", emoji: "💲" };
   }
 };
+
+const loadMoreRef = ref<HTMLElement | null>(null);
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
+const {
+  data: completedData,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isFetching,
+} = useInfiniteQuery({
+  queryKey: ["rewardList", selected, startDate, endDate],
+  queryFn: async ({ pageParam = 0 }) => {
+    const response = await getCompletedReceiptList({
+      period: getPeriodNumber(selected["기간"]),
+      sort: getSortOrder(selected["정렬"]),
+      state: getCompletedReceiptFilter(selected["필터"]),
+      startDate: startDate.value ?? undefined,
+      endDate: endDate.value ?? undefined,
+      cursorId: pageParam === 0 ? undefined : pageParam,
+      size: 20
+    });
+    return response.data;
+  },
+  getNextPageParam: (lastPage) => {
+    return lastPage.cursorId ? lastPage.cursorId : undefined;
+  },
+  initialPageParam: 0,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const onChangeDate = (start: string, end: string) => {
+  startDate.value = start;
+  endDate.value = end;
+};
+
+let observer: IntersectionObserver | null = null;
+
+const startObserver = () => {
+  if (observer) observer.disconnect();
+  if (!loadMoreRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 1.0 }
+  );
+
+  observer.observe(loadMoreRef.value);
+};
+
+onMounted(() => {
+  startObserver();
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 요소가 바뀌거나 다시 렌더링 될 경우 재감지
+watch(loadMoreRef, () => {
+  startObserver();
+});
 </script>
 
 <template>
@@ -117,28 +183,28 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
         :filters="EXPENSE_FILTER_KEYS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
+        @change-date="onChangeDate"
       />
       <HistoryBlock
         :items="
-          completedData?.list?.map((item) => ({
-            id: item.receiptId,
-            label: item.companyName,
-            amount: item.totalPrice,
-            href: `/expense/${item.receiptId}/receive`,
-            icon: getIcon(item.companyName),
-            createdAt:              
-              item.createdAt && !isNaN(new Date(item.createdAt).getTime())
-                ? new Date(item.createdAt)
-                : new Date(0),
-            completed: item.processState === ProcessState.APPROVED
-              ? { word: '경비 처리 승인', icon: 'ic:baseline-check' }
-              : item.processState === ProcessState.REJECTED
-                ? { word: '경비 처리 반려', icon: 'ic:baseline-close' }
-                : undefined,
-          })) || []
+          completedData?.pages.flatMap((page) =>
+            page.receiptList.map((receipt) => ({
+              id: receipt.receiptId,
+              label: receipt.companyName,
+              amount: receipt.totalPrice,
+              href: `/expense/${receipt.receiptId}/detail`,
+              icon: getIcon(receipt.companyName),
+              createdAt: receipt.createdAt,
+              completed: receipt.processState === ProcessState.APPROVED
+                ? { word: '경비 처리 승인', icon: 'ic:baseline-check' }
+                : receipt.processState === ProcessState.REJECTED
+                  ? { word: '경비 처리 반려', icon: 'ic:baseline-close' }
+                  : undefined
+            }))
+          ) ?? []
         "
       />
-
+      <div ref="loadMoreRef" class="h-6" />
     </div>
   </main>
 

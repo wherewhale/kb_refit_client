@@ -1,9 +1,14 @@
 // 경비 처리가 필요한 내용
+export interface ReceiptListCursor {
+  receiptList: Receipt[];
+  cursorId: number;
+}
+
 export interface Receipt {
   receiptId: number;
   companyName: string;
   totalPrice: number;
-  createdAt: string; // 결제 일시
+  createdAt: Date; // 결제 일시
   processState: string; // 영수 처리 상태
 }
 
@@ -69,6 +74,18 @@ export interface EmailSend {
 
 // 응답 전체 타입
 export interface CompletedReceiptsResponse {
-  CursorId: string;
-  list: Receipt[];
+  cursorId: number;
+  receiptList: Receipt[];
+}
+
+export interface CompletedReceiptListRequest {
+  cursorId?: number;
+  sort: "Newest" | "Oldest";
+  period?: number;
+  state?: "Whole" | "Process" | "UnProcess";
+  /** 2025-07-01 형식 */
+  startDate?: string;
+  /** 2025-07-01 형식 */
+  endDate?: string;
+  size?: number;
 }
