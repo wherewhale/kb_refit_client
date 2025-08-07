@@ -26,14 +26,14 @@ const toast = useToast();
 const route = useRoute();
 const router = useRouter();
 const receiptId = route.params.receiptId as string;
-const { currentStep, direction, nextStep, prevStep } = useFunnel(STEPS);
+const { currentStep, direction, nextStep } = useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
   direction.value === "forward" ? "slide-left" : "slide-right"
 );
 
 const store = useInsuranceClaimStore();
-const { validate, errors } = useValidation();
+const { validate } = useValidation();
 const {
   onChangeReceiptId,
   onSelectInsurance,

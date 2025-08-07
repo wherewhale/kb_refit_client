@@ -14,9 +14,6 @@ const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 const { data } = useQuery({
   queryKey: ["medicalReceiptDetail", receiptId],
   queryFn: async () => (await getMedicalReceiptDetail(Number(receiptId))).data,
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  refetchOnMount: false,
   retry: false,
 });
 
@@ -87,9 +84,17 @@ const onDownloadImage = async () => {
             size="large"
             variant="primary"
             class-name="w-full"
-            :disabled="['accepted'].includes(data?.processState ?? '')"
+            :disabled="
+              ['accepted', 'inProgress'].includes(data?.processState ?? '')
+            "
           >
-            실손보험금 청구하기
+            {{
+              data?.processState === "accepted"
+                ? "실손보험금 청구 완료"
+                : data?.processState === "inProgress"
+                  ? "실손보험금 청구 중"
+                  : "실손보험금 심사 중"
+            }}
           </KBUIButton>
         </NuxtLink>
       </div>
