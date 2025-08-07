@@ -67,8 +67,6 @@ const onSelect = (index: number) => {
 const select = (index: number) => {
   carousel.value?.emblaApi?.scrollTo(index);
 };
-
-const shouldShowLoading = import.meta.env.VITEST ? false : isPending;
 </script>
 <template>
   <UCarousel
@@ -90,7 +88,6 @@ const shouldShowLoading = import.meta.env.VITEST ? false : isPending;
       :class-name="item.className"
     />
   </UCarousel>
-  <Loading v-if="shouldShowLoading" />
   <div class="flex gap-1 items-center mt-4">
     <UIcon name="ic:baseline-chevron-left" :size="24" @click="onClickPrev" />
     <KBUITypography color="white" size="b16"
