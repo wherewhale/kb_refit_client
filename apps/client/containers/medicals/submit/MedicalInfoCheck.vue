@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
+import { useQuery } from "@tanstack/vue-query";
 import dayjs from "dayjs";
+import { getMedicalInfo } from "~/services/medical";
 
 interface Props {
   store: ReturnType<typeof useInsuranceClaimStore>;
@@ -15,11 +17,16 @@ const date = shallowRef(
 );
 const isModalOpen = ref(false);
 
-// TODO: receiptId로 병원 정보 및 방문 날짜 가져오는 API 연동
-const SAMPLE_HOSPITAL_DATA = {
-  name: "손박사 이비인후과",
-  visitDate: new Date("2025-07-14"),
-};
+const { data: medicalInfoData } = useQuery({
+  queryKey: ["medicalInfo", props.store.receiptId],
+  queryFn: async () =>
+    (await getMedicalInfo(Number(props.store.receiptId))).data,
+  enabled: !!props.store.receiptId,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
 
 const onChangeDate = () => {
   props.onChangeVisitedDate(date.value.toDate(getLocalTimeZone()));
@@ -31,13 +38,13 @@ const onChangeDate = () => {
   <form>
     <KBUITypography size="b14" color="gray-2"> 방문한 병원명 </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">
-      {{ SAMPLE_HOSPITAL_DATA.name }}
+      {{ medicalInfoData?.hospitalName ?? "병원명" }}
     </KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       방문 날짜
     </KBUITypography>
     <KBUITypography weight="medium" class-name="mt-2">{{
-      dayjs(SAMPLE_HOSPITAL_DATA.visitDate).format("YYYY.MM.DD")
+      dayjs(medicalInfoData?.createdAt).format("YYYY.MM.DD")
     }}</KBUITypography>
     <KBUITypography size="b14" color="gray-2" class-name="mt-4">
       아프기 시작한 날짜
@@ -74,9 +81,7 @@ const onChangeDate = () => {
               class-name="mt-4 w-full"
               @click="onChangeDate"
             >
-              {{
-                dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD")
-              }}
+              {{ dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD") }}
               선택하기
             </KBUIButton>
           </aside>

@@ -153,3 +153,17 @@ export const getReceiptProgressButtonText = (
       };
   }
 };
+
+export const getInsuranceLogo = (name: string): string => {
+  if (name.includes("KB")) {
+    return "kb";
+  } else if (name.includes("DB")) {
+    return "db";
+  } else if (name.includes("메리츠")) {
+    return "meritz";
+  } else if (name.includes("미래에셋")) {
+    return "mirae-asset";
+  } else {
+    return "default";
+  }
+};

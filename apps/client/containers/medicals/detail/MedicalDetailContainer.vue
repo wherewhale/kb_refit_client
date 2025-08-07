@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import html2canvas from "html2canvas";
 import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
+import { getMedicalReceiptDetail } from "~/services/medical";
 
 // TODO: 영수증 정보 불러오기 API 연동
 
@@ -8,6 +10,15 @@ const route = useRoute();
 const receiptId = route.params.receiptId as string;
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
+
+const { data } = useQuery({
+  queryKey: ["medicalReceiptDetail", receiptId],
+  queryFn: async () => (await getMedicalReceiptDetail(Number(receiptId))).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
 
 const onDownloadImage = async () => {
   const el = receiptRef.value?.printRef;
@@ -37,15 +48,27 @@ const onDownloadImage = async () => {
     <ClientOnly>
       <CommonReceipt
         ref="receiptRef"
-        title="손박사 이비인후과"
-        business-number="123-45-67890"
-        ceo="홍길동"
-        address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date()"
-        :total-price="11000"
-        :complete="{
-          result: true,
-        }"
+        :title="data?.hospitalName ?? '병원명'"
+        :business-number="
+          convertNumberBusinessNumberToString(data?.companyId ?? 0)
+        "
+        :ceo="data?.ceoName ?? '대표자명'"
+        :address="data?.address ?? '병원 주소'"
+        :created-at="data?.createdAt ?? new Date()"
+        :total-price="(data?.supplyPrice ?? 0) + (data?.surtax ?? 0)"
+        :supply-price="data?.supplyPrice ?? 0"
+        :surtax="data?.surtax ?? 0"
+        :complete="
+          ['none', 'inProgress', null].includes(data?.processState ?? null)
+            ? undefined
+            : {
+                result: data?.processState === 'accepted',
+                message:
+                  data?.processState === 'rejected'
+                    ? '실손보험금 청구가 거절되었습니다.'
+                    : undefined,
+              }
+        "
       />
       <div class="flex flex-col items-center mt-10 gap-2">
         <KBUIButton
@@ -60,7 +83,12 @@ const onDownloadImage = async () => {
           진료비 세부산정내역 다운로드 (PDF)
         </KBUIButton>
         <NuxtLink class="w-full block" :href="`/medical/${receiptId}/submit`">
-          <KBUIButton size="large" variant="primary" class-name="w-full">
+          <KBUIButton
+            size="large"
+            variant="primary"
+            class-name="w-full"
+            :disabled="['accepted'].includes(data?.processState ?? '')"
+          >
             실손보험금 청구하기
           </KBUIButton>
         </NuxtLink>

@@ -10,6 +10,10 @@ import InsuranceCheck from "~/containers/medicals/submit/InsuranceCheck.vue";
 import SubmitComplete from "~/containers/medicals/submit/SubmitComplete.vue";
 import MedicalInfoCheck from "~/containers/medicals/submit/MedicalInfoCheck.vue";
 import SelectInsurance from "~/containers/medicals/submit/SelectInsurance.vue";
+import { useMutation } from "@tanstack/vue-query";
+import type { MedicalInsuranceClaimRequest } from "~/types/medical";
+import { patchInsuranceClaim } from "~/services/medical";
+import dayjs from "dayjs";
 
 const STEPS = [
   "가입된 보험 확인하기",
@@ -18,6 +22,7 @@ const STEPS = [
   "보험금 청구 완료",
 ];
 
+const toast = useToast();
 const route = useRoute();
 const router = useRouter();
 const receiptId = route.params.receiptId as string;
@@ -41,6 +46,40 @@ const onClickNext = () => {
   if (isValid === false) return;
 
   nextStep();
+};
+
+const { mutate } = useMutation({
+  mutationKey: [
+    "insuranceClaim",
+    store.receiptId,
+    store.insuranceId,
+    store.description,
+    store.visitedDate,
+  ],
+  mutationFn: async (data: MedicalInsuranceClaimRequest) => {
+    return await patchInsuranceClaim(data);
+  },
+  onSuccess: () => {
+    onClickNext();
+    store.reset(); // 폼 초기화
+  },
+  onError: () => {
+    toast.add({
+      color: "error",
+      title: "보험금 청구 실패",
+      description: "보험금 청구에 실패했습니다. 다시 시도해주세요.",
+      duration: 3000,
+    });
+  },
+});
+
+const onClickSend = () => {
+  mutate({
+    receiptId: Number(store.receiptId),
+    insuranceId: Number(store.insuranceId),
+    visitedReason: store.description,
+    sickedDate: dayjs(store.visitedDate).format("YYYY.MM.DD"),
+  });
 };
 
 const onClickComplete = () => {
@@ -125,7 +164,7 @@ onMounted(() => {
       variant="primary"
       class-name="w-full mt-10"
       :disabled="!currentStepConfig?.validateStep?.()"
-      @click="onClickNext"
+      @click="onClickSend"
       >보내기</KBUIButton
     >
     <KBUIButton

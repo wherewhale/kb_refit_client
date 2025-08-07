@@ -193,7 +193,7 @@ defineExpose({ printRef });
         >
           {{
             route.path.startsWith("/medical")
-              ? t("common_receipt.label.completed_processing")
+              ? t("common_medical.label.insurance_not_completed")
               : t("common_receipt.label.not-completed_processing")
           }}
         </KBUITypography>

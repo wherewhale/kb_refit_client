@@ -1,31 +1,17 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import dayjs from "dayjs";
+import { getMyInsuranceList } from "~/services/medical";
 
-const INSURANCE_DATA: Array<{
-  id: string;
-  name: string;
-  registerDate: Date;
-  logo: string;
-}> = [
-  {
-    id: "insurance1",
-    name: "(무)KB손보간편가입실손의료비보험",
-    registerDate: new Date("2023-03-16"),
-    logo: "kb",
-  },
-  {
-    id: "insurance2",
-    name: "(무)KB손보간편가입실손의료비보험",
-    registerDate: new Date("2017-03-05"),
-    logo: "db",
-  },
-  {
-    id: "insurance3",
-    name: "(무)KB손보간편가입실손의료비보험",
-    registerDate: new Date("2025-03-02"),
-    logo: "meritz",
-  },
-];
+const { data } = useQuery({
+  queryKey: ["insuranceList"],
+  queryFn: async () => (await getMyInsuranceList()).data,
+  refetchOnWindowFocus: false,
+  refetchOnReconnect: false,
+  refetchOnMount: false,
+  retry: false,
+});
+
 const props = defineProps<{
   onNext: () => void;
   onSelectInsurance: (insurance: string) => void;
@@ -39,12 +25,12 @@ const onClickInsurance = (insuranceId: string) => {
 
 <template>
   <ul
-    v-if="INSURANCE_DATA.length > 0"
+    v-if="(data ?? []).length > 0"
     class="flex flex-col gap-2 items-center justify-center"
   >
     <li
-      v-for="insurance in INSURANCE_DATA"
-      :key="insurance.id"
+      v-for="insurance in data"
+      :key="insurance.insuranceId"
       class="p-4 rounded-lg bg-white border border-gray-2 w-full"
     >
       <div class="flex items-center gap-1">
@@ -52,7 +38,7 @@ const onClickInsurance = (insuranceId: string) => {
           class="size-10 rounded-lg relative flex items-center justify-center shrink-0"
         >
           <NuxtImg
-            :src="`assets/images/insurances/${insurance.logo}.png`"
+            :src="`assets/images/insurances/${getInsuranceLogo(insurance.insuranceName)}.png`"
             alt="Insurance Logo"
             width="40"
             height="40"
@@ -60,12 +46,12 @@ const onClickInsurance = (insuranceId: string) => {
         </figure>
         <div class="flex flex-col">
           <KBUITypography size="b14" :ellipsis="1" class="truncate max-w-48">{{
-            insurance.name
+            insurance.insuranceName
           }}</KBUITypography>
           <KBUITypography size="b12" color="gray-2"
             >가입일 :
             {{
-              dayjs(insurance.registerDate).format("YYYY.MM.DD")
+              dayjs(insurance.joinedDate).format("YYYY.MM.DD")
             }}</KBUITypography
           >
         </div>
@@ -75,7 +61,7 @@ const onClickInsurance = (insuranceId: string) => {
         size="small"
         variant="primary"
         class="ml-auto"
-        @click="onClickInsurance(insurance.id)"
+        @click="onClickInsurance(`${insurance.insuranceId}`)"
       >
         선택하기
       </KBUIButton>
