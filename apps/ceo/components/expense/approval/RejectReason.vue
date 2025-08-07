@@ -6,7 +6,6 @@ const props = defineProps<{
   receiptId: string;
   onPrev: () => void;
   onSubmit: () => void;
-  onMutate: (status: "accepted" | "rejected") => void;
 }>();
 
 const reason = ref("");
@@ -21,7 +20,7 @@ const { mutate: rejectExpense } = useMutation({
   mutationFn: (reason: string) =>
     patchReceiptProcess(Number(props.receiptId), "rejected", reason),
   onSuccess: () => {
-    props.onSubmit?.();
+    props.onSubmit();
   },
 });
 
@@ -29,7 +28,7 @@ const onClickSubmit = () => {
   if (!isValid.value) {
     return;
   }
-  rejectExpense(reason.value.trim());
+  rejectExpense(reason.value);
 };
 </script>
 
