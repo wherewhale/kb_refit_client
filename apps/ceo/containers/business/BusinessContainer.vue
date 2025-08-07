@@ -5,6 +5,8 @@ import Card from "~/components/common/Card.vue";
 import HistoryBlock from "~/components/common/HistoryBlock.vue";
 import FilterPanel from "~/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
+import { useQuery } from "@tanstack/vue-query";
+import {  getCorporateCardListCursor, getCorporateCardTotalPrice } from "~/services/business";
 
 // 선택된 필터 상태
 const selected = reactive({
@@ -13,15 +15,36 @@ const selected = reactive({
   정렬: "최신순",
 });
 
+const { data } = useQuery({
+  queryKey: ["getCorporateCardTotalPrice"],
+  queryFn: async () => (await getCorporateCardTotalPrice()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const { data: cardList } = useQuery({
+  queryKey: ["getCorporateCardListCursor"],
+  queryFn: async () => (await getCorporateCardListCursor()).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const isLess = data.value && data.value.thisMonth < data.value.lastMonth;
+const diffAmount = data.value
+  ? Math.abs(data.value.thisMonth - data.value.lastMonth)
+  : 0;
+
 // 카드 데이터 정의
-const card_data: CardProps = {
-  title: "7월 사용 금액",
-  content: `${(21234200).toLocaleString()}원`,
-  src: "luna-1",
+const card_data = computed<CardProps>(() => ({
+  title: `${data.value?.month}월 사용 금액`,
+  content: `${data.value?.thisMonth.toLocaleString()}원`,
+  src: isLess ? "luna-2" : "luna-1",
   className: "bg-blue-1",
-  description: "저번 달보다 {replace}\n덜쓰고 있어요!",
-  boldText: "323,000원",
-};
+  description: data.value
+    ? "저번 달보다 {replace}\n덜 쓰고 있어요!"
+    : "저번 달보다 {replace}\n더 쓰고 있어요!",
+  boldText: `${diffAmount.toLocaleString()}원`,
+}));
 
 // 아이콘 매핑 함수
 const getIcon = (label: string): { background: string; emoji: string } => {
@@ -35,35 +58,35 @@ const getIcon = (label: string): { background: string; emoji: string } => {
 };
 
 // 영수 처리 완료 or 진행 중 리스트 (가공 후 전달됨)
-const paymentList = [
-  {
-    id: 21,
-    label: "스타벅스",
-    amount: -5900,
-    createdAt: new Date("2025-07-14T12:30:00"),
-    isCompleted: true,
-  },
-  {
-    id: 22,
-    label: "브네",
-    amount: -32500,
-    createdAt: new Date("2025-07-14T14:35:00"),
-    isCompleted: true,
-  },
-  {
-    id: 23,
-    label: "브네",
-    amount: 52500,
-    createdAt: new Date("2025-07-14T18:50:00"),
-    isCompleted: false,
-  },
-  {
-    id: 24,
-    label: "브네",
-    amount: -52500,
-    createdAt: new Date("2025-07-15T10:05:00"),
-  },
-];
+// const paymentList = [
+//   {
+//     id: 21,
+//     label: "스타벅스",
+//     amount: -5900,
+//     createdAt: new Date("2025-07-14T12:30:00"),
+//     isCompleted: true,
+//   },
+//   {
+//     id: 22,
+//     label: "브네",
+//     amount: -32500,
+//     createdAt: new Date("2025-07-14T14:35:00"),
+//     isCompleted: true,
+//   },
+//   {
+//     id: 23,
+//     label: "브네",
+//     amount: 52500,
+//     createdAt: new Date("2025-07-14T18:50:00"),
+//     isCompleted: false,
+//   },
+//   {
+//     id: 24,
+//     label: "브네",
+//     amount: -52500,
+//     createdAt: new Date("2025-07-15T10:05:00"),
+//   },
+// ];
 </script>
 
 <template>
@@ -87,16 +110,14 @@ const paymentList = [
         @update:selected="(value) => Object.assign(selected, value)"
       />
       <HistoryBlock
-        :items="
-          paymentList.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            href: `/business/${item.id}`,
-            icon: getIcon(item.label),
-            createdAt: item.createdAt,
-          }))
-        "
+        :items="(cardList?.corporateCardList ?? []).map((item) => ({
+          id: item.receiptId,
+          label: item.companyName,
+          amount: item.totalPrice,
+          href: `/business/${item.receiptId}`,
+          icon: getIcon(item.companyName),
+          createdAt: item.createdAt,
+        }))"
       />
     </div>
   </main>

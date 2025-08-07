@@ -8,6 +8,7 @@ import type { CardProps } from "~/interfaces/common/card.interface";
 import { getCompletedReceipt, getPendingReceipt } from "~/services/expense";
 import { useQuery } from "@tanstack/vue-query";
 import { ProcessState } from "~/enum/role.enum";
+import SendExpenseResult from "~/components/expense/SendExpenseResult.vue";
 
 // 선택된 필터 상태
 const selected = reactive({
@@ -119,7 +120,7 @@ const getIcon = (label?: string): { background: string; emoji: string } => {
       />
       <HistoryBlock
         :items="
-          completedData?.list.map((item) => ({
+          completedData?.list?.map((item) => ({
             id: item.receiptId,
             label: item.companyName,
             amount: item.totalPrice,
