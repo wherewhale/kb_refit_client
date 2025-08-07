@@ -3,12 +3,13 @@ import { useMutation } from "@tanstack/vue-query";
 import { UserRole } from "~/enum/role.enum";
 import { getMyInfo, postLogin } from "~/services/auth";
 import { setTokens } from "~/utils/token";
+import Loading from "~/components/common/Loading.vue";
 
 const router = useRouter();
 const pinNumber = ref<string[]>([]);
 const toast = useToast();
 
-const { mutate: postLoginApi } = useMutation({
+const { mutate: postLoginApi, isPending } = useMutation({
   mutationKey: ["login", pinNumber.value.join("")],
   mutationFn: async () => {
     const response = await postLogin({
@@ -74,11 +75,15 @@ const onClickConfirm = () => {
   postLoginApi();
 };
 
+const shouldShowLoading = import.meta.env.VITEST ? false : isPending;
+
 defineExpose({ pinNumber }); // 🔑 테스트를 위한 노출
 </script>
 
 <template>
   <div class="max-w-md mx-auto">
+    <Loading v-if="shouldShowLoading" />
+
     <main class="px-6">
       <figure class="w-10 mt-20 mx-auto">
         <NuxtImg src="assets/images/logos/symbol-logo.png" alt="kb_logo" />
