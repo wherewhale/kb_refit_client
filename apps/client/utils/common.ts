@@ -51,6 +51,32 @@ export const getRewardType = (type: string): string => {
   }
 };
 
+export const getMedicalType = (
+  type: string
+): "ALL" | "APPROVED" | "CANCELED" => {
+  switch (type) {
+    case "receipt.filter.approval":
+      return "APPROVED";
+    case "receipt.filter.cancel":
+      return "CANCELED";
+    default:
+      return "ALL";
+  }
+};
+
+export const getMedicalFilter = (
+  filter: string
+): "ALL" | "PROCESSED" | "UNPROCESSED" => {
+  switch (filter) {
+    case "medical.filter.insurance_claim":
+      return "PROCESSED";
+    case "medical.filter.insurance_non-claim":
+      return "UNPROCESSED";
+    default:
+      return "ALL";
+  }
+};
+
 export const getReceiptPaymentType = (
   type: string
 ): "APPROVED" | "CANCELED" | "ALL" => {

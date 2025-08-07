@@ -6,8 +6,8 @@ import {
   MEDICAL_FILTER_KEYS,
 } from "~/common/constant/filters";
 import type { CardProps } from "~/interfaces/common/card.interface";
-import { useQuery } from "@tanstack/vue-query";
-import { getMedicalSummary } from "~/services/medical";
+import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
+import { getMedicalReceiptList, getMedicalSummary } from "~/services/medical";
 
 const { t } = useI18n();
 
@@ -28,12 +28,45 @@ const MEDICAL_FILTERS = computed<Record<string, string[]>>(() => {
   );
 });
 
+const loadMoreRef = ref<HTMLElement | null>(null);
+const startDate = ref<string | null>(null);
+const endDate = ref<string | null>(null);
+
 const { data: medicalSummaryData } = useQuery({
   queryKey: ["medicalSummary"],
   queryFn: async () => (await getMedicalSummary()).data,
   refetchOnWindowFocus: false,
   refetchOnReconnect: false,
   refetchOnMount: false,
+  retry: false,
+});
+
+const {
+  data: medicalReceiptList,
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+  isFetching,
+} = useInfiniteQuery({
+  queryKey: ["rewardList", selected, startDate, endDate],
+  queryFn: async ({ pageParam = 0 }) => {
+    const response = await getMedicalReceiptList({
+      period: getPeriodNumber(selected["common.filter.period"]),
+      type: getMedicalType(selected["common.filter.type"]),
+      sort: getSortOrder(selected["common.filter.sort"]),
+      filter: getMedicalFilter(selected["common.filter.filter"]),
+      startDate: startDate.value ?? undefined,
+      endDate: endDate.value ?? undefined,
+      cursorId: pageParam === 0 ? undefined : pageParam,
+      size: 20,
+    });
+    return response.data;
+  },
+  getNextPageParam: (lastPage) => {
+    return lastPage.nextCursorId ? lastPage.nextCursorId : undefined;
+  },
+  initialPageParam: 0,
+  refetchOnWindowFocus: false,
   retry: false,
 });
 
@@ -51,6 +84,48 @@ const card_data = computed<CardProps>(() => ({
       ? `${(medicalSummaryData.value?.insuranceBillable ?? 0).toLocaleString()}건`
       : undefined,
 }));
+
+const onChangeDate = (start: string, end: string) => {
+  startDate.value = start;
+  endDate.value = end;
+};
+
+let observer: IntersectionObserver | null = null;
+
+const startObserver = () => {
+  if (observer) observer.disconnect();
+  if (!loadMoreRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      const [entry] = entries;
+      if (
+        entry.isIntersecting &&
+        hasNextPage.value &&
+        !isFetchingNextPage.value &&
+        !isFetching.value
+      ) {
+        fetchNextPage();
+      }
+    },
+    { threshold: 1.0 }
+  );
+
+  observer.observe(loadMoreRef.value);
+};
+
+onMounted(() => {
+  startObserver();
+});
+
+onUnmounted(() => {
+  if (observer) observer.disconnect();
+});
+
+// 요소가 바뀌거나 다시 렌더링 될 경우 재감지
+watch(loadMoreRef, () => {
+  startObserver();
+});
 </script>
 
 <template>
@@ -70,26 +145,30 @@ const card_data = computed<CardProps>(() => ({
         :filters="MEDICAL_FILTERS"
         :selected="selected"
         @update:selected="(value) => Object.assign(selected, value)"
+        @change-date="onChangeDate"
       />
       <HistoryBlock
         :items="
-          paymentList.map((item) => ({
-            id: item.id,
-            label: item.label,
-            amount: item.amount,
-            createdAt: item.createdAt,
-            completed: item.isCompleted
-              ? {
-                  word: '보험 청구 완료',
-                  icon: 'material-symbols:local-hospital',
-                }
-              : undefined,
-            icon: {
-              background: 'bg-blue-1',
-              emoji: '🏥',
-            },
-            href: `/medical/${item.id}`,
-          }))
+          medicalReceiptList?.pages.flatMap((page) =>
+            page.hospitalList.map((item) => ({
+              id: item.receiptId,
+              label: item.storeName,
+              amount: item.totalPrice,
+              createdAt: item.createdAt,
+              completed:
+                item.processState === 'completed'
+                  ? {
+                      word: '보험 청구 완료',
+                      icon: 'material-symbols:local-hospital',
+                    }
+                  : undefined,
+              icon: {
+                background: 'bg-blue-1',
+                emoji: '🏥',
+              },
+              href: `/medical/${item.receiptId}`,
+            }))
+          ) ?? []
         "
       />
     </div>
