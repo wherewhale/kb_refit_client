@@ -39,7 +39,7 @@ export interface ReceiptDetail {
   supplyPrice: number;
   surtax: number;
   transactionType: string;
-  createdAt: string;
+  createdAt: Date;
   processState: string;
   cardNumber: string;
   isCorporate: number;

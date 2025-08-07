@@ -7,6 +7,7 @@ import FilterPanel from "~/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
 import {  getCorporateCardListCursor, getCorporateCardTotalPrice } from "~/services/business";
+import { ProcessState } from "~/enum/role.enum";
 
 // 선택된 필터 상태
 const selected = reactive({
@@ -153,9 +154,15 @@ watch(loadMoreRef, () => {
               id: receipt.receiptId,
               label: receipt.companyName,
               amount: receipt.totalPrice,
-              href: `/business/${receipt.receiptId}/detail`,
+              href: `/business/${receipt.receiptId}`,
               icon: getIcon(receipt.companyName),
               createdAt: receipt.createdAt,
+              completed:
+                receipt.processState === ProcessState.DEPOSIT
+                  ? { word: '금액 반환 완료', icon: 'mdi:cash-refund' }
+                  : receipt.processState === ProcessState.INPROGRESS
+                    ? { word: '경비 처리 반려', icon: 'ic:baseline-close' }
+                    : undefined,
             }))
           ) ?? []
         "

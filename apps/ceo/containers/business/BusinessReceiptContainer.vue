@@ -1,12 +1,34 @@
 <script setup lang="ts">
+import { useQuery } from "@tanstack/vue-query";
 import html2canvas from "html2canvas";
 import type CommonReceipt from "~/components/expense/CommonReceipt.vue";
-
-// TODO: 영수증 정보 불러오기 API 연동
+import { getReceiptProcessDetail } from "~/services/expense";
 
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
-// FIXME: 영수증 정보 API에서 받아온 데이터로 대체
+
+const { data: ReceiptProcessApplicant } = useQuery({
+  queryKey: ["getReceiptProcessDetail", receiptId],
+  queryFn: async () => (await getReceiptProcessDetail(Number(receiptId))).data,
+  refetchOnWindowFocus: false,
+  retry: false,
+});
+
+const receiptDetail = computed(() => ReceiptProcessApplicant.value?.receiptDetail);
+
+const goods = computed(() =>
+  receiptDetail.value?.receiptContents.map((item) => ({
+    name: item.merchandiseName,
+    price: item.merchandisePrice,
+    quantity: item.amount,
+  })) ?? []
+);
+
+const createdAt = computed(() =>
+  receiptDetail.value?.createdAt
+    ? new Date(receiptDetail.value.createdAt)
+    : new Date()
+);
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 
@@ -38,15 +60,17 @@ const onDownloadImage = async () => {
     <ClientOnly>
       <CommonReceipt
         ref="receiptRef"
-        title="가게 이름"
-        business-number="123-45-67890"
-        ceo="홍길동"
-        address="서울특별시 강남구 역삼동 123-45"
-        :created-at="new Date()"
-        :goods="[
-          { name: '상품1', price: 10000, quantity: 2 },
-          { name: '상품2', price: 15000, quantity: 1 },
-        ]"
+        :title="receiptDetail?.companyName ?? ''"
+        :business-number="receiptDetail?.companyId?.toString() ?? ''"
+        :ceo="receiptDetail?.ceoName ?? ''"
+        :address="receiptDetail?.address ?? ''"
+        :created-at="createdAt"
+        :goods="goods"
+        :total-price="receiptDetail?.totalPrice"
+        :supply="receiptDetail?.supplyPrice"
+        :tax="receiptDetail?.surtax"
+        :transaction-type="receiptDetail?.transactionType ?? ''
+        "
       />
       <div class="flex flex-col items-center mt-10 gap-2">
         <KBUIButton

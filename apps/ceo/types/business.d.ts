@@ -28,4 +28,5 @@ export interface ReceiptFilter {
   /** 2025-07-01 형식 */
   endDate?: string;
   size?: number;
+  price?: number; // 환불 관련
 }

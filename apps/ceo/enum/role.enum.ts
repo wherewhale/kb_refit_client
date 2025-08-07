@@ -7,4 +7,6 @@ export enum UserRole {
 export enum ProcessState {
   APPROVED = "accepted",
   REJECTED = "rejected",
+  DEPOSIT = "deposit",
+  INPROGRESS = "inProgress"
 }
