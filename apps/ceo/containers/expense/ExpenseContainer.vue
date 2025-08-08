@@ -31,7 +31,7 @@ const openModal = () => { isOpen.value = true; };
 // 카드 데이터 정의
 const card_data = computed<CardProps>(() => ({
   title: "처리가 필요한 경비",
-  content: `총 ${(data.value?.countPendingReceipts || data.value?.pendingReceipts)}건`,
+  content: `총 ${(data.value?.countPendingReceipts ?? data.value?.pendingReceipts?.length ?? 0)}건`,
   src: "bibi",
   className: "bg-yellow-1",
   description: data.value?.countCompletedReceiptsThisMonth
@@ -187,8 +187,8 @@ watch(loadMoreRef, () => {
       />
       <HistoryBlock
         :items="
-          completedData?.pages.flatMap((page) =>
-            page.receiptList.map((receipt) => ({
+          completedData?.pages?.flatMap((page) =>
+            page.receiptList?.map((receipt) => ({
               id: receipt.receiptId,
               label: receipt.companyName,
               amount: receipt.totalPrice,
