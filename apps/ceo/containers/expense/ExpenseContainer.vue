@@ -200,7 +200,7 @@ watch(loadMoreRef, () => {
                 : receipt.processState === ProcessState.REJECTED
                   ? { word: '경비 처리 반려', icon: 'ic:baseline-close' }
                   : undefined
-            }))
+            })) ?? []
           ) ?? []
         "
       />
