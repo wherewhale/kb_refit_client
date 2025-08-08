@@ -48,5 +48,11 @@ export default defineNuxtConfig({
     ssr: { noExternal: true },
   },
   plugins: ["~/plugins/vue-query.ts"],
-  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/ui", "@nuxt/test-utils"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/image",
+    "@nuxt/ui",
+    "@nuxt/test-utils",
+    "@pinia/nuxt",
+  ],
 });
