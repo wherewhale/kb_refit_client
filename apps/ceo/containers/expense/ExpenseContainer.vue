@@ -192,7 +192,7 @@ watch(loadMoreRef, () => {
               id: receipt.receiptId,
               label: receipt.companyName,
               amount: receipt.totalPrice,
-              href: `/expense/${receipt.receiptId}/detail`,
+              href: `/expense/${receipt.receiptId}`,
               icon: getIcon(receipt.companyName),
               createdAt: receipt.createdAt,
               completed: receipt.processState === ProcessState.APPROVED

@@ -14,6 +14,7 @@ const selected = reactive({
   기간: "1개월",
   종류: "전체",
   정렬: "최신순",
+  필터: "전체",
 });
 
 const { data } = useQuery({
@@ -67,7 +68,8 @@ const {
     const response = await getCorporateCardListCursor({
       period: getPeriodNumber(selected["기간"]),
       sort: getSortOrder(selected["정렬"]),
-      state: getCompletedReceiptFilter(selected["종류"]),
+      state: getCompletedReceiptFilter(selected["필터"]),
+      refundState: getRefundStateFilter(selected["종류"]),
       startDate: startDate.value ?? undefined,
       endDate: endDate.value ?? undefined,
       cursorId: pageParam === 0 ? undefined : pageParam,

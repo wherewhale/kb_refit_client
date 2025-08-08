@@ -20,13 +20,13 @@ export interface CorporateCard {
 
 export interface ReceiptFilter {
   cursorId?: number;
-  sort: "Newest" | "Oldest";
+  sort: "NEWEST" | "OLDEST";
   period?: number;
-  state?: "Whole" | "Process" | "UnProcess";
+  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS";
+  refundState: "WHOLE" | "UNREFUND" | "REFUND";
   /** 2025-07-01 형식 */
   startDate?: string;
   /** 2025-07-01 형식 */
   endDate?: string;
   size?: number;
-  price?: number; // 환불 관련
 }

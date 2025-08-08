@@ -15,21 +15,38 @@ export const getPeriodNumber = (value: string) => {
 export const getSortOrder = (value: string) => {
     switch(value) {
         case "최신순":
-            return "Newest"
+            return "NEWEST"
         case "과거순":
-            return "Oldest"
+            return "OLDEST"
         default:
-            return "Newest"
+            return "NEWEST"
     }
 }
 
-export const getCompletedReceiptFilter = (value: string): "Whole" | "Process" | "UnProcess" => {
+export const getCompletedReceiptFilter = (value: string): "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS" => {
     switch(value) {
         case "경비 승인":
-            return "Process"
+            return "PROCESS"
         case "경비 반려":
-            return "UnProcess"
+            return "UNPROCESS"
+        case "미반려":
+            return "INPROGRESS";
+        case "반려/미환급":
+            return "REJECTED";
+        case "환급":
+            return "DEPOSIT"
         default:
-            return "Whole"
+            return "WHOLE"
+    }
+}
+
+export const getRefundStateFilter = (value: string): "WHOLE" | "UNREFUND" | "REFUND" => {
+    switch(value) {
+        case "승인":
+            return "REFUND"
+        case "취소":
+            return "UNREFUND"
+        default:
+            return "WHOLE"
     }
 }

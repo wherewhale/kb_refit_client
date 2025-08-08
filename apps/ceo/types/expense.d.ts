@@ -80,9 +80,9 @@ export interface CompletedReceiptsResponse {
 
 export interface CompletedReceiptListRequest {
   cursorId?: number;
-  sort: "Newest" | "Oldest";
+  sort: "NEWEST" | "OLDEST";
   period?: number;
-  state?: "Whole" | "Process" | "UnProcess";
+  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS";
   /** 2025-07-01 형식 */
   startDate?: string;
   /** 2025-07-01 형식 */
