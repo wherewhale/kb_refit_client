@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone, today } from "@internationalized/date";
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery } from "@tanstack/vue-query";
 import dayjs from "dayjs";
-import { getMedicalInfo } from "~/services/medical";
+import { useMedicalPdfDownload } from "~/hooks/useMedicalPdfDownload";
+import { getMedicalFile, getMedicalInfo } from "~/services/medical";
 
 interface Props {
   store: ReturnType<typeof useInsuranceClaimStore>;
@@ -11,6 +12,9 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const route = useRoute();
+const receiptId = route.params.receiptId as string;
+const toast = useToast();
 
 const date = shallowRef(
   new CalendarDate(dayjs().year(), dayjs().month() + 1, dayjs().date())
@@ -27,6 +31,40 @@ const { data: medicalInfoData } = useQuery({
   refetchOnMount: false,
   retry: false,
 });
+
+const { downloadUrl, error, loadPdf } = useMedicalPdfDownload();
+
+const { mutate: onDownloadMedicalFileApi } = useMutation({
+  mutationKey: ["medicalFile", receiptId],
+  mutationFn: async () => (await getMedicalFile(Number(receiptId))).data,
+  onSuccess: async (fileName) => {
+    // 파일 다운로드 로직 추가
+    await loadPdf(fileName.medicalImageFileName);
+    if (error.value) {
+      toast.add({
+        title: "파일 다운로드 실패",
+        description: error.value,
+        color: "error",
+        duration: 2000,
+      });
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = downloadUrl.value ?? "";
+    link.target = "_blank"; // 새 탭에서 열기
+    link.rel = "noopener noreferrer"; // 보안상 권장
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+  onError: (error) => {
+    console.error("파일 다운로드 실패:", error.message);
+  },
+});
+
+const onDownloadMedicalFile = () => {
+  onDownloadMedicalFileApi();
+};
 
 const onChangeDate = () => {
   props.onChangeVisitedDate(date.value.toDate(getLocalTimeZone()));
@@ -108,6 +146,7 @@ const onChangeDate = () => {
       variant="outlined"
       class-name="mt-10 w-full"
       type="button"
+      @click="onDownloadMedicalFile"
     >
       진료비 세부산정내역
     </KBUIButton>

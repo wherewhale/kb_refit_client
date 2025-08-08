@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
+import { useMutation, useQuery } from "@tanstack/vue-query";
 import html2canvas from "html2canvas";
 import type CommonReceipt from "~/components/receipt/CommonReceipt.vue";
-import { getMedicalReceiptDetail } from "~/services/medical";
-
-// TODO: 영수증 정보 불러오기 API 연동
+import { useMedicalPdfDownload } from "~/hooks/useMedicalPdfDownload";
+import { getMedicalFile, getMedicalReceiptDetail } from "~/services/medical";
 
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
+const toast = useToast();
 
 const receiptRef = ref<InstanceType<typeof CommonReceipt> | null>(null);
 
@@ -16,6 +16,40 @@ const { data } = useQuery({
   queryFn: async () => (await getMedicalReceiptDetail(Number(receiptId))).data,
   retry: false,
 });
+
+const { downloadUrl, error, loadPdf } = useMedicalPdfDownload();
+
+const { mutate: onDownloadMedicalFileApi } = useMutation({
+  mutationKey: ["medicalFile", receiptId],
+  mutationFn: async () => (await getMedicalFile(Number(receiptId))).data,
+  onSuccess: async (fileName) => {
+    // 파일 다운로드 로직 추가
+    await loadPdf(fileName.medicalImageFileName);
+    if (error.value) {
+      toast.add({
+        title: "파일 다운로드 실패",
+        description: error.value,
+        color: "error",
+        duration: 2000,
+      });
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = downloadUrl.value ?? "";
+    link.target = "_blank"; // 새 탭에서 열기
+    link.rel = "noopener noreferrer"; // 보안상 권장
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  },
+  onError: (error) => {
+    console.error("파일 다운로드 실패:", error.message);
+  },
+});
+
+const onDownloadMedicalFile = () => {
+  onDownloadMedicalFileApi();
+};
 
 const onDownloadImage = async () => {
   const el = receiptRef.value?.printRef;
@@ -76,7 +110,12 @@ const onDownloadImage = async () => {
         >
           이미지로 저장하기
         </KBUIButton>
-        <KBUIButton size="large" variant="outlined" class-name="w-full">
+        <KBUIButton
+          size="large"
+          variant="outlined"
+          class-name="w-full"
+          @click="onDownloadMedicalFile"
+        >
           진료비 세부산정내역 다운로드 (PDF)
         </KBUIButton>
         <NuxtLink class="w-full block" :href="`/medical/${receiptId}/submit`">
@@ -92,8 +131,8 @@ const onDownloadImage = async () => {
               data?.processState === "accepted"
                 ? "실손보험금 청구 완료"
                 : data?.processState === "inProgress"
-                  ? "실손보험금 청구 중"
-                  : "실손보험금 심사 중"
+                  ? "실손보험금 심사 중..."
+                  : "실손보험금 청구하기"
             }}
           </KBUIButton>
         </NuxtLink>

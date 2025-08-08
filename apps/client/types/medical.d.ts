@@ -56,3 +56,7 @@ export interface MedicalCheck {
   hospitalName: string;
   createdAt: Date;
 }
+
+export interface MedicalFileResponse {
+  medicalImageFileName: string;
+}

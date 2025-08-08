@@ -1,5 +1,6 @@
 import type {
   MedicalCheck,
+  MedicalFileResponse,
   MedicalInsurance,
   MedicalInsuranceClaimRequest,
   MedicalReceiptDetail,
@@ -54,5 +55,11 @@ export const patchInsuranceClaim = async (
 export const getMedicalInfo = async (receiptId: number) => {
   return await apiClient.get<MedicalCheck>(
     `/medical/insurance/claim?receiptId=${receiptId}`
+  );
+};
+
+export const getMedicalFile = async (receiptId: number) => {
+  return await apiClient.get<MedicalFileResponse>(
+    `/medical/voucher?receiptId=${receiptId}`
   );
 };
