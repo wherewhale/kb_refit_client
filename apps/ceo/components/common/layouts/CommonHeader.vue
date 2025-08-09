@@ -1,16 +1,14 @@
 <script setup lang="ts">
 import { Logo } from "#components";
-// import { ref, watch } from "vue";
 
-// import { removeTokens } from "@/utils/token";
-// FIXME: 추후 개발 과정에서는 setToken 관련 내용 삭제
+import { removeTokens } from "@/utils/token";
 
-// const router = useRouter();
+const router = useRouter();
 
-// const onClickRemoveTokens = async () => {
-//   await removeTokens();
-//   router.push("/auth/login");
-// };
+const onClickRemoveTokens = async () => {
+  await removeTokens();
+  router.push("/auth/login");
+};
 </script>
 
 <template>
@@ -20,13 +18,13 @@ import { Logo } from "#components";
       사장님
     </KBUITypography>
 
-    <!-- <KBUIButton
+    <KBUIButton
       class="ml-auto"
       variant="outlined"
       size="small"
       @click="onClickRemoveTokens"
     >
       로그아웃
-    </KBUIButton> -->
+    </KBUIButton>
   </header>
 </template>
