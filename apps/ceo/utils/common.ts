@@ -43,9 +43,9 @@ export const getCompletedReceiptFilter = (value: string): "WHOLE" | "PROCESS" | 
 export const getRefundStateFilter = (value: string): "WHOLE" | "UNREFUND" | "REFUND" => {
     switch(value) {
         case "승인":
-            return "REFUND"
-        case "취소":
             return "UNREFUND"
+        case "취소":
+            return "REFUND"
         default:
             return "WHOLE"
     }
