@@ -55,5 +55,6 @@ watch(active, (tab) => {
       <MedicalContainer v-else-if="active === 'hospital_receipt'" />
     </div>
     <WalletContainer />
+    <CommonFooter />
   </div>
 </template>

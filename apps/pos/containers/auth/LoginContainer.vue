@@ -70,6 +70,10 @@ const onClickBackspace = () => {
   }
 };
 
+const onClickCancel = () => {
+  pinNumber.value = [];
+};
+
 const onClickConfirm = () => {
   postLoginApi();
 };
@@ -115,7 +119,9 @@ defineExpose({ pinNumber }); // 🔑 테스트를 위한 노출
         <KBUIButton variant="secondary" size="medium" @click="onClickBackspace">
           <UIcon name="material-symbols-light:backspace" size="24" />
         </KBUIButton>
-        <KBUIButton variant="ghost" size="medium"> 취소 </KBUIButton>
+        <KBUIButton variant="ghost" size="medium" @click="onClickCancel">
+          취소
+        </KBUIButton>
         <KBUIButton
           variant="primary"
           size="medium"
