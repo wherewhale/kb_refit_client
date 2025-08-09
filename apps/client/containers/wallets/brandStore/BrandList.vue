@@ -196,7 +196,7 @@ watch(
       <template #content>
         <aside v-if="selectedBrand" class="p-6">
           <KBUITypography size="b20" weight="bold" class="text-center">
-            {{ selectedBrand.brandName }} 배지를 <br />
+            {{ selectedBrand.brandName }} 를 <br />
             {{
               selectedBrand.owned ? "장착하시겠습니까?" : "구매하시겠습니까?"
             }}

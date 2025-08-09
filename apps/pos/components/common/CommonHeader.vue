@@ -1,6 +1,6 @@
 <template>
   <header class="bg-white w-full p-4">
-    <figure class="flex justify-center items-center gap-2">
+    <figure class="relative flex justify-center items-center gap-2">
       <NuxtImg
         src="assets/images/logos/symbol-logo.png"
         alt="kb_logo"
