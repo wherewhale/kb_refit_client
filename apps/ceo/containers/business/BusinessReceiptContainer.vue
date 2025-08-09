@@ -7,7 +7,7 @@ import { getReceiptProcessDetail } from "~/services/expense";
 const route = useRoute();
 const receiptId = route.params.receiptId as string;
 
-const { data: ReceiptProcessApplicant } = useQuery({
+const { data: ReceiptProcessApplicant, isLoading } = useQuery({
   queryKey: ["getReceiptProcessDetail", receiptId],
   queryFn: async () => (await getReceiptProcessDetail(Number(receiptId))).data,
   refetchOnWindowFocus: false,
@@ -82,6 +82,7 @@ const onDownloadImage = async () => {
           이미지로 저장하기
         </KBUIButton>
         <NuxtLink
+          v-if="!isLoading && receiptDetail?.processState !== 'rejected' && receiptDetail?.processState !== 'deposit'"
           :href="`/business/${receiptId}/reject`"
           class="w-full block"
         >
