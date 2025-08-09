@@ -23,14 +23,14 @@ export const getSortOrder = (value: string) => {
     }
 }
 
-export const getCompletedReceiptFilter = (value: string): "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS" => {
+export const getCompletedReceiptFilter = (value: string): "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "NONE" => {
     switch(value) {
         case "경비 승인":
             return "PROCESS"
         case "경비 반려":
             return "UNPROCESS"
         case "미반려":
-            return "INPROGRESS";
+            return "NONE";
         case "반려/미환급":
             return "REJECTED";
         case "환급":

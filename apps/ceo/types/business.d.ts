@@ -22,7 +22,7 @@ export interface ReceiptFilter {
   cursorId?: number;
   sort: "NEWEST" | "OLDEST";
   period?: number;
-  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS";
+  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "NONE";
   refundState: "WHOLE" | "UNREFUND" | "REFUND";
   /** 2025-07-01 형식 */
   startDate?: string;

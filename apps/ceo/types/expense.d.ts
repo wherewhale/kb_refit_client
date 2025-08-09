@@ -82,7 +82,7 @@ export interface CompletedReceiptListRequest {
   cursorId?: number;
   sort: "NEWEST" | "OLDEST";
   period?: number;
-  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "INPROGRESS";
+  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "NONE";
   /** 2025-07-01 형식 */
   startDate?: string;
   /** 2025-07-01 형식 */
