@@ -109,11 +109,14 @@ const getStateIcon = (state: string) => {
 const card_data = computed<CardProps>(() => ({
   title: t("receipt.card.title"),
   content: `${(summaryData.value?.thisMonthExpense ?? 0).toLocaleString()}원`,
-  src: `${(summaryData.value?.lastMonthExpense ?? 0) < 0 ? "luna-1" : "luna-2"}`,
+  src: `${(summaryData.value?.lastMonthExpense ?? 0) > (summaryData.value?.thisMonthExpense ?? 0) ? "luna-1" : "luna-2"}`,
   className: "bg-blue-1",
-  // FIXME: 더 쓴거랑 덜 쓴거랑 다름
-  description: t("receipt.card.description"),
-  boldText: `${Math.abs(summaryData.value?.lastMonthExpense ?? 0).toLocaleString()}원`,
+  description:
+    (summaryData.value?.lastMonthExpense ?? 0) <
+    (summaryData.value?.thisMonthExpense ?? 0)
+      ? "지난 달보다 더 쓰고 있어요!"
+      : "지난 달보다 덜쓰고 있어요!",
+  boldText: `${Math.abs((summaryData.value?.thisMonthExpense ?? 0) - (summaryData.value?.lastMonthExpense ?? 0)).toLocaleString()}원`,
 }));
 
 let observer: IntersectionObserver | null = null;
