@@ -15,6 +15,7 @@ import ReceiptProcessingInfo from "~/containers/receipts/submit/ReceiptProcessin
 import SubmitComplete from "~/containers/receipts/submit/SubmitComplete.vue";
 import { useMutation } from "@tanstack/vue-query";
 import { patchReceiptProcess } from "~/services/receipt";
+import { scrollToTop } from "~/utils/common";
 
 const { t } = useI18n();
 
@@ -35,7 +36,7 @@ const { currentStep, direction, nextStep, prevStep, setStep } =
   useFunnel(STEPS);
 const stepIndex = computed(() => STEPS.indexOf(currentStep.value));
 const transitionName = computed(() =>
-  direction.value === "forward" ? "slide-left" : "slide-right",
+  direction.value === "forward" ? "slide-left" : "slide-right"
 );
 
 const store = useReceiptSubmitStore();
@@ -58,6 +59,7 @@ const onClickNext = () => {
 
 const onClickPrev = () => {
   prevStep();
+  scrollToTop();
 };
 
 const { mutate: submitReceiptExpense } = useMutation({

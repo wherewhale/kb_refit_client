@@ -1,3 +1,11 @@
+export const scrollToTop = (behavior: ScrollBehavior = "smooth") => {
+  if (typeof window === "undefined") return; // SSR 방지
+  window.scrollTo({
+    top: 0,
+    behavior,
+  });
+};
+
 export const getIcon = (
   label: string
 ): { background: string; emoji: string } => {
