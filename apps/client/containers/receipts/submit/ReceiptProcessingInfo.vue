@@ -8,9 +8,6 @@ import { extractFilenameFromUrl } from "~/utils/files";
 
 const { t } = useI18n();
 
-// TODO: 상호명, 사업장 주소 가져오는 API 연동
-// TODO: 영수증 정보 가져오기
-
 interface Props {
   store: ReturnType<typeof useReceiptSubmitStore>;
   onChangeFilename: (filename: string) => void;

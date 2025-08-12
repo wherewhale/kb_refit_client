@@ -58,8 +58,12 @@ const onClickNext = () => {
 };
 
 const onClickPrev = () => {
-  prevStep();
   scrollToTop();
+  if (currentStep.value === "receipt_submit.step.processingInfo") {
+    setStep("고용 정보 확인하기");
+  } else {
+    prevStep();
+  }
 };
 
 const { mutate: submitReceiptExpense } = useMutation({
