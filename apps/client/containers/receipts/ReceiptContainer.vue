@@ -115,7 +115,7 @@ const card_data = computed<CardProps>(() => ({
     (summaryData.value?.lastMonthExpense ?? 0) <
     (summaryData.value?.thisMonthExpense ?? 0)
       ? "지난 달보다 더 쓰고 있어요!"
-      : "지난 달보다 덜쓰고 있어요!",
+      : "지난 달보다 덜 쓰고 있어요!",
   boldText: `${Math.abs((summaryData.value?.thisMonthExpense ?? 0) - (summaryData.value?.lastMonthExpense ?? 0)).toLocaleString()}원`,
 }));
 
