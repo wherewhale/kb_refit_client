@@ -10,15 +10,6 @@ const isEnglish = ref(locale.value === "en");
 watch(isEnglish, (val) => {
   setLocale(val ? "en" : "ko");
 });
-// import { removeTokens } from "@/utils/token";
-// FIXME: 추후 개발 과정에서는 setToken 관련 내용 삭제
-
-// const router = useRouter();
-
-// const onClickRemoveTokens = async () => {
-//   await removeTokens();
-//   router.push("/auth/login");
-// };
 </script>
 
 <template>
@@ -30,13 +21,5 @@ watch(isEnglish, (val) => {
       unchecked-icon="material-symbols:language-korean-latin"
       checked-icon="mdi:alphabetical"
     />
-    <!-- <KBUIButton
-      class="ml-auto"
-      variant="outlined"
-      size="small"
-      @click="onClickRemoveTokens"
-    >
-      로그아웃
-    </KBUIButton> -->
   </header>
 </template>
