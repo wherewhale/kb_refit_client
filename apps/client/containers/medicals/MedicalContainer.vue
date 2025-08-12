@@ -100,6 +100,25 @@ const onChangeDate = (start: string, end: string) => {
   endDate.value = end;
 };
 
+const getStateObject = (state: string) => {
+  switch (state) {
+    case "accepted":
+      return {
+        word: "보험 청구 완료",
+        icon: "material-symbols:local-hospital",
+      };
+    case "rejected":
+      return { word: "보험 청구 거절", icon: "material-symbols:cancel" };
+    case "inProgress":
+      return {
+        word: "보험 청구 진행 중",
+        icon: "material-symbols:hourglass-empty",
+      };
+    default:
+      return undefined;
+  }
+};
+
 let observer: IntersectionObserver | null = null;
 
 const startObserver = () => {
@@ -165,12 +184,7 @@ watch(loadMoreRef, () => {
               label: item.storeName,
               amount: item.totalPrice,
               createdAt: item.createdAt,
-              completed: ['completed', 'rejected'].includes(item.processState)
-                ? {
-                    word: '보험 청구 완료',
-                    icon: 'material-symbols:local-hospital',
-                  }
-                : undefined,
+              completed: getStateObject(item.processState),
               icon: {
                 background: 'bg-blue-1',
                 emoji: '🏥',
