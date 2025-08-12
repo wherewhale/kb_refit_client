@@ -14,7 +14,7 @@ const selected = reactive({
   기간: "1개월",
   종류: "전체",
   정렬: "최신순",
-  필터: "전체",
+  필터: "전체"
 });
 
 const { data } = useQuery({
