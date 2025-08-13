@@ -36,7 +36,7 @@ const diffAmount = data.value
 const card_data = computed<CardProps>(() => ({
   title: `${data.value?.month}월 사용 금액`,
   content: `${data.value?.thisMonth.toLocaleString()}원`,
-  src: isLess ? "luna-2" : "luna-1",
+  src: isLess ? "luna-1" : "luna-2",
   className: "bg-blue-1",
   description: isLess
     ? "저번 달보다 {replace}\n덜 쓰고 있어요!"
