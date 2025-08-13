@@ -85,7 +85,7 @@ const onDeletePreset = () => {
       @click="props.onBack('내 지갑')"
     >
       <UIcon name="i-heroicons-chevron-left" size="16" />
-      <KBUITypography size="b14" weight="medium">프리셋 설정</KBUITypography>
+      <KBUITypography size="b14" weight="medium">프리셋 조회</KBUITypography>
     </button>
     <UModal v-model:open="isModalOpen">
       <template #title> 프리셋 삭제 확인 </template>

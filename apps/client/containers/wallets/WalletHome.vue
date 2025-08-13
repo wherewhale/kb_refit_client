@@ -119,10 +119,13 @@ const onSavePreset = () => {
           size="small"
           @click="props.onNext('프리셋 설정')"
         >
-          <UIcon name="ic:round-wifi-protected-setup" class="w-4 h-4" />
+          <UIcon
+            name="material-symbols:format-list-bulleted-rounded"
+            class="w-4 h-4"
+          />
         </KBUIButton>
         <KBUITypography weight="regular" tag="p" size="b12"
-          >프리셋 변경</KBUITypography
+          >프리셋 조회</KBUITypography
         >
       </div>
     </div>
