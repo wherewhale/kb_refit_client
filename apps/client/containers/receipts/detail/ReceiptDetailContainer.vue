@@ -105,12 +105,17 @@ const onDownloadImage = async () => {
             variant="primary"
             class="w-full"
             :disabled="
-              getReceiptProgressButtonText(data?.processState ?? 'none')
-                .disabled
+              data?.isCorporate === 1
+                ? true
+                : getReceiptProgressButtonText(data?.processState ?? 'none')
+                    .disabled
             "
           >
             {{
-              getReceiptProgressButtonText(data?.processState ?? "none").label
+              data?.isCorporate === 1
+                ? "법인 카드로 결제했습니다"
+                : getReceiptProgressButtonText(data?.processState ?? "none")
+                    .label
             }}
           </KBUIButton>
         </NuxtLink>
