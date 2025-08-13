@@ -19,6 +19,7 @@ import {
 } from "~/utils/common";
 
 import Card from "~/components/common/Card.vue";
+import dayjs from "dayjs";
 
 const { t } = useI18n();
 
@@ -107,7 +108,7 @@ const getStateIcon = (state: string) => {
 
 // 카드 데이터
 const card_data = computed<CardProps>(() => ({
-  title: t("receipt.card.title"),
+  title: `${dayjs().month() + 1}월 사용 금액`,
   content: `${(summaryData.value?.thisMonthExpense ?? 0).toLocaleString()}원`,
   src: `${(summaryData.value?.lastMonthExpense ?? 0) > (summaryData.value?.thisMonthExpense ?? 0) ? "luna-1" : "luna-2"}`,
   className: "bg-blue-1",

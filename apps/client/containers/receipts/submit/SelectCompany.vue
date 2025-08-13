@@ -65,6 +65,14 @@ const onClickCompany = (companyId: number) => {
         선택하기
       </KBUIButton>
     </li>
+    <KBUIButton
+      variant="secondary-ghost"
+      size="small"
+      class="mt-10"
+      @click="props.onNext"
+    >
+      직접 입력하기</KBUIButton
+    >
   </ul>
   <div v-else class="w-full mt-10 flex flex-col items-center justify-center">
     <UIcon

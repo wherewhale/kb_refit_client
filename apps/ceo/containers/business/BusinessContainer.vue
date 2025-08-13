@@ -6,7 +6,10 @@ import HistoryBlock from "~/components/common/HistoryBlock.vue";
 import FilterPanel from "~/components/common/FilterPanel.vue";
 import type { CardProps } from "~/interfaces/common/card.interface";
 import { useInfiniteQuery, useQuery } from "@tanstack/vue-query";
-import {  getCorporateCardListCursor, getCorporateCardTotalPrice } from "~/services/business";
+import {
+  getCorporateCardListCursor,
+  getCorporateCardTotalPrice,
+} from "~/services/business";
 import { ProcessState } from "~/enum/role.enum";
 
 // 선택된 필터 상태
@@ -14,7 +17,7 @@ const selected = reactive({
   기간: "1개월",
   종류: "전체",
   정렬: "최신순",
-  필터: "전체"
+  필터: "전체",
 });
 
 const { data } = useQuery({
@@ -35,7 +38,7 @@ const card_data = computed<CardProps>(() => ({
   content: `${data.value?.thisMonth.toLocaleString()}원`,
   src: isLess ? "luna-2" : "luna-1",
   className: "bg-blue-1",
-  description: data.value
+  description: isLess
     ? "저번 달보다 {replace}\n덜 쓰고 있어요!"
     : "저번 달보다 {replace}\n더 쓰고 있어요!",
   boldText: `${diffAmount.toLocaleString()}원`,
@@ -73,7 +76,7 @@ const {
       startDate: startDate.value ?? undefined,
       endDate: endDate.value ?? undefined,
       cursorId: pageParam === 0 ? undefined : pageParam,
-      size: 20
+      size: 20,
     });
     return response.data;
   },
