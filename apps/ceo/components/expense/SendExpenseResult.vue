@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useMutation, useQuery } from "@tanstack/vue-query";
-import { getMonthlySummary, postEmailSend } from "~/services/expense";
+import { useMutation } from "@tanstack/vue-query";
+import { getAcceptedExpenseCount, postEmailSend } from "~/services/expense";
 import { isValidEmail } from "~/utils/regex";
 import type { CalendarDate } from "@internationalized/date";
 import { today, getLocalTimeZone } from "@internationalized/date";
@@ -9,12 +9,6 @@ import dayjs from "dayjs";
 const props = defineProps<{
   open: boolean; // v-model:open
 }>();
-
-const { data } = useQuery<number>({
-  queryKey: ["getMonthlySummary"],
-  queryFn: async () => (await getMonthlySummary()).data,
-  retry: false,
-});
 
 const emit = defineEmits<{
   (eventName: "update:open", newOpenValue: boolean): void;
@@ -30,6 +24,17 @@ const toast = useToast();
 const rangeValue = shallowRef({
   start: today(getLocalTimeZone()),
   end: today(getLocalTimeZone()),
+});
+
+const { mutate: getAcceptedExpenseCountApi, data } = useMutation<number>({
+  mutationFn: async () =>
+    (
+      await getAcceptedExpenseCount({
+        startDate: getFormattedDate(rangeValue.value.start),
+        endDate: getFormattedDate(rangeValue.value.end),
+      })
+    ).data,
+  retry: false,
 });
 
 const getFormattedDate = (date: CalendarDate) => {
@@ -87,6 +92,11 @@ const onSubmit = () => {
   });
 };
 
+const onSelectDate = () => {
+  isModalOpen.value = false;
+  getAcceptedExpenseCountApi();
+};
+
 watch(
   () => props.open,
   (newOpenValue) => {
@@ -96,6 +106,10 @@ watch(
 
 watch(isBottomSheetOpen, (newOpenValue) => {
   emit("update:open", newOpenValue);
+});
+
+onMounted(() => {
+  getAcceptedExpenseCountApi();
 });
 </script>
 
@@ -166,7 +180,7 @@ watch(isBottomSheetOpen, (newOpenValue) => {
                   class="mt-4 w-full"
                   variant="primary"
                   size="large"
-                  @click="() => (isModalOpen = false)"
+                  @click="onSelectDate"
                 >
                   선택하기
                 </KBUIButton>

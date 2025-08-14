@@ -39,9 +39,21 @@ export const getCompletedReceiptList = async (
 };
 
 export const postEmailSend = async (payload: EmailSend) => {
-  return apiClient.post<EmailSend>("/ceo/sendEmail", payload);
+  return apiClient.post<EmailSend>("/ceo/email/send", payload);
 };
 
 export const getMonthlySummary = async () => {
   return await apiClient.get<number>("/ceo/monthlySummary");
+};
+
+export const getAcceptedExpenseCount = async ({
+  startDate,
+  endDate,
+}: {
+  startDate: string;
+  endDate: string;
+}) => {
+  return await apiClient.get<number>("/ceo/expense/accepted/count", {
+    params: { startDate, endDate },
+  });
 };
