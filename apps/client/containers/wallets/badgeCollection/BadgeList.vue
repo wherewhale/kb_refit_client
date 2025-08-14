@@ -1,22 +1,15 @@
 <script setup lang="ts">
-import { useQuery } from "@tanstack/vue-query";
-import { getBadgeCollection } from "~/services/wallet";
 import type { SpecificBadgeDetail } from "~/types/wallet";
 
-const { data, isPending } = useQuery({
-  queryKey: ["getBadgeCollection"],
-  queryFn: async () => {
-    const res = await getBadgeCollection();
-    return res?.data?.badgeList ?? [];
-  },
-  refetchOnWindowFocus: false,
-});
+const props = defineProps<{
+  badges?: SpecificBadgeDetail[];
+}>();
 
 const isChecked = ref(false);
 const filteredBadges = computed(() => {
   return isChecked.value
-    ? (data.value?.filter((badge) => badge.owned) ?? [])
-    : (data.value ?? []);
+    ? (props.badges?.filter((badge) => badge.owned) ?? [])
+    : (props.badges ?? []);
 });
 const selectedBadge = ref<SpecificBadgeDetail | null>(null);
 
@@ -37,7 +30,7 @@ const isModalOpen = computed({
     />
 
     <ul
-      v-if="!isPending && filteredBadges.length > 0"
+      v-if="filteredBadges.length > 0"
       class="grid grid-cols-3 justify-between gap-y-4 mt-4"
     >
       <li
