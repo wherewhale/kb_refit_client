@@ -21,7 +21,7 @@ export interface PendingDetail {
 
 export interface ReceiptProcessApplicant {
   userId: number; // 신청자 id
-  name: string;   // 신청자
+  name: string; // 신청자
   documentType: string; // 경비 처리 항목
   documentDetail: string; // 세부 내용
   imageFileName: string; // 증빙 이미지 파일명
@@ -48,7 +48,7 @@ export interface ReceiptDetail {
 }
 
 // 상품 상세 내역
-export interface ReceiptContentDetail{
+export interface ReceiptContentDetail {
   merchandiseId: number;
   merchandiseName: string;
   merchandisePrice: number;
@@ -56,8 +56,8 @@ export interface ReceiptContentDetail{
 }
 
 export interface ReceiptProcessDetail {
-  receiptDetail: ReceiptDetail;                 // 영수증 상세 정보
-  receiptProcessApplicant: ReceiptProcessApplicant;        // 영수처리 신청자 상세 정보
+  receiptDetail: ReceiptDetail; // 영수증 상세 정보
+  receiptProcessApplicant: ReceiptProcessApplicant; // 영수처리 신청자 상세 정보
 }
 
 // 영수 처리 승인/반려
@@ -70,6 +70,8 @@ export interface ReceiptProcessingRequest {
 // 이메일 전송
 export interface EmailSend {
   email: string;
+  startDate: string;
+  endDate: string;
 }
 
 // 응답 전체 타입
@@ -82,7 +84,14 @@ export interface CompletedReceiptListRequest {
   cursorId?: number;
   sort: "NEWEST" | "OLDEST";
   period?: number;
-  state?: "WHOLE" | "PROCESS" | "UNPROCESS" | "WHOLE" | "REJECTED" | "DEPOSIT" | "NONE";
+  state?:
+    | "WHOLE"
+    | "PROCESS"
+    | "UNPROCESS"
+    | "WHOLE"
+    | "REJECTED"
+    | "DEPOSIT"
+    | "NONE";
   /** 2025-07-01 형식 */
   startDate?: string;
   /** 2025-07-01 형식 */
