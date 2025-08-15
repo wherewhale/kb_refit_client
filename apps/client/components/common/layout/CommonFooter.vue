@@ -66,19 +66,15 @@ function copy() {
       푸시 알림 받기
     </KBUITypography>
     <div v-if="messagingToken">
-      <KBUITypography
-        size="b14"
-        weight="medium"
-        color="gray-2"
-        class="cursor-pointer hover:text-gray-4 transition-colors mt-2"
-      >
+      <div class="break-all text-ellipsis text-wrap text-gray-3">
         {{ messagingToken }}
-      </KBUITypography>
+      </div>
+
       <KBUITypography
         size="b14"
         weight="medium"
         color="gray-2"
-        class="cursor-pointer hover:text-gray-4 transition-colors mt-2"
+        class="cursor-pointer hover:text-gray-4 transition-colors mt-2 text-center"
         @click="copy"
       >
         클립보드에 복사
