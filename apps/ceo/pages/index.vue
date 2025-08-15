@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import type { TabsItem } from "@nuxt/ui";
 import ExpenseContainer from "~/containers/expense/ExpenseContainer.vue";
 import BusinessContainer from "~/containers/business/BusinessContainer.vue";
+import CommonFooter from "~/components/common/layouts/CommonFooter.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -40,5 +41,6 @@ watch(active, (tab) => {
       <ExpenseContainer v-if="active === 'expense'" />
       <BusinessContainer v-else-if="active === 'business'" />
     </div>
+    <CommonFooter />
   </div>
 </template>

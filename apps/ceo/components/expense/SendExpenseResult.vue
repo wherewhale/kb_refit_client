@@ -38,10 +38,6 @@ const { mutate: getAcceptedExpenseCountApi, data } = useMutation<number>({
 });
 
 const getFormattedDate = (date: CalendarDate) => {
-  console.log(
-    "getFormattedDate",
-    dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD")
-  );
   return dayjs(date.toDate(getLocalTimeZone())).format("YYYY-MM-DD");
 };
 
@@ -101,7 +97,7 @@ watch(
   () => props.open,
   (newOpenValue) => {
     isBottomSheetOpen.value = newOpenValue;
-  }
+  },
 );
 
 watch(isBottomSheetOpen, (newOpenValue) => {

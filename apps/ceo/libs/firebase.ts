@@ -1,5 +1,5 @@
 // lib/firebase.ts
-import { initializeApp } from "@firebase/app";
+import { getApps, initializeApp } from "@firebase/app";
 import { getStorage } from "@firebase/storage";
 
 const firebaseConfig = {
@@ -11,5 +11,5 @@ const firebaseConfig = {
   appId: "1:289583572319:web:6920aa2a5986aff45bc2ea",
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps()[0] ?? initializeApp(firebaseConfig);
 export const storage = getStorage(app);
