@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { removeTokens } from "@/utils/token";
 import { getToken } from "@firebase/messaging";
+import { useMutation } from "@tanstack/vue-query";
+import { postUserFcmToken } from "~/services/fcm";
 
 const router = useRouter();
+const toast = useToast();
 
 const onClickRemoveTokens = async () => {
   await removeTokens();
@@ -13,6 +16,21 @@ const messagingToken = ref("");
 
 onMounted(() => {
   requestPermission();
+});
+
+const { mutate: postFcmTokenApi } = useMutation({
+  mutationFn: async (token: string) => await postUserFcmToken(token),
+  onSuccess: () => {
+    console.log("FCM 토큰이 성공적으로 서버에 저장되었습니다.");
+  },
+  onError: () => {
+    console.error("FCM 토큰을 서버에 저장하는 데 실패했습니다.");
+    toast.add({
+      title: "토큰 설정 오류",
+      description: "FCM 토큰을 서버에 저장하는 데 실패했습니다.",
+      color: "error",
+    });
+  },
 });
 
 function requestPermission() {
@@ -33,11 +51,17 @@ async function setToken() {
   const { $messaging } = useNuxtApp();
   const token = await getToken($messaging, {
     vapidKey:
-      "BKOStP9Dtijt8pt9a3i_dOvDvXoeWvqViTBpRb-jAvwnlqbvGJToOKfGjrs4uCfbjLnofmwqMNxPAX6lLVe6yEM",
+      "BFPqlA9eJkOZWDsKJgTei_kQbMzwnvnez2H1Law_AVnvXB54hBYElM4REhrl7mjHn3nvSDWwcntreP5xYvsY3N8",
   });
-  // TODO: 여기서 서버에 유저 정보 업데이트 API
-
-  messagingToken.value = token;
+  if (token) {
+    postFcmTokenApi(token);
+  } else {
+    toast.add({
+      title: "토큰 설정 오류",
+      description: "FCM 토큰을 가져오는 데 실패했습니다.",
+      color: "error",
+    });
+  }
 }
 
 function copy() {

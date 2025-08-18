@@ -1,19 +1,20 @@
 // Import the firebase app / messaging packages
 importScripts(
-  "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js",
+  "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"
 );
 importScripts(
-  "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js",
+  "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"
 );
 
 // Initialize app
 const app = firebase.initializeApp({
-  apiKey: "AIzaSyBnu6RjJ590LXibggfB1YM2oHhbPJ0LxuE",
-  authDomain: "kb-refit.firebaseapp.com",
-  projectId: "kb-refit",
-  storageBucket: "kb-refit.firebasestorage.app",
-  messagingSenderId: "289583572319",
-  appId: "1:289583572319:web:6920aa2a5986aff45bc2ea",
+  apiKey: "AIzaSyBWJnTAvotWMpA2_G5QdXUXf7fh2Wb-U-Q",
+  authDomain: "kb-refit-97c7f.firebaseapp.com",
+  projectId: "kb-refit-97c7f",
+  storageBucket: "kb-refit-97c7f.firebasestorage.app",
+  messagingSenderId: "663203165058",
+  appId: "1:663203165058:web:a03b2cacdb2e029829959b",
+  // measurementId: "G-WXWD2W9RQY"
 });
 
 // Initialize messaging
