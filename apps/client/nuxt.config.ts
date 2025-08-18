@@ -4,6 +4,10 @@ import { resolve } from "path";
 export default defineNuxtConfig({
   app: {
     head: {
+      title: "종이보다 디지털, 번거로움 대신 KB 리핏",
+      htmlAttrs: {
+        lang: "ko",
+      },
       meta: [
         {
           name: "viewport",

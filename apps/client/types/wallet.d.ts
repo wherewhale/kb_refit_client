@@ -1,9 +1,9 @@
-/** 뱃지 도감 조회 */
+/** 배지 도감 조회 */
 export interface BadgeListResponse {
   badgeList: SpecificBadgeDetail[];
 }
 
-/** 뱃지 상세 조회 */
+/** 배지 상세 조회 */
 export interface SpecificBadgeDetail {
   badgeBenefit: string;
   badgeCondition: string;

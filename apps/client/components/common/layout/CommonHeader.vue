@@ -18,6 +18,7 @@ watch(isEnglish, (val) => {
 
     <USwitch
       v-model="isEnglish"
+      aria-label="language-change-button"
       unchecked-icon="material-symbols:language-korean-latin"
       checked-icon="mdi:alphabetical"
     />

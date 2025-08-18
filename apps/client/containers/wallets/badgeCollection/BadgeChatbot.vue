@@ -12,7 +12,7 @@ const isAnalyzing = ref(false);
 const hasAnalyzed = ref(false);
 const selectedBadge = ref<SpecificBadgeDetail | null>(null);
 
-/** 뱃지 원본 */
+/** 배지 원본 */
 const allBadges = ref<SpecificBadgeDetail[]>(props.badges ?? []);
 watch(
   () => props.badges,
@@ -104,7 +104,7 @@ const isAllUnowned = computed(
               color="gray-1"
               class="w-full text-center col-span-3"
             >
-              리핏 챗봇이 뱃지를 분석 중이에요...
+              리핏 챗봇이 배지를 분석 중이에요...
             </KBUITypography>
             <li v-for="n in 6" :key="n" class="animate-pulse">
               <div class="mx-auto size-24 rounded-xl bg-gray-3" />
@@ -115,7 +115,7 @@ const isAllUnowned = computed(
           <!-- 결과/메시지 -->
           <div v-else>
             <KBUITypography v-if="isUnknown" color="gray-2" size="b14">
-              뱃지를 알 수 없어요. 예: “점심/교통비”, “여행/숙소”처럼 키워드를
+              배지를 알 수 없어요. 예: “점심/교통비”, “여행/숙소”처럼 키워드를
               포함해 주세요.
             </KBUITypography>
 
@@ -125,7 +125,7 @@ const isAllUnowned = computed(
               size="b14"
               class-name="mt-2"
             >
-              뱃지를 알 수 없어요. 예: “점심/교통비”, “여행/숙소”처럼 키워드를
+              배지를 알 수 없어요. 예: “점심/교통비”, “여행/숙소”처럼 키워드를
               포함해 주세요.
             </KBUITypography>
 

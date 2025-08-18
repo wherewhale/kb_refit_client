@@ -1,7 +1,7 @@
 // utils/badge-pick.ts
 import type { SpecificBadgeDetail } from "~/types/wallet";
 
-/** 사용자가 입력한 문장에 특정 단어가 포함되면 해당 뱃지ID를 담습니다. */
+/** 사용자가 입력한 문장에 특정 단어가 포함되면 해당 배지ID를 담습니다. */
 export function recommendBadges(
   query: string,
   badgeList: SpecificBadgeDetail[],
@@ -110,7 +110,7 @@ export function recommendBadges(
   )
     ids.add(16);
 
-  // 선택된 ID들만 추출 (소유 뱃지 우선 정렬)
+  // 선택된 ID들만 추출 (소유 배지 우선 정렬)
   const out: SpecificBadgeDetail[] = [];
   for (const b of badgeList) {
     if (ids.has(b.badgeId)) out.push(b);
