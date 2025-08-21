@@ -7,7 +7,7 @@ importScripts(
 );
 
 // Initialize app
-const firebaseConfig = {
+const app = {
   apiKey: "AIzaSyBnu6RjJ590LXibggfB1YM2oHhbPJ0LxuE",
   authDomain: "kb-refit.firebaseapp.com",
   projectId: "kb-refit",
@@ -15,6 +15,8 @@ const firebaseConfig = {
   messagingSenderId: "289583572319",
   appId: "1:289583572319:web:6920aa2a5986aff45bc2ea",
 };
+
+firebase.initializeApp(app);
 
 // Initialize messaging
 const messaging = firebase.messaging();
