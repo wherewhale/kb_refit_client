@@ -51,7 +51,7 @@ async function setToken() {
   const { $messaging } = useNuxtApp();
   const token = await getToken($messaging, {
     vapidKey:
-      "BFPqlA9eJkOZWDsKJgTei_kQbMzwnvnez2H1Law_AVnvXB54hBYElM4REhrl7mjHn3nvSDWwcntreP5xYvsY3N8",
+      "BKOStP9Dtijt8pt9a3i_dOvDvXoeWvqViTBpRb-jAvwnlqbvGJToOKfGjrs4uCfbjLnofmwqMNxPAX6lLVe6yEM",
   });
   if (token) {
     postFcmTokenApi(token);
